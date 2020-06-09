@@ -16,6 +16,8 @@ defmodule Webchat.Accounts.User do
     user
     |> cast(attrs, [:username, :email, :password])
     |> validate_required([:username, :email, :password])
+    |> validate_length(:username, min: 2, max: 20)
+    |> unique_constraint(:email)
   end
 
   def registration_changeset(user, attrs) do
