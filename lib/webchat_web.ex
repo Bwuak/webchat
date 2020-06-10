@@ -48,6 +48,7 @@ defmodule WebchatWeb do
 
       import Plug.Conn
       import Phoenix.Controller
+      import WebchatWeb.Auth, only: [authenticate_user: 2]
     end
   end
 
