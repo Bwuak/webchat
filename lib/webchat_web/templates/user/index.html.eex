@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+      <th></th>
       <th>Username</th>
       <th>email</th>
       <th>Password hash</th>
@@ -11,6 +12,11 @@
   <tbody>
 <%= for user <- @users do %>
     <tr>
+      <td>
+        <button style="background-color:#f00">
+          <%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: "delete" %>
+        </button>
+      </td>
       <td><%= user.username %></td>
       <td><%= user.email %></td>
       <td><%= user.password_hash %></td>

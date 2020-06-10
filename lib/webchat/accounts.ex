@@ -37,6 +37,9 @@ defmodule Webchat.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
   def get_user(id), do: Repo.get(User, id)
+  def get_user_by(params) do
+    Repo.get_by(User, params)
+  end
 
   @doc """
   Creates a user.
@@ -52,7 +55,7 @@ defmodule Webchat.Accounts do
   """
   def create_user(attrs \\ %{}) do
     %User{}
-    |> User.changeset(attrs)
+    |> User.registration_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -102,4 +105,22 @@ defmodule Webchat.Accounts do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+
+  def authenticate_user(email, given_pass) do
+    user = get_user_by(email: email)
+
+    cond do
+      user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
+        {:ok, user}
+
+      user ->
+        {:error, :unauthorized}
+
+      true ->
+        Pbkdf2.no_user_verify()
+        {:error, :not_found}
+    end
+  end
+
 end

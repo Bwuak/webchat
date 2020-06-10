@@ -4,12 +4,12 @@
 
   <li>
     <strong>Name:</strong>
-    <%= @user.name %>
+    <%= @user.username %>
   </li>
 
   <li>
     <strong>Username:</strong>
-    <%= @user.username %>
+    <%= @user.email %>
   </li>
 
   <li>
