@@ -11,24 +11,26 @@ defmodule Webchat.Accounts.User do
     timestamps()
   end
 
-  @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :password])
-    |> validate_required([:username, :email, :password])
+    |> cast(attrs, [:username])
+    |> validate_required([:username ])
     |> validate_length(:username, min: 2, max: 20)
-    |> unique_constraint(:email)
   end
 
+  # registered users
   def registration_changeset(user, attrs) do
     user
     |> changeset(attrs)
-    |> cast(attrs, [:password])
-    |> validate_required([:password])
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email, :password])
     |> validate_length(:password, min: 6, max: 100)
+    |> update_change(:email, &String.downcase/1)
+    |> unique_constraint(:email)
     |> put_pass_hash()
   end
 
+  # Hash the user's password
   defp put_pass_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
@@ -38,5 +40,5 @@ defmodule Webchat.Accounts.User do
           changeset
     end
   end
-  
+
 end

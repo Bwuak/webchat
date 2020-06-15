@@ -4,7 +4,7 @@ defmodule Webchat.Repo.Migrations.CreateUsers do
   def change do
     create table(:users) do
       add :username, :string
-      add :email, :string
+      add :email, :citext
       add :password_hash, :string
 
       timestamps()

@@ -18,6 +18,7 @@ defmodule WebchatWeb.UserController do
     case Accounts.create_user(user_params) do
       {:ok, user} ->
         conn
+        |> WebchatWeb.Auth.login(user)
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: Routes.user_path(conn, :index))
 
