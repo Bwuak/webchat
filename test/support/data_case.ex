@@ -24,6 +24,7 @@ defmodule Webchat.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Webchat.DataCase
+      import Webchat.TestHelpers
     end
   end
 

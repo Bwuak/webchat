@@ -24,6 +24,9 @@ defmodule WebchatWeb.ConnCase do
       import Phoenix.ConnTest
       import WebchatWeb.ConnCase
 
+      #custom
+      import Webchat.TestHelpers
+
       alias WebchatWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing

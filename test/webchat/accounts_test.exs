@@ -7,17 +7,7 @@ defmodule Webchat.AccountsTest do
     alias Webchat.Accounts.User
 
     @valid_attrs %{email: "some@email", password: "some password", username: "some username"}
-    @update_attrs %{email: "some@updatedemail", password: "some updated password", username: "some updated username"}
     @invalid_attrs %{email: nil, password: nil, username: nil}
-
-    def user_fixture(attrs \\ %{}) do
-      {:ok, user} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Accounts.create_user()
-
-      user
-    end
 
     test "list_users/0 returns all users" do
       user = user_fixture()
@@ -43,8 +33,8 @@ defmodule Webchat.AccountsTest do
     test "create_user/1 with invalid length name returns error changeset" do
       attrs_with_long_name = Map.put(@valid_attrs, :username, String.duplicate("x", 21))
       attrs_with_short_name = Map.put(@valid_attrs, :username, "x")
-      {:error, changeset} = Accounts.create_user(attrs_with_long_name)
-      {:error, changeset} = Accounts.create_user(attrs_with_short_name)
+      {:error, _changeset} = Accounts.create_user(attrs_with_long_name)
+      {:error, _changeset} = Accounts.create_user(attrs_with_short_name)
 
       assert Accounts.list_users() == []
     end

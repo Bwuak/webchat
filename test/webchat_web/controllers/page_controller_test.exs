@@ -1,5 +1,5 @@
 defmodule WebchatWeb.PageControllerTest do
-  use WebchatWeb.ConnCase
+#  use WebchatWeb.ConnCase
 
 #  test "GET /", %{conn: conn} do
 #    conn = get(conn, "/")
