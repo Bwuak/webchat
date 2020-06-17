@@ -3,9 +3,10 @@ textarea {
 }
 
 #chatroom {
+  height: 100%;
+  width: 100%;
   display: grid;
   grid-template-rows: 3fr 35fr;
-  max-width: none;
   background-color: red;
 }
 
@@ -14,10 +15,7 @@ textarea {
 }
 
 #chatroom-name {
-  justify-self: center;
-  align-self: center;
-  height: 100%;
-  
+  margin: auto;
 }
 
 #messages-container {
