@@ -25,9 +25,9 @@ defmodule Webchat.ChatTest do
 
   describe "message" do
     @valid_attrs %{content: "some message"}
-    @invalid_attrs %{message: "    "}
+    @invalid_attrs %{content: "               "}
 
-    defp chatroom_fixture(attrs \\ %{}) do
+    defp chatroom_fixture() do
       {:ok, %Chatroom{} = room} =
         Chat.create_chatroom(%{roomname: "some name"})
 
@@ -52,6 +52,16 @@ defmodule Webchat.ChatTest do
 
       messages = Chat.get_chatroom_messages(room)
       assert messages == [message]
+    end
+
+    test "add_message/3 empty message is ignored"  do
+      room = chatroom_fixture()
+      user = user_fixture()
+
+      {:error, _err} = Chat.add_message(user, room.id, @invalid_attrs)
+
+      messages = Chat.get_chatroom_messages(room)
+      assert messages == []
     end
 
   end

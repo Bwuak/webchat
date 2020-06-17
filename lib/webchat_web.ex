@@ -23,6 +23,10 @@ defmodule WebchatWeb do
 
       import Plug.Conn
       import WebchatWeb.Gettext
+
+      #custom imports
+      import WebchatWeb.Auth, only: [authenticate_user: 2] 
+
       alias WebchatWeb.Router.Helpers, as: Routes
     end
   end

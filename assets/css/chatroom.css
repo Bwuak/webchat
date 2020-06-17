@@ -1,0 +1,51 @@
+textarea {
+  resize: none;
+}
+
+#chatroom {
+  display: grid;
+  grid-template-rows: 3fr 35fr;
+  max-width: none;
+  background-color: red;
+}
+
+#name-container {
+  display: grid;
+}
+
+#chatroom-name {
+  justify-self: center;
+  align-self: center;
+  height: 100%;
+  
+}
+
+#messages-container {
+  background-color: blue;
+}
+
+#msg-chatbox {
+  grid-row-end: span 1;
+  background-color: black;
+}
+
+#msg-box {
+  display: grid;
+  grid-template-columns: 10fr 1fr;
+  background-color: black;
+  height: 100%;
+}
+
+#msg-input {
+  background-color: white;
+  height: 100%;
+  border-top-left-radius: 150px;
+  border-bottom-left-radius: 150px;
+  padding-left: 50px;
+}
+
+#msg-submit {
+  height: 100%;
+  border-top-right-radius: 150px;
+  border-bottom-right-radius: 150px;
+}

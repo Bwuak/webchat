@@ -12,6 +12,7 @@ defmodule Webchat.Chat.Message do
   end
 
 
+  # The changeset forces the content of the message to not be blank
   def changeset(message, attrs) do
     message
     |> cast(attrs, [:content])
