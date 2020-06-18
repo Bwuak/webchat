@@ -1,4 +1,5 @@
-<div id="chatroom">
+<%= content_tag :div, id: "chatroom",
+                  data: [id: @chatroom.id] do %>
   <div id="name-container">
     <h1 id="chatroom-name"><%= @chatroom.roomname %></h1>
   </div>
@@ -6,12 +7,13 @@
   </div>
   <div id="chatbox">
     <div id="msg-box">
-      <textarea id="msg-input"
+      <textarea 
+                id="msg-input"
                 placeholder="Message..."
-                ></textarea>
+      ></textarea>
       <button id="msg-submit">
         Send
       </button>
     </div>
   </div>
-</div>
+<% end %>
