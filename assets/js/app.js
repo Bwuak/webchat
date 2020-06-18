@@ -13,3 +13,7 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
+import socket from "./socket"
+import Chatroom from "./chatroom"
+
+Chatroom.init(socket, document.getElementById("chatroom"))
