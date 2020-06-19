@@ -1,3 +1,5 @@
+@import "./variables.css";
+
 textarea {
   resize: none;
 }
@@ -7,7 +9,7 @@ textarea {
   width: 100%;
   display: grid;
   grid-template-rows: 3fr 35fr;
-  background-color: red;
+  background-color: var(--chatroom-title);
 }
 
 #name-container {
@@ -19,7 +21,7 @@ textarea {
 }
 
 #messages-container {
-  background-color: blue;
+  background-color: var(--chatroom-scrollbar);
   overflow-y: auto;
 }
 
@@ -52,6 +54,7 @@ textarea {
 .a-message {
   padding: 0.6em;
   border-top: 1px solid black;
+  background-color: var(--chatroom-message);
 }
 
 .a-message h6{
