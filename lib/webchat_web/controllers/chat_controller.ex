@@ -10,7 +10,6 @@ defmodule WebchatWeb.ChatController do
   end
 
   def show(conn, %{"id" => chatroom_id}) do
-    user = conn.assigns.current_user
     changeset = Chat.change_message(%Chat.Message{})
     room = Chat.get_chatroom!(chatroom_id)
     render(conn, "show.html", changeset: changeset, chatroom: room)

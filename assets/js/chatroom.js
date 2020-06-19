@@ -1,3 +1,5 @@
+import {Presence} from "phoenix"
+
 let Chatroom = {
   init(socket, element) {
     if(!element) { return }
@@ -27,17 +29,25 @@ let Chatroom = {
       msgInput.value = ""
     })
 
-    roomChannel.join()
-      .receive("ok", resp => {
-        console.log(resp)
-        this.renderMessages(msgContainer, resp.messages)
-      })
-
     roomChannel.on("new_message", resp => {
-      this.renderMessage(msgContainer, resp, resp.message)
+      console.log("got a new message")
+      this.renderNewMessage(msgContainer, resp.message)
     })
 
+    roomChannel.join()
+      .receive("ok", resp => {
+        console.log("joined channel")
+        this.renderMessages(msgContainer, resp.messages)
+      })
+      .receive("error", reason => console.log(reason))
+    // let presence = new Presence(roomChannel)
 
+    // presence.onSync(() => {
+    //   presence.list((id, {metas: [first, ...rest]}) => {
+    //     let count = rest.length + 1
+    //     console.log(`${id}: (${count})`)
+    //   }).join("")
+    // })
   },
 
   esc(str) {
@@ -46,22 +56,31 @@ let Chatroom = {
     return div.innerHTML
   },
 
-  renderMessage(container, {id, at, content, user}) {
+  renderMessage({id, at, content, user}){
     const template = document.createElement("div")
     template.classList.add("a-message")
-    console.log(template)
     template.innerHTML = `
     <h6 class="message-username">${this.esc(user.username)}</h6>
     <p class="message-content">${this.esc(content)}</p>
     `
-    container.appendChild(template)
+    return template
+  },
+
+  renderNewMessage(container, message) {
+    const message_div = this.renderMessage(message)
+    container.appendChild(message_div)
+    container.scrollTop = container.scrollHeight
+  },
+  
+  renderOldMessage(container, message) {
+    const message_div = this.renderMessage(message)
+    container.prepend(message_div)
     container.scrollTop = container.scrollHeight
   },
 
   renderMessages(container, messages) {
-    console.log(messages)
     messages.forEach( message =>
-      this.renderMessage(container, message)
+      this.renderOldMessage(container, message)
     )
   },
 

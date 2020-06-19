@@ -13,6 +13,7 @@ defmodule Webchat.Application do
       WebchatWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Webchat.PubSub},
+      WebchatWeb.Presence,
       # Start the Endpoint (http/https)
       WebchatWeb.Endpoint
       # Start a worker by calling: Webchat.Worker.start_link(arg)

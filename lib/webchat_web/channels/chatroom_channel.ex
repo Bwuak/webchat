@@ -21,7 +21,6 @@ defmodule WebchatWeb.ChatroomChannel do
 
   def handle_in(event, params, socket) do
     user = Accounts.get_user!(socket.assigns.user_id)
-    IO.inspect params
     handle_in(event, params, user, socket)
   end
 
@@ -30,6 +29,7 @@ defmodule WebchatWeb.ChatroomChannel do
 
     case Chat.add_message(user, room_id, params) do
       {:ok, message} ->
+        broadcast_message(socket, user, message)
         {:reply, :ok, socket}
 
       {:error, changeset} ->
@@ -38,7 +38,22 @@ defmodule WebchatWeb.ChatroomChannel do
   end
 
   def hanlde_info(:after_join, socket) do
+    push(socket, "presence_state", WechatWeb.Presence.list(socket))
+    {:ok, _} = WebchatWeb.Presence.track(
+      socket,
+      socket.assigns.user_id,
+      %{device: "browser"}
+    )
 
+    {:noreply, socket}
   end
+
+  defp broadcast_message(socket, user, message) do
+    broadcast!(socket, "new_message", %{
+      message: MessageView.render("message.json", %{user: user, message: message})
+        }
+      )
+  end
+
 
 end
