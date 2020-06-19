@@ -33,6 +33,7 @@ defmodule Webchat.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      #defaults
       {:phoenix, "~> 1.5.3"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
@@ -46,6 +47,7 @@ defmodule Webchat.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
 
+      # added
       {:pbkdf2_elixir, "~> 1.0"}
     ]
   end

@@ -33,7 +33,10 @@ defmodule Webchat.Chat do
   end
 
   defp chatroom_messages_query(query, %Chatroom{id: chatroom_id}) do
-    from( v in query, where: v.chatroom_id == ^chatroom_id)
+    from( v in query, 
+      where: v.chatroom_id == ^chatroom_id,
+      preload: [:user]
+    )
   end
 
 end

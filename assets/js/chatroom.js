@@ -1,8 +1,6 @@
 let Chatroom = {
   init(socket, element) {
-    console.log("WTF")
     if(!element) { return }
-    console.log("wtf")
 
     const roomId = element.getAttribute("data-id")
     socket.connect()
@@ -18,6 +16,9 @@ let Chatroom = {
     const msgInput = document.getElementById("msg-input")
     const sendButton = document.getElementById("msg-submit")
 
+    window.addEventListener("click", e => {
+      msgInput.focus()
+    })
 
     sendButton.addEventListener("click", e => {
       const payload = {content: msgInput.value}
@@ -29,11 +30,13 @@ let Chatroom = {
     roomChannel.join()
       .receive("ok", resp => {
         console.log(resp)
+        this.renderMessages(msgContainer, resp.messages)
       })
 
     roomChannel.on("new_message", resp => {
-      this.renderMessage(msgContainer, resp)
+      this.renderMessage(msgContainer, resp, resp.message)
     })
+
 
   },
 
@@ -45,16 +48,20 @@ let Chatroom = {
 
   renderMessage(container, {id, at, content, user}) {
     const template = document.createElement("div")
+    template.classList.add("a-message")
+    console.log(template)
     template.innerHTML = `
-    <p>${this.esc(user)}</p>
+    <h6 class="message-username">${this.esc(user.username)}</h6>
+    <p class="message-content">${this.esc(content)}</p>
     `
     container.appendChild(template)
     container.scrollTop = container.scrollHeight
   },
 
-  renderMessages(messages, container) {
-    messages.foEach( message =>
-      renderMessage(container, message)
+  renderMessages(container, messages) {
+    console.log(messages)
+    messages.forEach( message =>
+      this.renderMessage(container, message)
     )
   },
 

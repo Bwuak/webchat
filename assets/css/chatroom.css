@@ -47,3 +47,20 @@ textarea {
   border-top-right-radius: 150px;
   border-bottom-right-radius: 150px;
 }
+
+.a-message {
+  padding: 0.6em;
+  border-top: 1px solid black;
+}
+
+.a-message h6{
+  margin: 0;
+  margin-left: 1em;
+  font-weight: bold;
+}
+
+.a-message p {
+  margin: 0;
+  margin-left: 2.6em;
+}
+
