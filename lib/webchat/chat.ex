@@ -13,6 +13,11 @@ defmodule Webchat.Chat do
     |> Repo.insert()
   end
 
+  def get_all_chatrooms() do
+    Chatroom
+    |> Repo.all
+  end
+
   def get_chatroom_messages(%Chatroom{} = room) do
     Message
     |> chatroom_messages_query(room)
@@ -21,6 +26,10 @@ defmodule Webchat.Chat do
 
   def get_chatroom!(chatroom_id), do: Repo.get!(Chatroom, chatroom_id)
   def get_chatroom(chatroom_id), do: Repo.get(Chatroom, chatroom_id)
+
+  def change_chatroom(%Chatroom{} = chatroom, attrs \\ %{}) do
+    Chatroom.changeset(chatroom, attrs)
+  end
 
   def change_message(%Message{} = message, attrs \\ %{}) do
     Message.changeset(message, attrs)

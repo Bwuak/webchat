@@ -20,8 +20,7 @@ defmodule WebchatWeb.Router do
     get "/", PageController, :index
     resources "/users", UserController, except: [:show]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
-    get "/room", ChatController, :index
-    get "/room/:id", ChatController, :show
+    resources "/room", ChatroomController, only: [:new, :index, :show, :create]
   end
 
   # Other scopes may use custom stacks.

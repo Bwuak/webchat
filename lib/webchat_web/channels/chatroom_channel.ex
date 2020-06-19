@@ -38,13 +38,6 @@ defmodule WebchatWeb.ChatroomChannel do
   end
 
   def hanlde_info(:after_join, socket) do
-    push(socket, "presence_state", WechatWeb.Presence.list(socket))
-    {:ok, _} = WebchatWeb.Presence.track(
-      socket,
-      socket.assigns.user_id,
-      %{device: "browser"}
-    )
-
     {:noreply, socket}
   end
 

@@ -23,6 +23,9 @@ textarea {
 #messages-container {
   background-color: var(--chatroom-scrollbar);
   overflow-y: auto;
+  display:grid;
+  grid-template-rows: 1fr;
+  align-items: end;
 }
 
 #msg-chatbox {

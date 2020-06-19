@@ -1,6 +1,7 @@
 defmodule Webchat.ChatTest do
   use Webchat.DataCase, async: true
 
+  alias Webchat.Accounts
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
   alias Webchat.Chat.Message
@@ -20,6 +21,14 @@ defmodule Webchat.ChatTest do
       assert {:error, %Ecto.Changeset{}} =
         Chat.create_chatroom(@invalid_attrs)
     end
+
+    test "get_all_chatrooms/0 returns all chatrooms" do
+      room = chatroom_fixture()
+      
+      chatrooms = Chat.get_all_chatrooms()
+      assert chatrooms == [room]
+    end
+
   end
 
 
@@ -50,6 +59,8 @@ defmodule Webchat.ChatTest do
       {:ok, %Message{} = message} =
         Chat.add_message(user, room.id, @valid_attrs)
 
+      user = %Accounts.User{user | password: nil}
+      message = %Message{message | user: user}
       messages = Chat.get_chatroom_messages(room)
       assert messages == [message]
     end

@@ -1,0 +1,18 @@
+<div class="b-container">
+  <h1 class="page-title">Chatroom creation</h1>
+  <%= form_for @changeset, Routes.chatroom_path(@conn, :create), fn f -> %>
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <p>Oops, something went wrong! Please check the errors below.</p>
+      </div>
+    <% end %>
+  
+    <%= label f, :roomname%>
+    <%= text_input f, :roomname%>
+    <%= error_tag f, :roomname%>
+  
+    <div>
+      <%= submit "Save" %>
+    </div>
+  <% end %>
+</div>
