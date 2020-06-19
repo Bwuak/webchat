@@ -1,3 +1,9 @@
 <div class="b-container">
-  <h1>Hello</h1>
+  <h1 class="page-title">Chatroom list</h1>
+
+  <%= for chatroom <- @chatrooms do %>
+    <button class="join-channel-button">
+      <%= link chatroom.roomname,to: Routes.chatroom_path(@conn, :show, chatroom.id) %> 
+    </button>
+  <% end %>
 </div>

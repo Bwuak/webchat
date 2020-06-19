@@ -54,6 +54,10 @@ textarea {
   border-bottom-right-radius: 150px;
 }
 
+.join-channel-button {
+  background-color:orange;
+}
+
 .a-message {
   padding: 0.6em;
   border-top: 1px solid black;

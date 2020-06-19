@@ -6,7 +6,8 @@ defmodule WebchatWeb.ChatroomController do
   plug :authenticate_user 
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    chatrooms = Chat.get_all_chatrooms()
+    render(conn, "index.html", chatrooms: chatrooms)
   end
 
   def show(conn, %{"id" => chatroom_id}) do
