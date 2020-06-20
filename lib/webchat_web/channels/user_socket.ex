@@ -1,5 +1,5 @@
 defmodule WebchatWeb.UserSocket do
-  use Phoenix.Socket
+  use Phoenix.Socket, check_origin: false
 
   # 2 weeks
   @max_age 2 * 7 * 24 * 60 * 60

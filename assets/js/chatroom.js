@@ -30,13 +30,11 @@ let Chatroom = {
     })
 
     roomChannel.on("new_message", resp => {
-      console.log("got a new message")
       this.renderNewMessage(msgContainer, resp.message)
     })
 
     roomChannel.join()
       .receive("ok", resp => {
-        console.log("joined channel")
         this.renderMessages(msgContainer, resp.messages)
       })
       .receive("error", reason => console.log(reason))
