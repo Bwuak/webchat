@@ -18,7 +18,7 @@ defmodule WebchatWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/users", UserController, except: [:show]
+    resources "/users", UserController, except: [:show, :index, :delete]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/room", ChatroomController, only: [:new, :index, :show, :create]
   end

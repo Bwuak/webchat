@@ -54,8 +54,20 @@ textarea {
   border-bottom-right-radius: 150px;
 }
 
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 2em;
+}
+
 .join-channel-button {
   background-color:orange;
+  padding: 0;
+  overflow: auto;
+}
+
+.join-channel-button a {
+  display: grid;
 }
 
 .a-message {
