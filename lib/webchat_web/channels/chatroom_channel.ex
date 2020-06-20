@@ -5,7 +5,7 @@ defmodule WebchatWeb.ChatroomChannel do
   alias Webchat.Accounts
   alias WebchatWeb.MessageView
 
-  def join("room:" <> room_id, params, socket) do
+  def join("room:" <> room_id, _params, socket) do
     room_id = String.to_integer(room_id)
     room = Chat.get_chatroom(room_id)
 
