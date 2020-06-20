@@ -6,8 +6,6 @@ defmodule WebchatWeb.ChatroomChannel do
   alias WebchatWeb.MessageView
 
   def join("room:" <> room_id, params, socket) do
-    send(self(), :after_join)
-    _last_seen_id = params["last_seen_id"] || 0
     room_id = String.to_integer(room_id)
     room = Chat.get_chatroom(room_id)
 
@@ -35,10 +33,6 @@ defmodule WebchatWeb.ChatroomChannel do
       {:error, changeset} ->
         {:reply, {:error, %{errors: changeset}}, socket}
     end
-  end
-
-  def hanlde_info(:after_join, socket) do
-    {:noreply, socket}
   end
 
   defp broadcast_message(socket, user, message) do

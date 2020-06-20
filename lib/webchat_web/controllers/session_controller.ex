@@ -15,7 +15,7 @@ defmodule WebchatWeb.SessionController do
         conn
         |> WebchatWeb.Auth.login(user)
         |> put_flash(:info, "Succesful login!")
-        |> redirect(to: Routes.page_path(conn, :index))
+        |> redirect(to: Routes.chatroom_path(conn, :index))
 
       {:error, _reason} ->
         conn

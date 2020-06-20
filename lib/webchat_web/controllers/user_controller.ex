@@ -4,6 +4,7 @@ defmodule WebchatWeb.UserController do
   alias Webchat.Accounts
   alias Webchat.Accounts.User
 
+
   def index(conn, _params) do
     users = Accounts.list_users()
     render(conn, "index.html", users: users)
@@ -60,4 +61,5 @@ defmodule WebchatWeb.UserController do
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :index))
   end
+
 end

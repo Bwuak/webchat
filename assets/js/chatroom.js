@@ -40,14 +40,7 @@ let Chatroom = {
         this.renderMessages(msgContainer, resp.messages)
       })
       .receive("error", reason => console.log(reason))
-    // let presence = new Presence(roomChannel)
 
-    // presence.onSync(() => {
-    //   presence.list((id, {metas: [first, ...rest]}) => {
-    //     let count = rest.length + 1
-    //     console.log(`${id}: (${count})`)
-    //   }).join("")
-    // })
   },
 
   esc(str) {

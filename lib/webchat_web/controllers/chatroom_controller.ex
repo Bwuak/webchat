@@ -21,7 +21,6 @@ defmodule WebchatWeb.ChatroomController do
   end
 
   def create(conn, %{"chatroom" => chatroom_params}) do
-    IO.inspect chatroom_params
     case Chat.create_chatroom(chatroom_params) do
       {:ok, chatroom} ->
         conn

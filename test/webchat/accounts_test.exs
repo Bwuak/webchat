@@ -39,37 +39,11 @@ defmodule Webchat.AccountsTest do
       assert Accounts.list_users() == []
     end
 
-
-    # This test does not pass, our program does not validate email
-#    test "create_user/1 with invalid email returns error" do
-#      assert {:error, changeset} = Accounts.create_user(%{@valid_attrs | email: "some invalid email"})
-#    end
-
-    # we are not letting users update their accounts yet
-#    test "update_user/2 with valid data updates the user" do
-#      user = user_fixture()
-#      assert {:ok, %User{} = user} = Accounts.update_user(user, @update_attrs)
-#      assert user.name == "some updated name"
-#      assert user.password_hash == "some updated password_hash"
-#      assert user.username == "some updated username"
-#    end
-
-#     test "update_user/2 with invalid data returns error changeset" do
-#       user = user_fixture()
-#       assert {:error, %Ecto.Changeset{}} = Accounts.update_user(user, @invalid_attrs)
-#       assert user == Accounts.get_user!(user.id)
-#     end
-
     test "delete_user/1 deletes the user" do
       user = user_fixture()
       assert {:ok, %User{}} = Accounts.delete_user(user)
       assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
     end
-
-    # test "change_user/1 returns a user changeset" do
-    #   user = user_fixture()
-    #   assert %Ecto.Changeset{} = Accounts.change_user(user)
-    # end
   end
 
 end

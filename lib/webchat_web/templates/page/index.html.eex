@@ -1,4 +1,4 @@
 <div class="b-container">
-  <h1 class="page-title"><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace-of-mind from prototype to production</p>
+  <h1 class="page-title"><%= gettext "Welcome!" %></h1>
+  <p>please log in or create an account.</p>
 </div>
