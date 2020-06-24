@@ -6,6 +6,10 @@ defmodule WebchatWeb.Auth do
 
   def init(opts), do: opts
 
+  # If user
+  # put user information in connection
+  # else
+  # current user is nil
   def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
 
@@ -21,6 +25,9 @@ defmodule WebchatWeb.Auth do
     end
   end
   
+  # Assign 
+  # Current user session to the connection
+  # user token for websocket identification
   def put_current_user(conn, user) do
     token = Phoenix.Token.sign(conn, "user socket", user.id)
 
@@ -42,6 +49,10 @@ defmodule WebchatWeb.Auth do
   end
 
 
+  # If user 
+  # Return connection
+  # Else
+  # Redirect a non connected user to welcome page and stop other plugs
   def authenticate_user(conn, _opts) do
     if conn.assigns.current_user do
       conn

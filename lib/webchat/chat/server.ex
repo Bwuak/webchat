@@ -6,7 +6,7 @@ defmodule Webchat.Chat.Server do
     field :name, :string
 
     belongs_to :user, Webchat.Accounts.User
-    has_many :chatroom, Webchat.Chat.Chatroom
+    has_many :chatrooms, Webchat.Chat.Chatroom
 
     timestamps()
   end

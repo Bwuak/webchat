@@ -15,6 +15,13 @@ defmodule WebchatWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/manage", WebchatWeb do
+    pipe_through :browser
+
+    resources "/users", UserController
+    resources "/servers", ServerController
+  end
+
   scope "/", WebchatWeb do
     pipe_through :browser
 
@@ -22,8 +29,7 @@ defmodule WebchatWeb.Router do
     resources "/users", UserController, except: [:show, :index, :delete]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/room", ChatroomController, only: [:new, :index, :show, :create]
-    resources "/servers", ServerController 
-    live "/test", TestLive
+    live "/servers", ServerLive
   end
 
   # Other scopes may use custom stacks.

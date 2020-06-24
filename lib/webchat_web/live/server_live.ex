@@ -1,4 +1,4 @@
-defmodule WebchatWeb.TestLive do
+defmodule WebchatWeb.ServerLive do
   use WebchatWeb, :live_view
 
 
@@ -10,7 +10,7 @@ defmodule WebchatWeb.TestLive do
 
   def render(assigns) do
     ~L"""
-    <h1>Hello</h1>
+    <h1>hello</h1>
     """
   end
 
