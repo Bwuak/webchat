@@ -12,8 +12,10 @@ defmodule Webchat.ChatTest do
     @invalid_attrs %{roomname: ""}
 
     test "create_chatroom/1 with valid data creates a chatroom" do
+      server = server_fixture()
+
       assert {:ok, %Chatroom{} = room} =
-        Chat.create_chatroom(@valid_attrs)
+        Chat.create_chatroom(server.id, @valid_attrs)
       assert room.roomname == "general"
     end
 
@@ -37,8 +39,9 @@ defmodule Webchat.ChatTest do
     @invalid_attrs %{content: "               "}
 
     defp chatroom_fixture() do
+      server = server_fixture()
       {:ok, %Chatroom{} = room} =
-        Chat.create_chatroom(%{roomname: "some name"})
+        Chat.create_chatroom(server.id, %{roomname: "some name"})
 
       room
     end

@@ -48,7 +48,8 @@ defmodule Webchat.MixProject do
       {:plug_cowboy, "~> 2.0"},
 
       # added
-      {:pbkdf2_elixir, "~> 1.0"}
+      {:pbkdf2_elixir, "~> 1.0"},
+      {:phoenix_live_view, "~> 0.13.3"}
     ]
   end
 

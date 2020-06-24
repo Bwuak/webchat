@@ -13,7 +13,7 @@ defmodule Webchat.Chat.Chatroom do
 
   def changeset(room, attrs) do
     room 
-    |> cast(attrs, [:roomname])
+    |> cast(attrs, [:roomname, :server_id])
     |> validate_required([:roomname])
     |> validate_length(:roomname, min: 1, max: 20)
   end

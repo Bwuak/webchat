@@ -14,7 +14,7 @@ defmodule Webchat.Chat.Server do
   @doc false
   def changeset(server, attrs) do
     server
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :user_id])
     |> validate_required([:name])
   end
 end

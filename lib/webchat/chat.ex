@@ -7,8 +7,8 @@ defmodule Webchat.Chat do
   alias Webchat.Chat.Message
 
 
-  def create_chatroom(attrs \\ %{}) do
-    %Chatroom{}
+  def create_chatroom(server_id, attrs \\ %{}) do
+    %Chatroom{server_id: server_id}
     |> Chatroom.changeset(attrs)
     |> Repo.insert()
   end

@@ -9,4 +9,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-Webchat.Chat.create_chatroom(%{roomname: "General"})
+import Ecto.Query
+alias Webchat.Repo
+alias Webchat.Chat.{Chatroom, Server, Message}
+alias Webchat.Accounts.User
+

@@ -5,6 +5,7 @@ defmodule WebchatWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug WebchatWeb.Auth
@@ -22,6 +23,7 @@ defmodule WebchatWeb.Router do
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/room", ChatroomController, only: [:new, :index, :show, :create]
     resources "/servers", ServerController 
+    live "/test", TestLive
   end
 
   # Other scopes may use custom stacks.
