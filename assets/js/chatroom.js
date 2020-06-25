@@ -51,7 +51,7 @@ let Chatroom = {
     const template = document.createElement("div")
     template.classList.add("a-message")
     template.innerHTML = `
-    <h6 class="message-username">${this.esc(user.username)}</h6>
+    <h4 class="message-username">${this.esc(user.username)}</h4>
     <p class="message-content">${this.esc(content)}</p>
     `
     return template

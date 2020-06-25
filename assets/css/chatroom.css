@@ -13,7 +13,13 @@ textarea {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 10fr 1fr;
+  grid-template-columns: 1fr 1fr 10fr; 
+}
+
+#servers-list a {
+  text-decoration: none;
+  display: block;
+  align-text: center;
 }
 
 #chatroom {
@@ -86,14 +92,14 @@ textarea {
   background-color: var(--chatroom-message);
 }
 
-.a-message h6{
-  margin: 0;
+.a-message h4{
   margin-left: 1em;
-  font-weight: bold;
+  margin-bottom: 0.3em;
 }
 
 .a-message p {
   margin: 0;
+  white-space: pre-wrap;
   margin-left: 2.6em;
 }
 
