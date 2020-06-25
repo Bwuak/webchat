@@ -29,7 +29,7 @@ defmodule WebchatWeb.Router do
     resources "/users", UserController, except: [:show, :index, :delete]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
     resources "/room", ChatroomController, only: [:new, :index, :show, :create]
-    live "/servers", ServerLive
+    live "/servers", ServerLive, layout: {WebchatWeb.LayoutView, :root}
   end
 
   # Other scopes may use custom stacks.
