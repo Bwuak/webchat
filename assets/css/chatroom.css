@@ -4,11 +4,23 @@ textarea {
   resize: none;
 }
 
+.app-container {
+  height:100%;
+  width: 100vw;
+}
+
+#app {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 10fr 1fr;
+}
+
 #chatroom {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-rows: 3fr 35fr;
+  grid-template-rows: 3fr 33fr;
   background-color: var(--chatroom-title);
 }
 
@@ -42,7 +54,6 @@ textarea {
 
 #msg-input {
   background-color: white;
-  height: 100%;
   border-top-left-radius: 150px;
   border-bottom-left-radius: 150px;
   padding-left: 50px;
