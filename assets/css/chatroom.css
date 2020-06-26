@@ -6,7 +6,6 @@ textarea {
 
 .app-container {
   height:100%;
-  width: 100vw;
 }
 
 #app {
@@ -27,6 +26,7 @@ textarea {
   width: 100%;
   display: grid;
   grid-template-rows: 3fr 33fr;
+  overflow-y: auto;
   background-color: var(--chatroom-title);
 }
 
@@ -40,7 +40,7 @@ textarea {
 
 #messages-container {
   background-color: var(--chatroom-scrollbar);
-  overflow-y: auto;
+  overflow-y: scroll;
   display:grid;
   grid-template-rows: 1fr;
   align-items: end;
@@ -53,8 +53,7 @@ textarea {
 
 #msg-box {
   display: grid;
-  grid-template-columns: 10fr 1fr;
-  background-color: black;
+  grid-template-columns: 10fr 1fr; background-color: black;
   height: 100%;
 }
 

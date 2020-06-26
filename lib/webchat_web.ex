@@ -55,6 +55,14 @@ defmodule WebchatWeb do
       end
   end
 
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+
+      unquote(view_helpers())
+    end
+  end
+
   def router do
     quote do
       use Phoenix.Router

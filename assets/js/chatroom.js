@@ -3,9 +3,9 @@ import {Presence} from "phoenix"
 let Chatroom = {
   init(socket, element) {
     if(!element) { return }
+    console.log("Chatroom init")
 
     const roomId = element.getAttribute("data-id")
-    socket.connect()
 
     this.onReady(roomId, socket)
   },
