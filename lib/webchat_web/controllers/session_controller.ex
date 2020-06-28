@@ -5,7 +5,6 @@ defmodule WebchatWeb.SessionController do
     render(conn, "new.html")
   end
 
-
   def create(
     conn,
     %{"session" => %{"email" => email, "password" => password}}
@@ -23,7 +22,6 @@ defmodule WebchatWeb.SessionController do
         |> render("new.html")
     end
   end
-
 
   def delete(conn, _) do
     conn
