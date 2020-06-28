@@ -1,20 +1,17 @@
-defmodule WebchatWeb.ChatroomChannel do
+defmodule WebchatWeb.ServerChannel do
   use WebchatWeb, :channel
 
   alias Webchat.Chat
   alias Webchat.Accounts
   alias WebchatWeb.MessageView
 
-  def join("room:" <> room_id, _params, socket) do
-    room_id = String.to_integer(room_id)
-    room = Chat.get_chatroom(room_id)
-
-    messages = 
-      room
-      |> Chat.get_chatroom_messages 
-      |> Phoenix.View.render_many(MessageView, "message.json")
-
-    {:ok, %{messages: messages}, assign(socket, :room_id, room_id)}
+  def join("server:" <> server_id, _params, socket) do
+    case server_id do
+      "" ->
+        {:error, {:reason, "Not a chatroom"}}
+      server_id ->
+        {:ok, %{server_id: server_id}, assign(socket, :server_id, server_id)}
+    end
   end
 
   def handle_in(event, params, socket) do
@@ -22,8 +19,23 @@ defmodule WebchatWeb.ChatroomChannel do
     handle_in(event, params, user, socket)
   end
 
+  def handle_in("request_messages", params, _user, socket) do
+    room = 
+      params["room_id"]
+      |> String.to_integer
+      |> Chat.get_chatroom!
+
+    messages = 
+      room
+      |> Chat.get_chatroom_messages
+      |> Phoenix.View.render_many(MessageView, "message.json")
+
+    {:reply, {:ok, %{messages: messages}}, socket} 
+  end
+
   def handle_in("new_message", params, user, socket) do
-    room_id = socket.assigns.room_id
+    {:ok, room_id} = Map.fetch(params, "room_id")
+    room_id = String.to_integer(room_id)
 
     case Chat.add_message(user, room_id, params) do
       {:ok, message} ->

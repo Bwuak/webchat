@@ -19,9 +19,9 @@ defmodule Webchat.Chat do
     |> Repo.all
   end
 
-  def get_chatroom_messages(%Chatroom{} = room) do
+  def get_chatroom_messages(%Chatroom{id: chatroom_id}) do
     Message
-    |> chatroom_messages_query(room)
+    |> chatroom_messages_query(chatroom_id)
     |> Repo.all()  
   end
 
@@ -42,7 +42,7 @@ defmodule Webchat.Chat do
     |> Repo.insert()
   end
 
-  defp chatroom_messages_query(query, %Chatroom{id: chatroom_id}) do
+  defp chatroom_messages_query(query, chatroom_id) do
     from( v in query, 
       where: v.chatroom_id == ^chatroom_id,
       preload: [:user]
@@ -57,7 +57,7 @@ defmodule Webchat.Chat do
 
   def server_chatrooms_query(query, %Server{id: server_id}) do
     from( c in query,
-      where: c.server_id == ^server_id,
+      where: c.server_id == ^server_id
     )
   end
 

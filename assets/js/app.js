@@ -13,18 +13,17 @@ import "../css/app.scss"
 //     import socket from "./socket"
 //
 import "phoenix_html"
-import socket from "./socket"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import Chatroom from "./chatroom"
+import controller from "./chatroom_controller"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
-liveSocket.connect()
-socket.connect()
 
-window.addEventListener("phx:page-loading-start", () => {
-  console.log("switching room")
-  Chatroom.init(socket, document.getElementById("chatroom"))
-})
+liveSocket.connect()
+
+
+//window.addEventListener("phx:page-loading-start", () => {
+//  console.log("switching room")
+//})
 

@@ -8,6 +8,7 @@ defmodule WebchatWeb.UserSocket do
   ## Channels
   # channel "room:*", WebchatWeb.RoomChannel
   channel "room:*", WebchatWeb.ChatroomChannel
+  channel "server:*", WebchatWeb.ServerChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

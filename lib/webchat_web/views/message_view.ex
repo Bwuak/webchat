@@ -1,12 +1,13 @@
 defmodule WebchatWeb.MessageView do
   use WebchatWeb, :view
 
-  def render("message.json", %{message: message, user: user}) do
+  def render("message.json", %{message: message, user: user, room_id: room_id}) do
     %{
       id: message.id,
       content: message.content,
       at: message.inserted_at,
-      user: render_one(user, WebchatWeb.UserView, "user.json")
+      user: render_one(user, WebchatWeb.UserView, "user.json"),
+      room_id: room_id
     }
   end
 

@@ -8,22 +8,48 @@ textarea {
   height:100%;
 }
 
+h3 {
+  text-align: center;
+}
+
+.link {
+  height: 100%;
+  width: inherit;
+  width: 240px;
+  text-align: center;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.link:link, .link:visited {
+  color: black;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.link:hover, .link:active {
+  background-color: #526262;
+}
+
+.active-server {
+  background-color: #9999bf;
+}
+
+.active-chatroom {
+  background-color: #bbd5d5;
+}
+
+
 #app {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 10fr; 
-}
-
-#servers-list a {
-  text-decoration: none;
-  display: block;
-  align-text: center;
+  grid-template-columns: 240px 240px auto; 
 }
 
 #chatroom {
   height: 100%;
-  width: 100%;
   display: grid;
   grid-template-rows: 3fr 33fr;
   overflow-y: auto;
