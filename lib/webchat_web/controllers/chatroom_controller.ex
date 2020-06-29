@@ -1,5 +1,6 @@
 defmodule WebchatWeb.ChatroomController do
   use WebchatWeb, :controller
+  import Phoenix.LiveView.Controller, only: [live_render: 2] 
 
   alias Webchat.Chat
 

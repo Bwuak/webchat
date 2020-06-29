@@ -1,5 +1,3 @@
-# Script for populating the database. You can run it as:
-#
 #     mix run priv/repo/seeds.exs
 #
 # Inside the script, you can read and write to any of your
@@ -11,6 +9,7 @@
 # and so on) as they will fail if something goes wrong.
 import Ecto.Query
 alias Webchat.Repo
+alias Webchat.Chat
 alias Webchat.Chat.{Chatroom, Server, Message}
 alias Webchat.Accounts.User
 

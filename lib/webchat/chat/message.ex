@@ -17,6 +17,7 @@ defmodule Webchat.Chat.Message do
     message
     |> cast(attrs, [:content])
     |> validate_required([:content])
+    |> assoc_constraint(:user)
   end
 
 

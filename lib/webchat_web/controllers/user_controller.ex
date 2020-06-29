@@ -21,7 +21,7 @@ defmodule WebchatWeb.UserController do
         conn
         |> WebchatWeb.Auth.login(user)
         |> put_flash(:info, "User created successfully.")
-        |> redirect(to: Routes.chatroom_path(conn, :index))
+        |> redirect(to: "/servers") 
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)

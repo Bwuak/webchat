@@ -1,16 +1,44 @@
-defmodule WebchatWeb.Chat.ServerLive do
+defmodule WebchatWeb.ApplicationLive do
   use WebchatWeb, :live_view
 
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
   alias WebchatWeb.Chat.ChatroomComponent
 
+  def mount(_session, socket) do
+    IO.inspect socket 
+    socket = 
+      socket
+      |> put_servers()
+      |> put_default_server()
+      |> put_chatrooms()
+      |> put_default_chatroom()
+    IO.inspect socket
+    {:ok, socket}
+  end
+
   def mount(_params, _session, socket) do
     socket = 
       socket
-      |> put_servers
-
+      |> put_servers()
+      |> put_default_server()
+      |> put_chatrooms()
+      |> put_default_chatroom()
+    IO.inspect socket
     {:ok, socket}
+  end
+  def handle_params(_,socket) do
+    IO.puts "hello"
+    socket =
+      socket
+      |> put_servers
+      |> put_default_server
+      |> put_chatrooms
+      |> put_default_chatroom
+
+
+    IO.inspect socket
+    {:noreply, socket}
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
@@ -32,7 +60,7 @@ defmodule WebchatWeb.Chat.ServerLive do
     end
   end
 
-  def handle_params(%{"server_id" => sid}, _url, socket) do
+    def handle_params(%{"server_id" => sid}, _url, socket) do
     server_id = String.to_integer(sid)
 
     socket = 
@@ -54,6 +82,9 @@ defmodule WebchatWeb.Chat.ServerLive do
 
     {:noreply, socket}
   end
+
+
+
 
   def render(assigns) do
     ~L"""

@@ -8,7 +8,7 @@ defmodule WebchatWeb.PageController do
 
       _connected_user ->
         conn
-        |> redirect(to: Routes.chatroom_path(conn, :index))
+        |> redirect(to: "/servers") 
     end 
   end
 

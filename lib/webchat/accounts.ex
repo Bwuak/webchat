@@ -104,8 +104,7 @@ defmodule Webchat.Accounts do
   """
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
-  end
-
+  end 
 
   def authenticate_user(email, given_pass) do
     down_cased_email = String.downcase email
@@ -123,5 +122,4 @@ defmodule Webchat.Accounts do
         {:error, :not_found}
     end
   end
-
 end
