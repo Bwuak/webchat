@@ -18,17 +18,16 @@ defmodule WebchatWeb.Router do
   scope "/manage", WebchatWeb do
     pipe_through :browser
 
-    resources "/users", UserController
     resources "/servers", ServerController
+    resources "/room", ChatroomController, only: [:new, :create]
   end
 
   scope "/", WebchatWeb do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/users", UserController, except: [:show, :index, :delete]
+    resources "/users", UserController
     resources "/sessions", SessionController, only: [:new, :create, :delete]
-    # resources "/room", ChatroomController, only: [:new, :index, :show, :create]
 
     live "/servers", ApplicationLive, layout: {WebchatWeb.LayoutView, :root}
     # live "/", WelcomeLive, layout: {WebchatWeb.LayoutView, :root}

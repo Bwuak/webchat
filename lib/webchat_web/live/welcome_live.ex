@@ -16,9 +16,8 @@ defmodule WebchatWeb.WelcomeLive do
           Signup
         </button>
       </div>
-      <%= live_component @socket, SignupComponent %> 
     </div>
     """
   end
-
+  #  <%= live_component @socket, SignupComponent %> 
 end

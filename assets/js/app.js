@@ -15,12 +15,16 @@ import "../css/app.scss"
 import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import controller from "./application_controller"
+import initApplication from "./application_controller"
 
-let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
 
-liveSocket.connect()
+if(document.getElementById("chatroom")) {
+  let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+  let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+  
+  liveSocket.connect()
+  initApplication()
+}
 
 
 //window.addEventListener("phx:page-loading-start", () => {

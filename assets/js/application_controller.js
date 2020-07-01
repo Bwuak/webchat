@@ -19,17 +19,16 @@
 import {Presence} from "phoenix"
 
 import socket from "./socket"
-import {elements, DOM } from "./views/app_view"
+import {elements, DOM} from "./views/app_view"
 import Chatroom from "./models/chatroom.js"
 
-socket.connect()
-
-const state = {
-  channels: {},
-  chatrooms: {},
-};
-
 let App = (function() {
+
+  socket.connect()
+  const state = {
+    channels: {},
+    chatrooms: {},
+  };
 
   elements.sendButton.addEventListener("click", () => {
     const channelId = state.currentServerId
@@ -113,7 +112,8 @@ let App = (function() {
     state.currentChatroomId = roomId 
   };
 
-})(window);
+
+})
 
   
-
+export default App

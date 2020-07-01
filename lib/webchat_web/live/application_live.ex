@@ -5,40 +5,13 @@ defmodule WebchatWeb.ApplicationLive do
   alias Webchat.Chat.Chatroom
   alias WebchatWeb.Chat.ChatroomComponent
 
-  def mount(_session, socket) do
-    IO.inspect socket 
-    socket = 
-      socket
-      |> put_servers()
-      |> put_default_server()
-      |> put_chatrooms()
-      |> put_default_chatroom()
-    IO.inspect socket
-    {:ok, socket}
-  end
 
   def mount(_params, _session, socket) do
     socket = 
       socket
       |> put_servers()
-      |> put_default_server()
-      |> put_chatrooms()
-      |> put_default_chatroom()
-    IO.inspect socket
+    
     {:ok, socket}
-  end
-  def handle_params(_,socket) do
-    IO.puts "hello"
-    socket =
-      socket
-      |> put_servers
-      |> put_default_server
-      |> put_chatrooms
-      |> put_default_chatroom
-
-
-    IO.inspect socket
-    {:noreply, socket}
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
@@ -75,7 +48,6 @@ defmodule WebchatWeb.ApplicationLive do
   def handle_params(_, _, socket) do
     socket = 
       socket
-      |> put_servers
       |> put_default_server
       |> put_chatrooms
       |> put_default_chatroom
@@ -141,7 +113,7 @@ defmodule WebchatWeb.ApplicationLive do
   defp select_first_room([]), do: %Chatroom{roomname: "NO ROOM IN THIS SERVER YET"}
   defp select_first_room([head|_tail]), do: head
 
-  def render_servers_listing(assigns) do
+  defp render_servers_listing(assigns) do
     ~L"""
     <div id="servers-listing">
       <h3>Servers</h3>
@@ -164,7 +136,7 @@ defmodule WebchatWeb.ApplicationLive do
     """
   end
 
-  def render_chatrooms_listing(assigns) do
+  defp render_chatrooms_listing(assigns) do
     ~L"""
     <div id="server" >
       <h3>Rooms</h3>
