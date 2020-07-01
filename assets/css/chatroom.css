@@ -45,7 +45,7 @@ h3 {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: 240px 240px auto; 
+  grid-template-columns: 240px 240px auto 240px;
 }
 
 #chatroom {

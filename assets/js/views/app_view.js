@@ -3,6 +3,7 @@ export const elements = {
   msgContainer: document.getElementById("messages-container"),
   msgInput: document.getElementById("msg-input"),
   sendButton:  document.getElementById("msg-submit"),
+  userListContainer: document.getElementById("online-users-list"),
   activeServerLink: () => document.querySelector("a.active-server")
 }
 

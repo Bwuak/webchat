@@ -21,6 +21,10 @@ defmodule Webchat.Accounts do
     Repo.all(User)
   end
 
+  def get_users_with_ids(ids) do
+    Repo.all(from(user in User, where: user.id in ^ids))
+  end
+
   @doc """
   Gets a single user.
 

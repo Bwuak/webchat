@@ -16,6 +16,8 @@
 // - adding messages to state
 // - has one active chatroom in state
 // - has one active server in state?
+import {Presence} from "phoenix"
+
 import socket from "./socket"
 import {elements, DOM } from "./views/app_view"
 import Chatroom from "./models/chatroom.js"
@@ -52,16 +54,27 @@ let App = (function() {
 
   var joinServer = function(serverId) {
     const channel = socket.channel("server:" + serverId, () => {})
+    const presence = new Presence(channel)
+
+    
     channel.join()
       .receive("ok", resp => {
         console.log("Joined server channel")
       })
       .receive("error", reason => console.log(reason))
-
+    
     channel.on("new_message", resp => {
       //state.chatrooms[room_id].addMessage()
       DOM.renderNewMessage(resp.message)
     })
+
+    presence.onSync(() => {
+      elements.userListContainer.innerHTML = presence.list((id, 
+        {user: user, metas: [first, ...rest]}) => {
+          return `<p>${user.username}</p>`
+        }).join("")
+    })
+
     state.channels[serverId] = channel
     state.currentServerId = serverId
   };
@@ -76,9 +89,8 @@ let App = (function() {
     const toServerId = DOM.getCurrentServerId()
     if(state.currentServerId == toServerId ) { return; }
 
-    //leaveServer(state.currentServerId)
+    leaveServer(state.currentServerId)
     joinServer(toServerId)
-    console.log(state)
   };
 
   var updateChatroom = function() {

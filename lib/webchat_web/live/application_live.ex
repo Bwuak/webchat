@@ -83,15 +83,17 @@ defmodule WebchatWeb.ApplicationLive do
     {:noreply, socket}
   end
 
-
-
-
   def render(assigns) do
     ~L"""
     <div id="app">
       <%= render_servers_listing(assigns) %>
       <%= render_chatrooms_listing(assigns) %>
       <%= live_component @socket, ChatroomComponent, selected_chatroom: @selected_chatroom %>
+      <div>
+        <h3>Users</h3>
+        <div id="online-users-list">
+        </div>
+      </div>
     </div>
     """
   end
