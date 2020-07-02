@@ -4,6 +4,9 @@ defmodule WebchatWeb.ApplicationLive do
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
   alias WebchatWeb.Chat.ChatroomComponent
+  alias WebchatWeb.Chat.UserListComponent
+  alias WebchatWeb.Chat.ChatroomListingComponent
+  alias WebchatWeb.Chat.ServerListingComponent
 
 
   def mount(_params, _session, socket) do
@@ -57,16 +60,12 @@ defmodule WebchatWeb.ApplicationLive do
 
   def render(assigns) do
     ~L"""
-    <div id="app">
-      <%= render_servers_listing(assigns) %>
-      <%= render_chatrooms_listing(assigns) %>
-      <%= live_component @socket, ChatroomComponent, selected_chatroom: @selected_chatroom %>
-      <div>
-        <h3>Users</h3>
-        <div id="online-users-list">
-        </div>
-      </div>
-    </div>
+      <div id="app">
+        <%= live_component @socket, ServerListingComponent, servers: @servers, selected_server: @selected_server %>
+        <%= live_component @socket, ChatroomListingComponent, chatrooms: @chatrooms, selected_server: @selected_server, selected_chatroom: @selected_chatroom %>
+        <%= live_component @socket, ChatroomComponent, selected_chatroom: @selected_chatroom %>
+        <%= live_component @socket, UserListComponent %>
+     </div>
     """
   end
       
@@ -112,52 +111,5 @@ defmodule WebchatWeb.ApplicationLive do
 
   defp select_first_room([]), do: %Chatroom{roomname: "NO ROOM IN THIS SERVER YET"}
   defp select_first_room([head|_tail]), do: head
-
-  defp render_servers_listing(assigns) do
-    ~L"""
-    <div id="servers-listing">
-      <h3>Servers</h3>
-      <nav id="servers-list">
-        <%= for server <- @servers do %>
-          <div>
-            <%= live_patch server.name,
-              to: Routes.live_path(
-                @socket,
-                __MODULE__,
-                server_id: server.id
-              ),
-              class: "link",
-              class: if server == @selected_server, do: "active-server link"
-            %>
-          </div>
-        <% end %>
-      </nav>
-    </div>
-    """
-  end
-
-  defp render_chatrooms_listing(assigns) do
-    ~L"""
-    <div id="server" >
-      <h3>Rooms</h3>
-      <nav>
-        <%= for room <- @chatrooms do %>
-          <div>
-            <%= live_patch room.roomname,
-              to: Routes.live_path(
-                @socket,
-                __MODULE__,
-                server_id: @selected_server.id,
-                room_id: room.id
-              ),
-              class: "link",
-              class: if room == @selected_chatroom, do: "active-chatroom link"
-            %>
-          </div>
-        <% end %>
-      </nav>
-    </div>
-    """
-  end
 
 end

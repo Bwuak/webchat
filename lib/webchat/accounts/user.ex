@@ -18,7 +18,6 @@ defmodule Webchat.Accounts.User do
     |> validate_length(:username, min: 2, max: 20)
   end
 
-  # registered users
   def registration_changeset(user, attrs) do
     user
     |> changeset(attrs)

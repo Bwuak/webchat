@@ -11,7 +11,6 @@ defmodule Webchat.Chat.Message do
     timestamps()
   end
 
-
   # The changeset forces the content of the message to not be blank
   def changeset(message, attrs) do
     message

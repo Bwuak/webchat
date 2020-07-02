@@ -43,15 +43,16 @@ defmodule WebchatWeb.ServerChannel do
         {:reply, {:error, %{errors: changeset}}, socket}
     end
   end
- 
-  def handle_info(:after_join, socket) do
-    push(socket, "presence_state", WebchatWeb.Presence.list(socket))
-    {:ok, _} = WebchatWeb.Presence.track(
-      socket,
-      socket.assigns.user_id,
-      %{device: "broswer"})
-    {:noreply, socket}
-  end
+
+ def handle_info(:after_join, socket) do
+   push(socket, "presence_state", WebchatWeb.Presence.list(socket))
+   {:ok, _} = WebchatWeb.Presence.track(
+     socket,
+     socket.assigns.user_id,
+     %{device: "broswer"}
+   )
+   {:noreply, socket}
+ end
 
   defp broadcast_message(socket, user, message, room_id) do
     broadcast!(socket, "new_message", %{

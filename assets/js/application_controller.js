@@ -1,6 +1,6 @@
-// Fetch messages from state
+// Fetch messages from STATE
 //   -> < 50 fetch messages from server
-// add received messages to state
+// add received messages to STATE
 // must identify each message
 // must use message date to not duplicate them
 //
@@ -13,9 +13,9 @@
 //
 //
 // controller 
-// - adding messages to state
-// - has one active chatroom in state
-// - has one active server in state?
+// - adding messages to STATE
+// - has one active chatroom in STATE
+// - has one active server in STATE?
 import {Presence} from "phoenix"
 
 import socket from "./socket"
@@ -25,21 +25,21 @@ import Chatroom from "./models/chatroom.js"
 let App = (function() {
 
   socket.connect()
-  const state = {
+  const STATE = {
     channels: {},
     chatrooms: {},
   };
 
   elements.sendButton.addEventListener("click", () => {
-    const channelId = state.currentServerId
-    const roomId = state.currentChatroomId
+    const channelId = STATE.currentServerId
+    const roomId = STATE.currentChatroomId
     const payload = {
       content: elements.msgInput.value,
       room_id: roomId 
     }
 
     console.log("button broken?")
-    state.channels[channelId].push("new_message", payload)
+    STATE.channels[channelId].push("new_message", payload)
       .receive("error", e => console.log(e))
     elements.msgInput.value = ""
   });
@@ -63,42 +63,42 @@ let App = (function() {
       .receive("error", reason => console.log(reason))
     
     channel.on("new_message", resp => {
-      //state.chatrooms[room_id].addMessage()
+      //STATE.chatrooms[room_id].addMessage()
       DOM.renderNewMessage(resp.message)
     })
 
     presence.onSync(() => {
       elements.userListContainer.innerHTML = presence.list((id, 
         {user: user, metas: [first, ...rest]}) => {
-          return `<p>${user.username}</p>`
-        }).join("")
+        return `<p>${user.username}</p>`
+      }).join("")
     })
 
-    state.channels[serverId] = channel
-    state.currentServerId = serverId
+    STATE.channels[serverId] = channel
+    STATE.currentServerId = serverId
   };
 
   var leaveServer = function(serverId) {
-    if( ! state.channels[serverId] ) { return; }
-    state.channels[serverId].leave()
-    delete state.channels[serverId]
+    if( ! STATE.channels[serverId] ) { return; }
+    STATE.channels[serverId].leave()
+    delete STATE.channels[serverId]
   };
 
   var updateServer = function() {
     const toServerId = DOM.getCurrentServerId()
-    if(state.currentServerId == toServerId ) { return; }
+    if(STATE.currentServerId == toServerId ) { return; }
 
-    leaveServer(state.currentServerId)
+    leaveServer(STATE.currentServerId)
     joinServer(toServerId)
   };
 
   var updateChatroom = function() {
     const toChatroomId = DOM.getCurrentChatroomId()
-    const noChange = state.currentChatroomId == toChatroomId
+    const noChange = STATE.currentChatroomId == toChatroomId
     //if(noChange) { return; }
     DOM.clearMessages()
 
-    joinChatroom(toChatroomId, state.currentServerId)
+    joinChatroom(toChatroomId, STATE.currentServerId)
   };
 
   var joinChatroom = function(roomId, serverId) {
@@ -106,10 +106,10 @@ let App = (function() {
     const payload = {
       room_id: roomId,
     }
-    state.channels[serverId].push("request_messages", payload)
+    STATE.channels[serverId].push("request_messages", payload)
       .receive( "ok", resp => DOM.renderMessages(resp.messages))
       .receive( "error", reason => console.log(reason))
-    state.currentChatroomId = roomId 
+    STATE.currentChatroomId = roomId 
   };
 
 
