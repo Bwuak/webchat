@@ -28,6 +28,9 @@ let App = (function() {
   const STATE = {
     channels: {},
     chatrooms: {},
+    currentServerId: 'none',
+    currentChatroomId: 'none',
+    current_user: 'none'
   };
 
   elements.sendButton.addEventListener("click", () => {
@@ -38,44 +41,47 @@ let App = (function() {
       room_id: roomId 
     }
 
-    console.log("button broken?")
     STATE.channels[channelId].push("new_message", payload)
       .receive("error", e => console.log(e))
     elements.msgInput.value = ""
   });
 
-  // ecoute les changements liveview
+  // listens to liveview live patching
+  // updates server and chatroom if needed
   window.addEventListener("phx:page-loading-stop", () => {
     updateServer()
     updateChatroom()
+    console.log(STATE)
   });
 
+  // This should be in app_view.js 
+  // But I don't want to import Presence there
+  var renderUserList = function(presence) {
+    elements.userListContainer.innerHTML = presence.list((id, 
+      {user: user, metas: [first, ...rest]}) => {
+      return `<p>${user.username}</p>`
+    }).join("")
+  };
 
   var joinServer = function(serverId) {
     const channel = socket.channel("server:" + serverId, () => {})
     const presence = new Presence(channel)
 
-    
     channel.join()
       .receive("ok", resp => {
-        console.log("Joined server channel")
+        presence.onSync(() => {
+          renderUserList(presence) 
+        })
       })
       .receive("error", reason => console.log(reason))
     
     channel.on("new_message", resp => {
-      //STATE.chatrooms[room_id].addMessage()
       DOM.renderNewMessage(resp.message)
-    })
-
-    presence.onSync(() => {
-      elements.userListContainer.innerHTML = presence.list((id, 
-        {user: user, metas: [first, ...rest]}) => {
-        return `<p>${user.username}</p>`
-      }).join("")
     })
 
     STATE.channels[serverId] = channel
     STATE.currentServerId = serverId
+    STATE.presence = presence
   };
 
   var leaveServer = function(serverId) {
@@ -95,21 +101,65 @@ let App = (function() {
   var updateChatroom = function() {
     const toChatroomId = DOM.getCurrentChatroomId()
     const noChange = STATE.currentChatroomId == toChatroomId
-    //if(noChange) { return; }
+    if(noChange) { return; }
+    
     DOM.clearMessages()
-
     joinChatroom(toChatroomId, STATE.currentServerId)
   };
 
   var joinChatroom = function(roomId, serverId) {
-    if( ! roomId ) { return; }
-    const payload = {
-      room_id: roomId,
+    if( ! roomId ) {
+      STATE.currentChatroomId = 'none'
+      return
     }
+
+    let current_room = STATE.chatrooms[roomId]
+    if(! current_room) {
+      current_room = new Chatroom(serverId, roomId)
+      STATE.chatrooms[roomId] = current_room
+    }
+
+    DOM.renderMessages(current_room.getMessages())
+    if(current_room.getMessagesCount() < 50) {
+      requestMessages(current_room)
+    }
+
+     
+    /*
+     * this is an unfortunate hack
+     * For some reason chatroom change
+     * removes all elements from userlist div
+     * Need to figure out a way for liveview to not remove elements in userlist
+     * during a live patch?
+     * 
+     * I expected live patch not to touch this div at all.
+     * Oh well we gotta render the user list every time we join a new
+     * chatroom, on sync will do the rest
+    */
+    renderUserList(STATE.presence)
+  };
+
+  var requestMessages = function(chatroom) {
+    let msg_id = chatroom.oldest
+    if(msg_id == 'none'){
+      msg_id == chatroom.newest
+    }
+    const serverId = chatroom.serverId
+    const payload = {
+      room_id: chatroom.roomId,
+      oldest: msg_id
+    }
+
     STATE.channels[serverId].push("request_messages", payload)
-      .receive( "ok", resp => DOM.renderMessages(resp.messages))
+      .receive( "ok", resp => {
+        console.log(STATE)
+        STATE.chatrooms[resp.room_id].addOldMessages(resp.messages)
+        if(STATE.currentChatroomId == resp.room_id) {
+          DOM.renderMessages(resp.messages)
+        }
+      }) 
       .receive( "error", reason => console.log(reason))
-    STATE.currentChatroomId = roomId 
+    STATE.currentChatroomId = chatroom.roomId 
   };
 
 

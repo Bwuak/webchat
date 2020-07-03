@@ -17,8 +17,10 @@ defmodule WebchatWeb.ServerChannel do
   end
 
   def handle_in("request_messages", params, _user, socket) do
+    room_id = params["room_id"]
+
     room = 
-      params["room_id"]
+      room_id
       |> String.to_integer
       |> Chat.get_chatroom!
 
@@ -27,7 +29,7 @@ defmodule WebchatWeb.ServerChannel do
       |> Chat.get_chatroom_messages
       |> Phoenix.View.render_many(MessageView, "message.json")
 
-    {:reply, {:ok, %{messages: messages}}, socket} 
+    {:reply, {:ok, %{messages: messages, room_id: room_id}}, socket} 
   end
 
   def handle_in("new_message", params, user, socket) do

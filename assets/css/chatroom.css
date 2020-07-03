@@ -34,10 +34,12 @@ h3 {
 
 .active-server {
   background-color: #9999bf;
+  pointer-events: none;
 }
 
 .active-chatroom {
   background-color: #bbd5d5;
+  pointer-events: none;
 }
 
 

@@ -11,7 +11,7 @@ export const DOM = {
   getCurrentServerId: () => elements.activeServerLink().href.split("=")[1],
   getCurrentChatroomId: () => elements.chatroom.dataset.id,
   renderNewMessage: (message) => renderNewMessage(elements.msgContainer, message),
-  renderMessages: (messages) => renderMessages(elements.msgContainer, messages),
+  renderMessages: (messages) => messages.forEach( msg => renderOldMessage(elements.msgContainer, msg)),
   clearMessages: () => {
     const node = elements.msgContainer
     while(node.firstChild) {
