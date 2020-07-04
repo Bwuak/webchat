@@ -30,7 +30,6 @@ let App = (function() {
     chatrooms: {},
     currentServerId: 'none',
     currentChatroomId: 'none',
-    current_user: 'none'
   };
 
   elements.sendButton.addEventListener("click", () => {
@@ -103,7 +102,7 @@ let App = (function() {
     const noChange = STATE.currentChatroomId == toChatroomId
     if(noChange) { return; }
     
-    DOM.clearMessages()
+//    DOM.clearMessages()
     joinChatroom(toChatroomId, STATE.currentServerId)
   };
 
@@ -119,7 +118,7 @@ let App = (function() {
       STATE.chatrooms[roomId] = current_room
     }
 
-    DOM.renderMessages(current_room.getMessages())
+    STATE.currentChatroomId = serverId 
     if(current_room.getMessagesCount() < 50) {
       requestMessages(current_room)
     }
@@ -138,7 +137,6 @@ let App = (function() {
 
     STATE.channels[serverId].push("request_messages", payload)
       .receive( "ok", resp => {
-        console.log(STATE)
         STATE.chatrooms[resp.room_id].addOldMessages(resp.messages)
         if(STATE.currentChatroomId == resp.room_id) {
           DOM.renderMessages(resp.messages)
