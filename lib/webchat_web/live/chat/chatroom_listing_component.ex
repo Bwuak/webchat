@@ -3,6 +3,7 @@ defmodule WebchatWeb.Chat.ChatroomListingComponent do
 
   alias WebchatWeb.Router.Helpers, as: Routes
 
+
   def render(assigns) do
    ~L"""
     <div id="server" >
@@ -13,7 +14,7 @@ defmodule WebchatWeb.Chat.ChatroomListingComponent do
             <%= live_patch room.roomname,
               to: Routes.live_path(
                 @socket,
-                WebchatWeb.ApplicationLive,
+                WebchatWeb.ChatLive,
                 server_id: @selected_server.id,
                 room_id: room.id
               ),

@@ -1,4 +1,4 @@
-defmodule WebchatWeb.ApplicationLive do
+defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
   alias Webchat.Chat

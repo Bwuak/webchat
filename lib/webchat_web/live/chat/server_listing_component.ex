@@ -14,7 +14,7 @@ defmodule WebchatWeb.Chat.ServerListingComponent do
             <%= live_patch server.name,
               to: Routes.live_path(
                 @socket,
-                WebchatWeb.ApplicationLive,
+                WebchatWeb.ChatLive,
                 server_id: server.id
               ),
               class: "link",

@@ -29,7 +29,7 @@ defmodule WebchatWeb.Router do
     resources "/users", UserController
     resources "/sessions", SessionController, only: [:new, :create, :delete]
 
-    live "/servers", ApplicationLive, layout: {WebchatWeb.LayoutView, :root}
+    live "/chat", ChatLive, layout: {WebchatWeb.LayoutView, :root}
     # live "/", WelcomeLive, layout: {WebchatWeb.LayoutView, :root}
   end
 

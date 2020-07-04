@@ -14,7 +14,7 @@ defmodule WebchatWeb.SessionController do
         conn
         |> WebchatWeb.Auth.login(user)
         |> put_flash(:info, "Succesful login!")
-        |> redirect(to: "/servers")
+        |> redirect(to: "/chat")
 
       {:error, _reason} ->
         conn

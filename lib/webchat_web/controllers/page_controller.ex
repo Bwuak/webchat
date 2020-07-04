@@ -8,7 +8,7 @@ defmodule WebchatWeb.PageController do
 
       _connected_user ->
         conn
-        |> redirect(to: "/servers") 
+        |> redirect(to: "/chat") 
     end 
   end
 
