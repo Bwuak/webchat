@@ -123,20 +123,6 @@ let App = (function() {
     if(current_room.getMessagesCount() < 50) {
       requestMessages(current_room)
     }
-
-     
-    /*
-     * this is an unfortunate hack
-     * For some reason chatroom change
-     * removes all elements from userlist div
-     * Need to figure out a way for liveview to not remove elements in userlist
-     * during a live patch?
-     * 
-     * I expected live patch not to touch this div at all.
-     * Oh well we gotta render the user list every time we join a new
-     * chatroom, on sync will do the rest
-    */
-    renderUserList(STATE.presence)
   };
 
   var requestMessages = function(chatroom) {
