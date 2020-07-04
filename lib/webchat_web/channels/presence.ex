@@ -9,8 +9,6 @@ defmodule WebchatWeb.Presence do
                         pubsub_server: Webchat.PubSub
 
   def fetch(_topic, entries) do
-    IO.puts "hello"
-    IO.inspect entries
     users =
       entries
       |> Map.keys()
