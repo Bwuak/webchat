@@ -1,26 +1,15 @@
-// Fetch messages from STATE
-//   -> < 50 fetch messages from server
-// add received messages to STATE
-// must identify each message
-// must use message date to not duplicate them
-//
-// chatroom class?? has
-// list of messages
-// id of chatroom
-// first message
-// last message
-// add before, add after..
-//
-//
-// controller 
-// - adding messages to STATE
-// - has one active chatroom in STATE
-// - has one active server in STATE?
 import {Presence} from "phoenix"
 
 import socket from "./socket"
 import {elements, DOM} from "./views/app_view"
 import Chatroom from "./models/chatroom.js"
+
+const nullRoom = {
+  chatroom: {
+    roomId: 'none',
+    messages: []
+  }
+}
 
 let App = (function() {
 
@@ -28,13 +17,13 @@ let App = (function() {
   const STATE = {
     channels: {},
     chatrooms: {},
-    currentServerId: 'none',
-    currentChatroomId: 'none',
+    currentChatroom: nullRoom
   };
 
   elements.sendButton.addEventListener("click", () => {
-    const channelId = STATE.currentServerId
-    const roomId = STATE.currentChatroomId
+    const room = STATE.currentChatroom
+    const channelId = room.serverId 
+    const roomId = room.roomId 
     const payload = {
       content: elements.msgInput.value,
       room_id: roomId 
@@ -49,38 +38,28 @@ let App = (function() {
   // updates server and chatroom if needed
   window.addEventListener("phx:page-loading-stop", () => {
     updateServer()
-    updateChatroom()
-    console.log(STATE)
+    updateChatroom(STATE.serverId)
   });
-
-  // This should be in app_view.js 
-  // But I don't want to import Presence there
-  var renderUserList = function(presence) {
-    elements.userListContainer.innerHTML = presence.list((id, 
-      {user: user, metas: [first, ...rest]}) => {
-      return `<p>${user.username}</p>`
-    }).join("")
-  };
 
   var joinServer = function(serverId) {
     const channel = socket.channel("server:" + serverId, () => {})
     const presence = new Presence(channel)
+    STATE.channels[serverId] = channel
 
     channel.join()
       .receive("ok", resp => {
         presence.onSync(() => {
-          renderUserList(presence) 
+          elements.userListContainer.innerHTML = presence.list((id, 
+          {user: user, metas: [first, ...rest]}) => {
+          return `<p>${user.username}</p>`
+          }).join("")
         })
       })
       .receive("error", reason => console.log(reason))
     
     channel.on("new_message", resp => {
-      DOM.renderNewMessage(resp.message)
+      STATE.chatrooms[resp.message.room_id].addNewMessage(resp.message)
     })
-
-    STATE.channels[serverId] = channel
-    STATE.currentServerId = serverId
-    STATE.presence = presence
   };
 
   var leaveServer = function(serverId) {
@@ -91,37 +70,39 @@ let App = (function() {
 
   var updateServer = function() {
     const toServerId = DOM.getCurrentServerId()
-    if(STATE.currentServerId == toServerId ) { return; }
+    const currentServerId = STATE.currentChatroom.serverId
+    if(currentServerId == toServerId ) { return; }
 
-    leaveServer(STATE.currentServerId)
+    leaveServer(currentServerId)
     joinServer(toServerId)
+    STATE.serverId = toServerId
   };
 
-  var updateChatroom = function() {
+  var updateChatroom = function(serverId) {
     const toChatroomId = DOM.getCurrentChatroomId()
-    const noChange = STATE.currentChatroomId == toChatroomId
+    const noChange = STATE.currentChatroom.roomId == toChatroomId
     if(noChange) { return; }
     
-//    DOM.clearMessages()
-    joinChatroom(toChatroomId, STATE.currentServerId)
+    const chatroom = joinChatroom(toChatroomId, serverId)
+    DOM.renderChatroom(chatroom)
   };
 
   var joinChatroom = function(roomId, serverId) {
-    if( ! roomId ) {
-      STATE.currentChatroomId = 'none'
-      return
+    if( ! roomId ) { 
+      return nullRoom
     }
 
-    let current_room = STATE.chatrooms[roomId]
-    if(! current_room) {
-      current_room = new Chatroom(serverId, roomId)
-      STATE.chatrooms[roomId] = current_room
+    let currentRoom = STATE.chatrooms[roomId]
+    if(! currentRoom) {
+      currentRoom = new Chatroom(serverId, roomId)
+      STATE.chatrooms[roomId] = currentRoom
     }
 
-    STATE.currentChatroomId = serverId 
-    if(current_room.getMessagesCount() < 50) {
-      requestMessages(current_room)
+    if(currentRoom.getMessagesCount() < 50) {
+      requestMessages(currentRoom)
     }
+    STATE.currentChatroom = currentRoom
+    return currentRoom
   };
 
   var requestMessages = function(chatroom) {
@@ -137,17 +118,11 @@ let App = (function() {
 
     STATE.channels[serverId].push("request_messages", payload)
       .receive( "ok", resp => {
-        STATE.chatrooms[resp.room_id].addOldMessages(resp.messages)
-        if(STATE.currentChatroomId == resp.room_id) {
-          DOM.renderMessages(resp.messages)
-        }
-      }) 
+        STATE.chatrooms[resp.room_id].addOldMessages(resp.messages)}) 
       .receive( "error", reason => console.log(reason))
-    STATE.currentChatroomId = chatroom.roomId 
   };
-
 
 })
 
-  
+
 export default App

@@ -2,7 +2,29 @@ defmodule WebchatWeb.Chat.ChatroomComponent do
   use Phoenix.LiveComponent
 
   def render(assigns) do
-    WebchatWeb.ChatroomView.render("show.html", assigns)
+    ~L"""
+    <div
+      id="chatroom" data-id="<%= @selected_chatroom.id %>"
+    >
+      <div id="name-container">
+        <h1 id="chatroom-name"><%= @selected_chatroom.roomname %></h1>
+      </div>
+      <div id="messages-container" phx-update="ignore">
+      </div>
+      <div id="chatbox">
+        <div id="msg-box">
+          <textarea
+             autofocus
+             id="msg-input"
+             placeholder="Message..."
+          ></textarea>
+          <button id="msg-submit">
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+    """
   end
 
 end
