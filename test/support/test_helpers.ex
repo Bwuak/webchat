@@ -10,6 +10,7 @@ defmodule Webchat.TestHelpers do
       |> Enum.into(@valid_attrs)
       |> Accounts.create_user()
 
+    user = %Accounts.User{user | password: nil}
     user
   end
 

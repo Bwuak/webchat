@@ -46,6 +46,12 @@ defmodule Webchat.ChatTest do
       room
     end
 
+    defp message_fixture(%Accounts.User{} = user, %Chatroom{} = room) do
+      {:ok, %Message{} = message} = Chat.add_message(user, room.id, @valid_attrs)
+      message = %Message{message | user:  user}
+      message
+    end
+
     test "add_message/3 creates a message with a valid user, chatroom and content" do
       room = chatroom_fixture()
       user = user_fixture()
@@ -62,7 +68,6 @@ defmodule Webchat.ChatTest do
       {:ok, %Message{} = message} =
         Chat.add_message(user, room.id, @valid_attrs)
 
-      user = %Accounts.User{user | password: nil}
       message = %Message{message | user: user}
       messages = Chat.get_chatroom_messages(room)
       assert messages == [message]
@@ -76,6 +81,27 @@ defmodule Webchat.ChatTest do
 
       messages = Chat.get_chatroom_messages(room)
       assert messages == []
+    end
+
+    test "get_chatroom_old_messages/2 gives up to 50 messages older than
+    the last message seen" do
+      user = user_fixture()
+      room = chatroom_fixture()
+
+      older_message = message_fixture(user, room)
+      old_messages = 
+        for _msg <- 1..50 do message_fixture(user, room) end
+
+      oldest_message_seen = message_fixture(user, room)
+
+      queried_messages = 
+        Chat.get_chatroom_old_messages(room, oldest_message_seen.id)
+      
+      assert length(old_messages) == 50
+      assert length(queried_messages) == 50
+      assert not Enum.member?(queried_messages, oldest_message_seen)
+      assert not Enum.member?(queried_messages, older_message)
+      # makes sure we get the right 50 messages
     end
 
   end

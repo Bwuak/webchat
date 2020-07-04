@@ -25,6 +25,16 @@ defmodule Webchat.Chat do
     |> Repo.all()  
   end
 
+  def get_chatroom_old_messages(%Chatroom{} = room, oldest_id) do
+    Repo.all(
+      from msg in Ecto.assoc(room, :messages),
+      where: msg.id < ^oldest_id,
+      order_by: [desc: msg.id],
+      limit: 50,
+      preload: [:user]
+    )
+  end
+
   def get_chatroom!(chatroom_id), do: Repo.get!(Chatroom, chatroom_id)
   def get_chatroom(chatroom_id), do: Repo.get(Chatroom, chatroom_id)
 
