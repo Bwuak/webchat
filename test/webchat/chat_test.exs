@@ -101,7 +101,36 @@ defmodule Webchat.ChatTest do
       assert length(queried_messages) == 50
       assert not Enum.member?(queried_messages, oldest_message_seen)
       assert not Enum.member?(queried_messages, older_message)
-      # makes sure we get the right 50 messages
+      assert queried_messages == old_messages
+      # makes sure we get the right 50 messages and are in the right order
+    end
+
+    test "charoom_messages/1 gives up to 50 messages when no message seen" do
+      user = user_fixture()
+      room = chatroom_fixture()
+
+      older_message = message_fixture(user, room)
+      old_messages = 
+        for _msg <- 1..50 do message_fixture(user, room) end
+
+      queried_messages = Chat.chatroom_messages(room)
+
+      assert not Enum.member?(queried_messages, older_message)
+      assert queried_messages == old_messages
+    end
+
+    test "chatroom_message/2 gives all messages since last seen" do
+      user = user_fixture()
+      room = chatroom_fixture()
+
+      last_seen_message = message_fixture(user, room)
+      new_unseen_messages = 
+        for _msg <- 1..100 do message_fixture(user, room) end
+
+      queried_messages = Chat.chatroom_messages(room, last_seen_message.id)
+
+      assert queried_messages = new_unseen_messages
+      assert not Enum.member?(queried_messages, last_seen_message)
     end
 
   end

@@ -25,6 +25,7 @@ defmodule Webchat.Chat do
     |> Repo.all()  
   end
 
+  @doc "gives up to 50 messages older than oldest seen, chatroom history"
   def get_chatroom_old_messages(%Chatroom{} = room, oldest_id) do
     Repo.all(
       from msg in Ecto.assoc(room, :messages),
@@ -33,8 +34,34 @@ defmodule Webchat.Chat do
       limit: 50,
       preload: [:user]
     )
+    |> Enum.reverse
   end
 
+  def chatroom_messages(room, last_seen_id \\ 0)
+  @doc "get all the messages between last_seen_id and current msg,
+  this happens when a user has changed server and comes back
+  "
+  def chatroom_messages(%Chatroom{} = room, last_seen_id) when last_seen_id > 0 do
+    Repo.all(
+      from msg in Ecto.assoc(room, :messages),
+      where: msg.id > ^last_seen_id,
+      order_by: [desc: msg.id],
+      preload: [:user]
+    )
+    |> Enum.reverse
+  end
+
+  @doc "get 50 newest messages when a user join a chatroom"
+  def chatroom_messages(%Chatroom{} = room, _) do
+    Repo.all(
+      from msg in Ecto.assoc(room, :messages),
+      order_by: [desc: msg.id],
+      limit: 50,
+      preload: [:user]
+    )
+    |> Enum.reverse
+  end
+  
   def get_chatroom!(chatroom_id), do: Repo.get!(Chatroom, chatroom_id)
   def get_chatroom(chatroom_id), do: Repo.get(Chatroom, chatroom_id)
 
