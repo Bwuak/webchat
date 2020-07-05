@@ -24,8 +24,8 @@ export const DOM = {
 elements.msgContainer.innerHTML = 
 `<div>
   <div v-for="msg in chatroom.messages" class="a-message">
-    <h4 class="message-username">{{ esc(msg.user.username) }}</h4>
-    <p class="message-content">{{ esc(msg.content) }}</p>
+    <h4 class="message-username">{{ msg.user.username }}</h4>
+    <p class="message-content">{{ msg.content }}</p>
   </div>
 </div>`
 
@@ -34,15 +34,5 @@ var vm = new Vue({
   data: {
     chatroom: {}
   },
-
-  methods: {
-    esc: function (str) {
-      let div = document.createElement("div")
-      div.appendChild(document.createTextNode(str))
-      return div.innerHTML
-    }
-
-  }
-
 })
 

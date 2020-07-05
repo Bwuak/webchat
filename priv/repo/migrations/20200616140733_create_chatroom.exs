@@ -10,7 +10,7 @@ defmodule Webchat.Repo.Migrations.CreateChatroom do
 
 
     create table(:messages) do
-      add :content, :string
+      add :content, :text
       add :user_id, references(:users, on_delete: :nilify_all) 
       add :chatroom_id, references(:chatrooms)
 
