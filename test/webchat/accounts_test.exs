@@ -2,9 +2,10 @@ defmodule Webchat.AccountsTest do
   use Webchat.DataCase, async: true
 
   alias Webchat.Accounts
+  alias Webchat.Accounts.User
+  alias Webchat.Accounts.Admin
 
   describe "users" do
-    alias Webchat.Accounts.User
 
     @valid_attrs %{email: "some@email", password: "some password", username: "some username"}
     @invalid_attrs %{email: nil, password: nil, username: nil}
@@ -44,6 +45,24 @@ defmodule Webchat.AccountsTest do
       assert {:ok, %User{}} = Accounts.delete_user(user)
       assert_raise Ecto.NoResultsError, fn -> Accounts.get_user!(user.id) end
     end
+  end
+
+  describe "admin" do
+
+    def admin_fixture(user) do
+      %Admin{user_id: user.id}
+      |> Admin.changeset(%{})
+      |> Repo.insert()
+    end
+
+    test "is_admin?/1 returns true if user is admin" do
+      user = user_fixture()
+      admin_fixture(user)
+
+      assert Accounts.is_admin?(user) == true
+    end
+
+
   end
 
 end

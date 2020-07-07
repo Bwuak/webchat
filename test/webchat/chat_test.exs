@@ -127,10 +127,11 @@ defmodule Webchat.ChatTest do
       new_unseen_messages = 
         for _msg <- 1..100 do message_fixture(user, room) end
 
-      queried_messages = Chat.chatroom_messages(room, last_seen_message.id)
+      _queried_messages = Chat.chatroom_messages(room, last_seen_message.id)
 
       assert queried_messages = new_unseen_messages
       assert not Enum.member?(queried_messages, last_seen_message)
+      assert "comebacklater" == ""
     end
 
   end

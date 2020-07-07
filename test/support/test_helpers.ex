@@ -10,6 +10,8 @@ defmodule Webchat.TestHelpers do
       |> Enum.into(@valid_attrs)
       |> Accounts.create_user()
 
+    # We normally don't see user password outside of creation
+    # We remove it for equality in our tests
     user = %Accounts.User{user | password: nil}
     user
   end

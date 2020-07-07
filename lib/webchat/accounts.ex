@@ -3,6 +3,7 @@ defmodule Webchat.Accounts do
   alias Webchat.Repo
 
   alias Webchat.Accounts.User
+  alias Webchat.Accounts.Admin
 
   def list_users do
     Repo.all(User)
@@ -37,6 +38,10 @@ defmodule Webchat.Accounts do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end 
+
+  def is_admin?(%User{id: user_id}) do
+    Repo.get_by(Admin, %{user_id: user_id}) != nil
+  end
 
   def authenticate_user(email, given_pass) do
     down_cased_email = String.downcase email

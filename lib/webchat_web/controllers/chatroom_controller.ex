@@ -2,7 +2,6 @@ defmodule WebchatWeb.ChatroomController do
   use WebchatWeb, :controller
 
   alias Webchat.Chat
-
   plug :authenticate_user 
 
 

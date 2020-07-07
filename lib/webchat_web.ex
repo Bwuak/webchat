@@ -25,7 +25,7 @@ defmodule WebchatWeb do
       import WebchatWeb.Gettext
 
       #custom imports
-      import WebchatWeb.Auth, only: [authenticate_user: 2] 
+      import WebchatWeb.Auth, only: [authenticate_user: 2]
 
       alias WebchatWeb.Router.Helpers, as: Routes
     end
@@ -70,7 +70,7 @@ defmodule WebchatWeb do
       import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
-      import WebchatWeb.Auth, only: [authenticate_user: 2]
+      import WebchatWeb.Auth, only: [authenticate_user: 2, authenticate_admin: 2]
     end
   end
 
