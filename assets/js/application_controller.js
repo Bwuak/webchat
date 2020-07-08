@@ -14,25 +14,12 @@ const nullRoom = {
 let App = (function() {
 
   socket.connect()
+
   const STATE = {
     channels: {},
     chatrooms: {},
     currentChatroom: nullRoom
   };
-
-  elements.sendButton.addEventListener("click", () => {
-    const room = STATE.currentChatroom
-    const channelId = room.serverId 
-    const roomId = room.roomId 
-    const payload = {
-      content: elements.msgInput.value,
-      room_id: roomId 
-    }
-
-    STATE.channels[channelId].push("new_message", payload)
-      .receive("error", e => console.log(e))
-    elements.msgInput.value = ""
-  });
 
   // listens to liveview live patching
   // updates server and chatroom if needed
@@ -40,6 +27,46 @@ let App = (function() {
     updateServer()
     updateChatroom(STATE.serverId)
   });
+
+  elements.sendButton.addEventListener("click", () => {
+
+    sendMessage(elements.msgInput.value)
+    clearMsgInputField()
+  });
+
+  function clearMsgInputField() {
+    elements.msgInput.value = ""
+  }
+
+  function getCurrentChannelId() {
+    return getCurrentChatroom().serverId
+  }
+
+  function getCurrentChatroomId() {
+    return getCurrentChatroom().roomId
+  }
+
+  function getCurrentChatroom() {
+    return STATE.currentChatroom
+  }
+
+  function sendMessage(msgContent) {
+    const payload = {
+      content: msgContent, 
+      room_id: getCurrentChatroomId() 
+    }
+
+    pushMessage(payload)
+  }
+
+  function pushMessage(payload) {
+    const channelId = getCurrentChannelId()
+    STATE.channels[channelId].push("new_message", payload)
+      .receive("error", e => console.log(e))
+  }
+
+
+
 
   var joinServer = function(serverId) {
     const channel = socket.channel("server:" + serverId, () => {})

@@ -12,7 +12,7 @@ alias Webchat.Repo
 alias Webchat.Chat
 alias Webchat.Accounts
 alias Webchat.Chat.{Chatroom, Server, Message}
-alias Webchat.Accounts.User
+alias Webchat.Accounts.{User, Admin}
 
 # Create a user first then run the following
 # user = Accounts.get_user!(1)
@@ -23,3 +23,8 @@ alias Webchat.Accounts.User
 # Chat.create_chatroom(server2.id, %{roomname: "First chatroom"}) 
 # Chat.create_chatroom(server1.id, %{roomname: "Some chatroom"})
 # Chat.create_chatroom(server1.id, %{roomname: "room"})
+
+# create a website admin
+# user = Accounts.get_user!(1)
+# {:ok, admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
+

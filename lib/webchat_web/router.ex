@@ -25,13 +25,14 @@ defmodule WebchatWeb.Router do
 
     resources "/servers", ServerController
     resources "/room", ChatroomController, only: [:new, :create]
+    resources "/users", UserController, only: [:delete, :index]
   end
 
   scope "/", WebchatWeb do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/users", UserController
+    resources "/users", UserController, only: [:new, :create]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
 
     live "/chat", ChatLive, layout: {WebchatWeb.LayoutView, :root}
