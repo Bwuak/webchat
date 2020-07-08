@@ -25,3 +25,9 @@ Chatroom.prototype.getMessagesCount = function() {
 }
 
 export default Chatroom
+export const nullRoom = {
+  chatroom: {
+    roomId: 'none',
+    messages: []
+  }
+}
