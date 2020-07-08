@@ -54,7 +54,7 @@ let App = (function() {
   function updateServer() {
     const toServerId = DOM.getCurrentServerId()
     const currentServerId = state.getCurrentServerId() 
-    if(currentServerId == toServerId ) { return; }
+    if(currentServerId == toServerId ) { return currentServerId; }
 
     joinServer(toServerId)
     return toServerId

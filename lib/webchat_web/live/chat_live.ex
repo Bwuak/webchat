@@ -16,7 +16,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Chat.get_server!()
-    chatrooms = Chat.get_all_chatrooms()
+    chatrooms = Chat.get_server_chatrooms(selected_server)
     selected_chatroom = String.to_integer(rid) |> Chat.get_chatroom!()
 
     case Enum.member?(chatrooms, selected_chatroom)  do
