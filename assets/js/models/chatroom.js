@@ -2,8 +2,6 @@ var Chatroom = function(serverId, roomId) {
   this.roomId = roomId;
   this.serverId = serverId;
   this.messages = [];
-  this.newest = 'none';
-  this.oldest = 'none';
 }
 
 Chatroom.prototype.addNewMessage = function(msg) {
@@ -12,8 +10,10 @@ Chatroom.prototype.addNewMessage = function(msg) {
 }
 
 Chatroom.prototype.addOldMessages = function(msgs) {
-  this.oldest = msgs[0].id
-  this.messages = msgs.concat(this.messages)
+  if(msgs.length > 0) { 
+    this.oldest = msgs[0].id
+    this.messages = msgs.concat(this.messages)
+  }
 }
 
 Chatroom.prototype.getMessages = function() { 

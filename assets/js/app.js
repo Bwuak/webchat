@@ -15,7 +15,9 @@ import "../css/app.scss"
 import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
-import initApplication from "./application_controller"
+
+import socket from "./socket"
+import initApplication from "./chat_controller"
 
 
 if(document.getElementById("chatroom")) {
@@ -23,11 +25,6 @@ if(document.getElementById("chatroom")) {
   let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
   
   liveSocket.connect()
-  initApplication()
+  socket.connect()
+  initApplication(socket)
 }
-
-
-//window.addEventListener("phx:page-loading-start", () => {
-//  console.log("switching room")
-//})
-

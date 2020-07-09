@@ -7,6 +7,7 @@ import State from "./models/state"
 
 let App = (function(socket) {
 
+  socket.connect()
   var state = new State()
 
   window.addEventListener("phx:page-loading-stop", () => {
@@ -81,17 +82,17 @@ let App = (function(socket) {
   }
 
   function requestMessages(chatroom) {
-    let msg_id = chatroom.oldest
-    if(msg_id == 'none'){
-      msg_id == chatroom.newest
-    }
-    const serverId = chatroom.serverId
     const payload = {
       room_id: chatroom.roomId,
-      oldest: msg_id
     }
 
-    pushRequestMessages(serverId, payload)
+    if(chatroom.oldest){
+      payload.oldest = chatroom.oldest
+    }else if(chatroom.newest) {
+      payload.oldest = chatroom.newest
+    }// else payload.oldest is not set
+
+    pushRequestMessages(chatroom.serverId, payload)
   };
 
 })
