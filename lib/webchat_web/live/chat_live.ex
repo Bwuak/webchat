@@ -3,10 +3,13 @@ defmodule WebchatWeb.ChatLive do
 
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
-  alias WebchatWeb.Chat.ChatroomComponent
-  alias WebchatWeb.Chat.UserListComponent
-  alias WebchatWeb.Chat.ChatroomListingComponent
-  alias WebchatWeb.Chat.ServerListingComponent
+  alias WebchatWeb.Chat.{
+    ChatroomComponent,
+    UserListComponent,
+    ChatroomListingComponent,
+    ServerListingComponent,
+    UserComponent
+  }
 
 
   def mount(_params, _session, socket) do
@@ -60,7 +63,10 @@ defmodule WebchatWeb.ChatLive do
     ~L"""
       <div id="app">
         <%= live_component @socket, ServerListingComponent, servers: @servers, selected_server: @selected_server %>
-        <%= live_component @socket, ChatroomListingComponent, chatrooms: @chatrooms, selected_server: @selected_server, selected_chatroom: @selected_chatroom %>
+        <div>
+          <%= live_component @socket, ChatroomListingComponent, chatrooms: @chatrooms, selected_server: @selected_server, selected_chatroom: @selected_chatroom %>
+          <%= live_component @socket, UserComponent %>
+        </div>
         <%= live_component @socket, ChatroomComponent, selected_chatroom: @selected_chatroom %>
         <%= live_component @socket, UserListComponent %>
      </div>

@@ -1,14 +1,26 @@
 import {Presence} from "phoenix"
+import regeneratorRuntime from "regenerator-runtime"
 
 import {elements, DOM} from "./views/app_view"
 import {Chatroom, nullRoom} from "./models/chatroom.js"
 import State from "./models/state"
 
 
+
 let App = (function(socket) {
 
+  function scrolldown() {
+    const isLocked = true
+    if(isLocked){
+      var div = document.getElementById("messages-container")
+      div.scrollTop = div.scrollHeight
+    }
+  }
+  
   socket.connect()
   var state = new State()
+
+  setInterval(scrolldown, 1000)
 
   window.addEventListener("phx:page-loading-stop", () => {
     const newServerId = updateServer()
@@ -16,6 +28,7 @@ let App = (function(socket) {
     sync(state.getCurrentChatroom())
   });
 
+  elements.msgContainer
   elements.sendButton.addEventListener("click", () => {
     sendMessage(elements.msgInput.value)
     clearMsgInputField()
@@ -46,18 +59,49 @@ let App = (function(socket) {
       .receive( "error", reason => console.log(reason))
   }
 
-  function joinServer(serverId) {
-    state.addNewChannel(socket, serverId)
-  };
-
   function updateServer() {
     const toServerId = DOM.getCurrentServerId()
     const currentServerId = state.getCurrentServerId() 
     if(currentServerId == toServerId ) { return currentServerId; }
 
+    leaveServer()
     joinServer(toServerId)
     return toServerId
   };
+
+  function leaveServer() {
+    state.deletePresence()
+  }
+
+  function joinServer(serverId) {
+    var channel = state.getChannelById(serverId)
+    if( ! channel ) {
+      channel = createChannel(socket, serverId)
+    }
+    const presence = new Presence(channel)
+
+    presence.onSync(() => {
+      elements.userListContainer.innerHTML = presence.list((id, 
+      {user: user, metas: [first, ...rest]}) => {
+      return `<p>${user.username}</p>`
+      }).join("")
+    })
+
+    state.setCurrentPresence(presence, serverId)
+  };
+
+  function createChannel(socket, serverId){
+    const channel = socket.channel("server:" + serverId, () => {})
+    channel.join()
+      .receive("error", reason => console.log(reason))
+    channel.on("new_message", resp => {
+      state.getChatroomById([resp.message.room_id]).addNewMessage(resp.message)
+    })
+
+    state.addNewChannel(channel, serverId)
+    return channel
+  }
+
 
   function updateChatroom(serverId) {
     const toChatroomId = DOM.getCurrentChatroomId()

@@ -8,6 +8,10 @@ var State = function() {
   this.currentChatroom = nullRoom
 }
 
+State.prototype.setCurrentPresence = function(presence, serverId) {
+  this.currentPresence = presence
+}
+
 State.prototype.getCurrentChatroom = function() {
   return this.currentChatroom
 }
@@ -30,15 +34,14 @@ State.prototype.getChannel = function() {
   return this.channels[currentChannelId]
 }
 
-// creates and store a new channel linked to a server
-State.prototype.addNewChannel = function(socket, serverId) {
-  const channel = socket.channel("server:" + serverId, () => {})
-  channel.join()
-    .receive("error", reason => console.log(reason))
-  channel.on("new_message", resp => {
-    this.chatrooms[resp.message.room_id].addNewMessage(resp.message)
-  })
+State.prototype.deletePresence = function() {
+  if(this.currentPresence) {
+    delete this.currentPresence
+  }
+}
 
+// creates and store a new channel linked to a server
+State.prototype.addNewChannel = function(channel, serverId) {
   this.channels[serverId] = channel
 }
 
@@ -57,7 +60,6 @@ State.prototype.getChatroomById = function(chatroomId) {
   const roomWanted = this.chatrooms[chatroomId]
   return roomWanted ?
     roomWanted : nullRoom
-    
 }
 
 
