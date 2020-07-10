@@ -1,6 +1,7 @@
 defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
+  alias Webchat.Accounts
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
   alias WebchatWeb.Chat.{
@@ -12,9 +13,14 @@ defmodule WebchatWeb.ChatLive do
   }
 
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    user = Accounts.get_user!(session["user_id"])
     servers = Chat.list_servers()
-    {:ok, assign(socket, servers: servers)}
+
+    {:ok, assign(socket, 
+      servers: servers,
+      user: user
+    )}
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do

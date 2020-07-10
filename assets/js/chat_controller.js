@@ -9,18 +9,17 @@ import State from "./models/state"
 
 let App = (function(socket) {
 
-  function scrolldown() {
-    const isLocked = true
-    if(isLocked){
-      var div = document.getElementById("messages-container")
-      div.scrollTop = div.scrollHeight
-    }
-  }
   
   socket.connect()
   var state = new State()
 
-  setInterval(scrolldown, 1000)
+  setInterval(scrolldown, 50)
+
+  document.onkeyup = function(e) {
+    if(e.keyCode == 13) {
+      sendMessage()
+    }
+  }
 
   window.addEventListener("phx:page-loading-stop", () => {
     const newServerId = updateServer()
@@ -30,19 +29,30 @@ let App = (function(socket) {
 
   elements.msgContainer
   elements.sendButton.addEventListener("click", () => {
-    sendMessage(elements.msgInput.value)
-    clearMsgInputField()
+    sendMessage()
   });
+
+  function scrolldown() {
+    var div = document.getElementById("messages-container")
+    //if(isChatScrollLocked(div)){
+      div.scrollTop = div.scrollHeight
+    //}
+  }
+
+  // function isChatScrollLocked(div) {
+  //   return div.scrollTopMax - (div.clientHeight/3) < div.scrollTop  
+  // }
 
   function clearMsgInputField() {
     elements.msgInput.value = ""
   }
 
-  function sendMessage(msgContent) {
+  function sendMessage() {
     pushMessage({
-      content: msgContent,
+      content: elements.msgInput.value,
       room_id: state.getCurrentChatroomId()
     })
+    clearMsgInputField()
   }
 
   function pushMessage(payload) {
@@ -55,7 +65,8 @@ let App = (function(socket) {
     const channel = state.getChannelById(serverId)
     channel.push("request_messages", payload)
       .receive( "ok", resp => {
-        state.getChatroomById(resp.room_id).addOldMessages(resp.messages)}) 
+        state.getChatroomById(resp.room_id).addOldMessages(resp.messages)
+      }) 
       .receive( "error", reason => console.log(reason))
   }
 
