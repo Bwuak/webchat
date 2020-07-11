@@ -69,9 +69,9 @@ defmodule WebchatWeb.ChatLive do
     ~L"""
       <div id="app">
         <%= live_component @socket, ServerListingComponent, servers: @servers, selected_server: @selected_server %>
-        <div>
+        <div id="col-2" >
           <%= live_component @socket, ChatroomListingComponent, chatrooms: @chatrooms, selected_server: @selected_server, selected_chatroom: @selected_chatroom %>
-          <%= live_component @socket, UserComponent %>
+          <%= live_component @socket, UserComponent, id: "user", user: @user %>
         </div>
         <%= live_component @socket, ChatroomComponent, selected_chatroom: @selected_chatroom %>
         <%= live_component @socket, UserListComponent %>

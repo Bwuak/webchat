@@ -50,6 +50,17 @@ h3 {
   grid-template-columns: 240px 240px auto 240px;
 }
 
+#col-2 {
+  position: relative;
+}
+
+#user {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
 #chatroom {
   height: 100%;
   display: grid;

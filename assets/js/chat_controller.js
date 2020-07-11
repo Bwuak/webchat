@@ -15,6 +15,14 @@ let App = (function(socket) {
 
   setInterval(scrolldown, 50)
 
+  // hack to log out
+  // Was not able to find conn in liveview socket
+  // Was not able to find a replacement for link in liveview
+  const link = document.getElementById("if-anyone-knows-how-to-fix-this-tell-me-please")
+  const linkContainer = document.getElementById("link-container")
+  linkContainer.appendChild(link)
+
+
   document.onkeyup = function(e) {
     if(e.keyCode == 13) {
       sendMessage()
