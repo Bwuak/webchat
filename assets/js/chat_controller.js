@@ -12,8 +12,15 @@ let App = (function(socket) {
   
   socket.connect()
   var state = new State()
+  var scroll = {
+    state: "locked"
+  }
 
-  setInterval(scrolldown, 50)
+  setInterval(() => {
+    if(scroll.state == "locked"){
+      scrolldown()
+    }
+  }, 50)
 
   // hack to log out
   // Was not able to find conn in liveview socket
@@ -35,21 +42,25 @@ let App = (function(socket) {
     sync(state.getCurrentChatroom())
   });
 
-  elements.msgContainer
+
+  const div = document.getElementById("messages-container")
+  div.addEventListener("scroll", function() {
+    scroll.state = "unlocked"
+    if(div.scrollTopMax - div.scrollTop < 1) {
+      scroll.state = "locked"
+    }else{
+      scroll.state = "unlocked"
+    }
+  });
+
   elements.sendButton.addEventListener("click", () => {
     sendMessage()
   });
 
   function scrolldown() {
     var div = document.getElementById("messages-container")
-    //if(isChatScrollLocked(div)){
-      div.scrollTop = div.scrollHeight
-    //}
+    div.scrollTop = div.scrollHeight
   }
-
-  // function isChatScrollLocked(div) {
-  //   return div.scrollTopMax - (div.clientHeight/3) < div.scrollTop  
-  // }
 
   function clearMsgInputField() {
     elements.msgInput.value = ""

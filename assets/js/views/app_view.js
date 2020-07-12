@@ -22,7 +22,7 @@ export const DOM = {
 
 if(elements.msgContainer){
   elements.msgContainer.innerHTML = 
-  `<div>
+  `<div id="messages">
     <div v-for="msg in chatroom.messages" class="a-message">
       <h4 v-if="msg.user" class="message-username">{{ msg.user.username }}</h4>
       <h4 v-else class="message-username">Uknown</h4>
