@@ -5,19 +5,23 @@
     </div>
   <% end %>
 
-  <%= label f, :username %>
-  <%= text_input f, :username %>
-  <%= error_tag f, :username %>
-
-  <%= label f, :email %>
-  <%= email_input f, :email %>
-  <%= error_tag f, :email %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password %>
-  <%= error_tag f, :password %>
+  <div>
+    <%= label f, :username %>
+    <%= text_input f, :username %>
+    <%= error_tag f, :username %>
+  </div>
 
   <div>
-    <%= submit "Save" %>
+    <%= label f, :email %>
+    <%= email_input f, :email %>
+    <%= error_tag f, :email %>
   </div>
+
+  <div>
+    <%= label f, :password %>
+    <%= password_input f, :password %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <%= submit "Save" %>
 <% end %>

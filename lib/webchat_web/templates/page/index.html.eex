@@ -1,4 +1,2 @@
-<div class="b-container">
-  <h1 class="page-title"><%= gettext "Welcome!" %></h1>
-  <p>please log in or create an account.</p>
-</div>
+<h1 class="page-title"><%= gettext "Welcome!" %></h1>
+<p>please log in or create an account.</p>

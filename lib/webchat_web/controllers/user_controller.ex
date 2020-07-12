@@ -29,6 +29,7 @@ defmodule WebchatWeb.UserController do
   end
 
   def delete(conn, %{"id" => id}) do
+    IO.puts "hey"
     user = Accounts.get_user!(id)
     {:ok, _user} = Accounts.delete_user(user)
 

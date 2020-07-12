@@ -65,7 +65,7 @@ defmodule WebchatWeb.Auth do
 
   def authenticate_admin(conn, _opts) do
     user = conn.assigns.current_user
-    IO.puts "hey~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+
     case Webchat.Accounts.is_admin?(user) do
       true ->
         conn
