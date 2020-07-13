@@ -3,7 +3,7 @@ defmodule WebchatWeb.Chat.UserListComponent do
 
   def render(assigns) do
     ~L"""
-      <div phx-update="ignore">
+      <div id="users-listing" phx-update="ignore">
         <h3>Users</h3>
         <div id="online-users-list">
         </div>

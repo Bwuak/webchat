@@ -38,12 +38,12 @@ h3 {
 }
 
 .active-server {
-  background-color: #9999bf;
+  background-color: var(--chatroom-col2);
   pointer-events: none;
 }
 
 .active-chatroom {
-  background-color: #bbd5d5;
+  background-color: var(--chatroom-col3);
   pointer-events: none;
 }
 
@@ -54,7 +54,21 @@ h3 {
   grid-template-columns: 240px 240px auto 240px;
 }
 
+#servers-listing {
+  background-color: var(--chatroom-col1); 
+}
+
+/* Change this to chatrooms=listing */
+#server {
+  background-color: var(--chatroom-col2);
+}
+
+#users-listing {
+  background-color: var(--chatroom-col2);
+}
+
 /*contains rooms component and user component */
 #col-2 {
   position: relative;
+  display: grid;
 }

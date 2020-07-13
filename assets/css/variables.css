@@ -1,5 +1,6 @@
 :root {
-  --chatroom-title: #bf9b75;
-  --chatroom-scrollbar: black;
-  --chatroom-message: #c4a875;
+  --chatroom-col1: #4a4e69;
+  --chatroom-col2: #9a8c98;
+  --chatroom-col3: #f2e9e4;
+  --chatroom-user: #4a4e6980;
 }
