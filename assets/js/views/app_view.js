@@ -29,12 +29,11 @@ if(elements.msgContainer){
       <p class="message-content">{{ msg.content }}</p>
     </div>
   </div>`
+
+  var vm = new Vue({ 
+    el: '#messages-container', 
+    data: {
+      chatroom: {}
+    },
+  })
 }
-
-var vm = new Vue({ 
-  el: '#messages-container', 
-  data: {
-    chatroom: {}
-  },
-})
-

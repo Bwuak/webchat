@@ -94,17 +94,22 @@ let App = (function(socket) {
     const currentServerId = state.getCurrentServerId() 
     if(currentServerId == toServerId ) { return currentServerId; }
 
-    leaveServer()
+    leaveServer(currentServerId)
     joinServer(toServerId)
     return toServerId
   };
 
-  function leaveServer() {
-    state.deletePresence()
+  function leaveServer(currentServerId) {
+    //state.deletePresence()
+    if(state.getChannelById(currentServerId)) {
+      state.getChannelById(currentServerId).leave()
+      delete state.getChannelById(currentServerId)
+    }
   }
 
   function joinServer(serverId) {
-    var channel = state.getChannelById(serverId)
+    //var channel = state.getChannelById(serverId)
+    var channel;
     if( ! channel ) {
       channel = createChannel(socket, serverId)
     }
