@@ -137,7 +137,6 @@ let App = (function(socket) {
     return channel
   }
 
-
   function updateChatroom(serverId) {
     const toChatroomId = DOM.getCurrentChatroomId()
     const noChange = state.getCurrentChatroomId() == toChatroomId
@@ -171,6 +170,10 @@ let App = (function(socket) {
       payload.oldest = chatroom.newest
     }// else payload.oldest is not set
 
+    // temp fix for now
+    if(chatroom.newest) {
+      payload.oldest = chatroom.newest
+    }
     pushRequestMessages(chatroom.serverId, payload)
   };
 

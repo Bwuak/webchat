@@ -1,0 +1,16 @@
+#welcome-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10em;
+  padding: 5em;
+}
+
+#welcome-buttons > a {
+  font-family: ubuntu;
+  font-weight: bold;
+  font-size: 2em;
+  text-decoration: none;
+  text-align: center;
+}
+
+

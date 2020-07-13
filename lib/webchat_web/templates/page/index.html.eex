@@ -1,2 +1,5 @@
 <h1 class="page-title"><%= gettext "Welcome!" %></h1>
-<p>please log in or create an account.</p>
+<div id="welcome-buttons">
+  <%= link "Log in", to: Routes.session_path(@conn, :new) %>
+  <%= link "Register", to: Routes.user_path(@conn, :new) %>
+</div>
