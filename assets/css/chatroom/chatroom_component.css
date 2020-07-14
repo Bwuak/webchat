@@ -11,7 +11,6 @@ textarea {
   color: var(--chatroom-col3-text);
 }
 
-
 #name-container {
   display: grid;
 }
@@ -28,28 +27,28 @@ textarea {
   align-items: end;
 }
 
-#msg-chatbox {
-  grid-row-end: span 1;
-  background-color: black;
-}
-
 #msg-box {
   display: grid;
-  grid-template-columns: 10fr 1fr; background-color: black;
-  height: 100%;
+  grid-template-columns: 1fr 10fr 1fr 1fr;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background-color: var(--chatroom-col3);
 }
 
 #msg-input {
-  background-color: white;
-  border-top-left-radius: 150px;
-  border-bottom-left-radius: 150px;
-  padding-left: 50px;
+  border: none;
+  background-color: var(--chatroom-col1);
+  border-top-left-radius: 5em;
+  border-bottom-left-radius: 5em;
+  padding-left: 1.2em;
+  grid-column: 2/3;
 }
 
 #msg-submit {
-  height: 100%;
-  border-top-right-radius: 150px;
-  border-bottom-right-radius: 150px;
+  background-color: var(--chatroom-col2);
+  border: none;
+  border-top-right-radius: 5em;
+  border-bottom-right-radius: 5em;
 }
 
 .a-message {
