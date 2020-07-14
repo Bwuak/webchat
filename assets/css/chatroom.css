@@ -54,6 +54,11 @@ h3 {
   grid-template-columns: 240px 240px auto 240px;
 }
 
+#app * {
+ font-family: ubuntu; 
+ color: var(--chatroom-col3-text);
+}
+
 #servers-listing {
   background-color: var(--chatroom-col1); 
 }

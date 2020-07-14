@@ -1,6 +1,9 @@
 :root {
-  --chatroom-col1: #4a4e69;
-  --chatroom-col2: #9a8c98;
-  --chatroom-col3: #f2e9e4;
-  --chatroom-user: #4a4e6980;
+  --chatroom-col1: #4a535b;
+  --chatroom-col2: #343a40;
+  --chatroom-col3: #5a6773e6;
+  --chatroom-user: #4a535b82;
+  --chatroom-col3-text: #f8f9fa;
+  --chatroom-col2-text: #adb5bd;
+  --chatroom-col1-text: #6c757d; 
 }

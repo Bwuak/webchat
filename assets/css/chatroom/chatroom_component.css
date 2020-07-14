@@ -8,7 +8,9 @@ textarea {
   grid-template-rows: 3fr 33fr;
   overflow-y: auto;
   background-color: var(--chatroom-col3);
+  color: var(--chatroom-col3-text);
 }
+
 
 #name-container {
   display: grid;

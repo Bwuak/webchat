@@ -4,5 +4,6 @@
   width: 100%;
   text-align: center;
   background-color: var(--chatroom-user);
+  color: var(--chatroom-col3-text);
 }
 
