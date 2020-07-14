@@ -49,7 +49,7 @@ defmodule Webchat.MixProject do
 
       # added
       {:pbkdf2_elixir, "~> 1.0"},
-      {:phoenix_live_view, "~> 0.13.3"}
+      {:phoenix_live_view, "~> 0.14.0"}
     ]
   end
 

@@ -1,8 +1,6 @@
 defmodule WebchatWeb.Chat.UserComponent do
   use Phoenix.LiveComponent
 
-  alias WebchatWeb.Router.Helpers, as: Routes
-
 
   def render(assigns) do
     ~L"""
