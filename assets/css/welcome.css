@@ -1,3 +1,7 @@
+/*
+ * Contains css for welcome page
+ * login and register forms
+ */
 #welcome-buttons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -11,6 +15,49 @@
   font-size: 2em;
   text-decoration: none;
   text-align: center;
+  color: var(--chatroom-col2);
 }
 
+header {
+  background-color: var(--chatroom-col2);
+}
+
+body {
+  background-color: var(--chatroom-col3);
+  color: var(--chatroom-col3-text);
+}
+
+.page-container {
+  margin: 2em;
+  padding: 2em;
+  border-radius: 2em;
+  background-color: var(--chatroom-col2);
+  color: var(--chatroom-col3-text);
+}
+
+.page-container > form {
+  display: grid;
+  grid-gap: 1em;
+}
+
+.page-container > form > div {
+  display: grid;
+}
+
+.page-container > form > button {
+  border: none;
+  background-color: var(--chatroom-col3-text); 
+  justify-self: end;
+  padding: 1em;
+  border-radius: 3em;
+  font-weight: bold;
+  font-size: 1.2em;
+  font-family: ubuntu;
+}
+
+.page-container > form > div > input {
+  border: none;
+  padding: 0.3em;
+  background-color: var(--chatroom-col3);
+}
 
