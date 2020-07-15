@@ -10,7 +10,6 @@
 import Ecto.Query
 alias Webchat.Repo
 alias Webchat.Chat
-alias Webchat.Accounts
 alias Webchat.Chat.{Chatroom, Server, Message}
 alias Webchat.Accounts.{User, Admin}
 
@@ -25,6 +24,8 @@ user = Accounts.get_user!(1)
 # Chat.create_chatroom(server1.id, %{roomname: "room"})
 
 # create a website admin
-# user = Accounts.get_user!(1)
-{:ok, admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
+user = Accounts.get_user!(1)
+{:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
 
+ans = Accounts.is_admin?(user)
+IO.inspect ans
