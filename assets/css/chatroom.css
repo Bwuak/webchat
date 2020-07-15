@@ -17,7 +17,7 @@ h3 {
   text-align: center;
 }
 
-.link {
+.server-link, .room-link {
   height: 100%;
   width: inherit;
   width: 240px;
@@ -27,14 +27,9 @@ h3 {
   white-space: nowrap;
 }
 
-.link:link, .link:visited {
-  color: black;
+.server-link:link, .server-link:visited, .room-link:link, .room-link:visited {
   text-decoration: none;
   display: inline-block;
-}
-
-.link:hover, .link:active {
-  background-color: #526262;
 }
 
 .active-server {

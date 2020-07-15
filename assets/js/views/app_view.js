@@ -1,14 +1,24 @@
+function idFromHref(link) {
+  return link.href.split("=")[1]
+}
+
 export const elements = {
   chatroom: document.getElementById("chatroom"),
   msgContainer: document.getElementById("messages-container"),
   msgInput: document.getElementById("msg-input"),
   sendButton:  document.getElementById("msg-submit"),
   userListContainer: document.getElementById("online-users-list"),
+  allServers: () => document.querySelectorAll("a.server-link"),
   activeServerLink: () => document.querySelector("a.active-server")
 }
 
 export const DOM = {
-  getCurrentServerId: () => elements.activeServerLink().href.split("=")[1],
+  getCurrentServerId: () => idFromHref(elements.activeServerLink()),
+  getAllServersId: () => {
+    var arr = []
+    elements.allServers().forEach(x => arr.push(idFromHref(x)))
+    return arr
+  },
   getCurrentChatroomId: () => elements.chatroom.dataset.id,
   renderChatroom: (chatroom) => vm.chatroom = chatroom, 
   clearMessages: () => {

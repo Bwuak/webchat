@@ -18,8 +18,8 @@ defmodule WebchatWeb.Chat.ChatroomListingComponent do
                 server_id: @selected_server.id,
                 room_id: room.id
               ),
-              class: "link",
-              class: if room == @selected_chatroom, do: "active-chatroom link"
+              class: "room-link",
+              class: if room == @selected_chatroom, do: "active-chatroom room-link"
             %>
           </div>
         <% end %>

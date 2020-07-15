@@ -29,6 +29,11 @@ let App = (function(socket) {
   const linkContainer = document.getElementById("link-container")
   linkContainer.appendChild(link)
 
+  var listenToServers = function() {
+    const servers = DOM.getAllServersId()
+    servers.forEach( id => createChannel(socket, id))
+  }
+  listenToServers()
 
   document.onkeyup = function(e) {
     if(e.keyCode == 13) {
@@ -100,16 +105,11 @@ let App = (function(socket) {
   };
 
   function leaveServer(currentServerId) {
-    //state.deletePresence()
-    if(state.getChannelById(currentServerId)) {
-      state.getChannelById(currentServerId).leave()
-      delete state.getChannelById(currentServerId)
-    }
+    state.deletePresence()
   }
 
   function joinServer(serverId) {
-    //var channel = state.getChannelById(serverId)
-    var channel;
+    var channel = state.getChannelById(serverId)
     if( ! channel ) {
       channel = createChannel(socket, serverId)
     }

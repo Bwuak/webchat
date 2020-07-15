@@ -17,8 +17,8 @@ defmodule WebchatWeb.Chat.ServerListingComponent do
                 WebchatWeb.ChatLive,
                 server_id: server.id
               ),
-              class: "link",
-              class: if server == @selected_server, do: "active-server link"
+              class: "server-link",
+              class: if server == @selected_server, do: "active-server server-link"
             %>
           </div>
         <% end %>
