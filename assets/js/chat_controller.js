@@ -51,7 +51,8 @@ let App = (function(socket) {
   const div = document.getElementById("messages-container")
   div.addEventListener("scroll", function() {
     scroll.state = "unlocked"
-    if(div.scrollTopMax - div.scrollTop < 1) {
+    // console.log(div.clientHeight - div.scrollTop)
+    if(div.scrollHeight - div.scrollTop == div.clientHeight) {
       scroll.state = "locked"
     }else{
       scroll.state = "unlocked"
