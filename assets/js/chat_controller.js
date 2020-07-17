@@ -45,13 +45,12 @@ let App = (function(socket) {
     const newServerId = updateServer()
     updateChatroom(newServerId)
     sync(state.getCurrentChatroom())
+    setTimeout(scrolldown, 5)
   });
 
 
   const div = document.getElementById("messages-container")
   div.addEventListener("scroll", function() {
-    scroll.state = "unlocked"
-    // console.log(div.clientHeight - div.scrollTop)
     if(div.scrollHeight - div.scrollTop == div.clientHeight) {
       scroll.state = "locked"
     }else{
@@ -90,7 +89,8 @@ let App = (function(socket) {
     const channel = state.getChannelById(serverId)
     channel.push("request_messages", payload)
       .receive( "ok", resp => {
-        state.getChatroomById(resp.room_id).addOldMessages(resp.messages)
+        const room = getChatroom(serverId, resp.room_id)
+        room.addOldMessages(resp.messages)
       }) 
       .receive( "error", reason => console.log(reason))
   }
@@ -131,7 +131,7 @@ let App = (function(socket) {
     channel.join()
       .receive("error", reason => console.log(reason))
     channel.on("new_message", resp => {
-      state.getChatroomById([resp.message.room_id]).addNewMessage(resp.message)
+      state.getChatroom(serverId, resp.message.room_id).addNewMessage(resp.message)
     })
 
     state.addNewChannel(channel, serverId)
@@ -143,15 +143,13 @@ let App = (function(socket) {
     const noChange = state.getCurrentChatroomId() == toChatroomId
     if(noChange) { return; }
     
-    const chatroom = getNewChatroom(serverId, toChatroomId)
+    const chatroom = state.getChatroom(serverId, toChatroomId)
     state.setCurrentChatroom(chatroom)
     DOM.renderChatroom(chatroom)
   };
 
-  function getNewChatroom(serverId, roomId) {
-    const room = state.getChatroomById(roomId)
-    return  room != nullRoom ?
-      room : state.createChatroom(serverId, roomId)
+  function getChatroom(serverId, roomId) {
+    return state.getChatroom(serverId, roomId) 
   };
 
   function sync(currentRoom) {
@@ -161,20 +159,15 @@ let App = (function(socket) {
   }
 
   function requestMessages(chatroom) {
+    if(chatroom.roomId == 0) { return; }
+    const oldestMsgId = chatroom.oldest != "nil" 
+      ? chatroom.oldest : chatroom.newest 
+
     const payload = {
       room_id: chatroom.roomId,
+      oldest: oldestMsgId
     }
 
-    if(chatroom.oldest){
-      payload.oldest = chatroom.oldest
-    }else if(chatroom.newest) {
-      payload.oldest = chatroom.newest
-    }// else payload.oldest is not set
-
-    // temp fix for now
-    if(chatroom.newest) {
-      payload.oldest = chatroom.newest
-    }
     pushRequestMessages(chatroom.serverId, payload)
   };
 

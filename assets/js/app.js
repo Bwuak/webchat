@@ -26,5 +26,6 @@ if(document.getElementById("chatroom")) {
   
   liveSocket.connect()
   socket.connect()
+  socket.onClose( () => console.log("socket connection closed"))
   initApplication(socket)
 }

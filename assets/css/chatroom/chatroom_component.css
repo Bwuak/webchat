@@ -52,6 +52,7 @@ textarea {
 
 .a-message {
   padding: 0.6em;
+  overflow-wrap: anywhere;
   border-top: 1px solid black;
   background-color: var(--chatroom-col3);
 }

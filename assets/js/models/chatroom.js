@@ -2,6 +2,8 @@ var Chatroom = function(serverId, roomId) {
   this.roomId = roomId;
   this.serverId = serverId;
   this.messages = [];
+  this.newest = "nil"
+  this.oldest = "nil"
 }
 
 Chatroom.prototype.addNewMessage = function(msg) {

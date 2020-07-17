@@ -46,6 +46,8 @@ State.prototype.addNewChannel = function(channel, serverId) {
 }
 
 State.prototype.createChatroom = function(serverId, chatroomId) {
+  console.log(`creating chatroom #${chatroomId}`)
+  chatroomId = Number(chatroomId)
   const newChatroom = new Chatroom(serverId, chatroomId)
   this.chatrooms[chatroomId] = newChatroom
 
@@ -56,10 +58,9 @@ State.prototype.setCurrentChatroom = function(chatroom) {
   this.currentChatroom = chatroom
 }
 
-State.prototype.getChatroomById = function(chatroomId) {
-  const roomWanted = this.chatrooms[chatroomId]
-  return roomWanted ?
-    roomWanted : nullRoom
+State.prototype.getChatroom = function(serverId, roomId) {
+  return this.chatrooms[roomId] ? 
+    this.chatrooms[roomId] : this.createChatroom(serverId, roomId);
 }
 
 

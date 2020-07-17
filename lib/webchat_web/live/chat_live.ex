@@ -43,7 +43,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
-    selected_server = String.to_integer(sid) |> Chat.get_server!()
+    selected_server = String.to_integer(sid) |> Chat.get_server()
     chatrooms = select_chatrooms(selected_server) 
 
     {:noreply, assign(socket,

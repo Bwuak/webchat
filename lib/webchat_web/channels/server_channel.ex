@@ -17,22 +17,20 @@ defmodule WebchatWeb.ServerChannel do
   end
 
   @very_high_number 90000000
-  def handle_in("request_messages", params, _user, socket) do
-    oldest_id = if params["oldest"], do: params["oldest"], else: @very_high_number
+  def handle_in("request_messages", %{"room_id" => id, "oldest" => oldest}, _user, socket) when id > 0 do
+    oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
 
     messages = 
-      params["room_id"] 
-      |> String.to_integer
+      id
       |> Chat.get_chatroom!
       |> Chat.get_chatroom_old_messages(oldest_id)
       |> Phoenix.View.render_many(MessageView, "message.json")
 
-    {:reply, {:ok, %{messages: messages, room_id: params["room_id"]}}, socket} 
+    {:reply, {:ok, %{messages: messages, room_id: id}}, socket} 
   end
 
   def handle_in("new_message", params, user, socket) do
     {:ok, room_id} = Map.fetch(params, "room_id")
-    room_id = String.to_integer(room_id)
 
     case Chat.add_message(user, room_id, params) do
       {:ok, message} ->
