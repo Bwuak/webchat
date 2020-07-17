@@ -21,7 +21,7 @@ textarea {
 
 #messages-container {
   background-color: var(--chatroom-col3);
-  overflow-y: scroll;
+  overflow-y: auto;
   display:grid;
   grid-template-rows: 1fr;
   align-items: end;
@@ -36,7 +36,6 @@ textarea {
 }
 
 #msg-input {
-  border: none;
   background-color: var(--chatroom-col1);
   border-top-left-radius: 5em;
   border-bottom-left-radius: 5em;

@@ -40,3 +40,27 @@ nav > ul > li > a {
   color: var(--chatroom-col3-text);
 }
 
+::-webkit-scrollbar {
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--chatroom-col1);
+  border-radius: 10px;
+}
+
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none;
+}
