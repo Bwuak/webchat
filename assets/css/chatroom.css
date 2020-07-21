@@ -7,6 +7,7 @@
 @import "./variables.css";
 @import "./chatroom/user_component.css";
 @import "./chatroom/chatroom_component.css";
+@import "./chatroom/server_action_component.css";
 
 
 .app-container {

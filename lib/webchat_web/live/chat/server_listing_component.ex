@@ -22,9 +22,10 @@ defmodule WebchatWeb.Chat.ServerListingComponent do
             %>
           </div>
         <% end %>
+        <div><div phx-click="server-action" class="server-link" phx-click="hello">Add or Join</div></div>
       </nav>
     </div>
     """
   end
- 
+
 end

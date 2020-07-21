@@ -5,23 +5,19 @@ defmodule WebchatWeb.ChatLive do
   alias Webchat.Chat
   alias Webchat.Chat.Server
   alias Webchat.Chat.Chatroom
-  alias WebchatWeb.Chat.{
-    ChatroomComponent,
-    UserListComponent,
-    ChatroomListingComponent,
-    ServerListingComponent,
-    UserComponent
-  }
 
 
   def mount(_params, session, socket) do
     user = Accounts.get_user!(session["user_id"])
     servers = Chat.list_servers()
 
-    {:ok, assign(socket, 
+    {:ok, 
+      assign(socket, 
       servers: servers,
       user: user
-    )}
+      ),
+      layout: {WebchatWeb.LayoutView, "chat_live.html"}
+    }
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
@@ -66,16 +62,30 @@ defmodule WebchatWeb.ChatLive do
 
   def render(assigns) do
     ~L"""
-      <div id="app">
-        <%= live_component @socket, ServerListingComponent, servers: @servers, selected_server: @selected_server %>
-        <div id="col-2" >
-          <%= live_component @socket, ChatroomListingComponent, chatrooms: @chatrooms, selected_server: @selected_server, selected_chatroom: @selected_chatroom %>
-          <%= live_component @socket, UserComponent, id: "user", user: @user %>
-        </div>
-        <%= live_component @socket, ChatroomComponent, selected_chatroom: @selected_chatroom %>
-        <%= live_component @socket, UserListComponent %>
-     </div>
+    <%= if Map.has_key?(assigns, :action) do %>
+      <div class="server-action">
+        <%= render_action_component(assigns) %>
+      </div>
+    <% end %>
     """
+  end
+
+  def handle_event("cancel_action", _, socket) do
+    socket_without_action = 
+      %{ socket |
+        assigns: Map.delete(socket.assigns, :action), 
+        changed: Map.put_new(socket.changed, :action, true)
+      } 
+
+    {:noreply, socket_without_action} 
+  end
+
+  def handle_event("server-action", _, socket) do
+    {:noreply, assign(socket, action: "")}
+  end
+
+  def render_action_component(_assigns) do
+    "Get component -> logic here"
   end
 
   defp select_default_server(servers) do

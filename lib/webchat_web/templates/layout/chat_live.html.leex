@@ -1,0 +1,14 @@
+<main role="main" class="app-container">
+  <div id="app" phx-click="cancel_action">
+
+    <%= live_component @socket, WebchatWeb.Chat.ServerListingComponent, servers: @servers, selected_server: @selected_server %>
+    <div id="col-2" >
+      <%= live_component @socket, WebchatWeb.Chat.ChatroomListingComponent, chatrooms: @chatrooms, selected_server: @selected_server, selected_chatroom: @selected_chatroom  %>
+      <%= live_component @socket, WebchatWeb.Chat.UserComponent, user: @user %>
+    </div>
+    <%= live_component @socket, WebchatWeb.Chat.ChatroomComponent, selected_chatroom: @selected_chatroom %>
+    <%= live_component @socket, WebchatWeb.Chat.UserListComponent %>
+  </div>
+ 
+  <%= @inner_content %>
+</main>
