@@ -64,7 +64,9 @@ defmodule WebchatWeb.ChatLive do
     ~L"""
     <%= if Map.has_key?(assigns, :action) do %>
       <div class="server-action">
+        <div class="page-container">
         <%= render_action_component(assigns) %>
+      </div>
       </div>
     <% end %>
     """
@@ -84,8 +86,9 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket, action: "")}
   end
 
-  def render_action_component(_assigns) do
-    "Get component -> logic here"
+  def render_action_component(assigns) do
+    assigns_server = Map.put(assigns, :server_changeset, Server.changeset(%Server{}, %{}))
+    WebchatWeb.Chat.ServerActionComponent.render(assigns_server)
   end
 
   defp select_default_server(servers) do
