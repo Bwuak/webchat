@@ -6,8 +6,8 @@ defmodule WebchatWeb.Chat.ServerActionComponent do
 
   def render(assigns) do
     ~L"""
-    <%= f = form_for @server_changeset, "#" %>
-      <%= if @server_changeset.action do %>
+    <%= f = form_for @changeset, "#" %>
+      <%= if @changeset.action do %>
         <div class="alert alert-danger">
           <p>Oops, something went wrong! Please check the errors below.</p>
         </div>

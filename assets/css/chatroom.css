@@ -10,6 +10,13 @@
 @import "./chatroom/server_action_component.css";
 
 
+.action {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
 .app-container {
   height:100%;
 }

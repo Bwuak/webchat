@@ -124,4 +124,23 @@ defmodule Webchat.Chat do
   def change_server(%Server{} = server, attrs \\ %{}) do
     Server.changeset(server, attrs)
   end
+
+  def select_default_server(servers) do
+    if servers == [], 
+      do: select_null_server(), else: servers |> Enum.at(0)
+  end
+
+  def select_chatrooms(server) do
+    if server.name == :nil, 
+      do: [], else: get_server_chatrooms(server)
+  end
+
+  def select_first_room([]), do: select_null_chatroom() 
+  def select_first_room([head|_tail]), do: head
+
+  defp select_null_chatroom(), do: %Chatroom{roomname: :nil} 
+
+  defp select_null_server(), do: %Server{name: :nil} 
+
+
 end
