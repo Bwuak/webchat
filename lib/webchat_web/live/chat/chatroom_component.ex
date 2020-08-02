@@ -14,9 +14,10 @@ defmodule WebchatWeb.Chat.ChatroomComponent do
       <div id="chatbox">
         <div id="msg-box">
           <textarea
-             autofocus
-             id="msg-input"
-             placeholder="Message..."
+            autofocus
+            id="msg-input"
+            placeholder="Message..."
+            maxlength="500"
           ></textarea>
           <button id="msg-submit">
             Send
