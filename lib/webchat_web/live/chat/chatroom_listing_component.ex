@@ -23,6 +23,7 @@ defmodule WebchatWeb.Chat.ChatroomListingComponent do
             %>
           </div>
         <% end %>
+        <div phx-click="create-room" class="room-link" >Create</div>
       </nav>
     </div>
     """

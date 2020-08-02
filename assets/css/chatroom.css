@@ -7,7 +7,6 @@
 @import "./variables.css";
 @import "./chatroom/user_component.css";
 @import "./chatroom/chatroom_component.css";
-@import "./chatroom/server_action_component.css";
 
 
 .action {
@@ -26,6 +25,7 @@ h3 {
 }
 
 .server-link, .room-link {
+  cursor: pointer;
   height: 100%;
   width: inherit;
   width: 240px;

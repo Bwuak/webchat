@@ -3,8 +3,10 @@ defmodule WebchatWeb.ChatLive do
 
   alias Webchat.Accounts
   alias Webchat.Chat
-  alias Webchat.Chat.Server
-  alias Webchat.Chat.Chatroom
+  alias WebchatWeb.Chat.ServerActionComponent
+  alias WebchatWeb.Chat.ServerCreationComponent
+  alias WebchatWeb.Chat.ServerSubscriptionComponent
+  alias WebchatWeb.Chat.RoomCreationComponent
 
 
   def mount(_params, session, socket) do
@@ -13,9 +15,8 @@ defmodule WebchatWeb.ChatLive do
 
     {:ok, 
       assign(socket, 
-      servers: servers,
-      user: user
-      ),
+        servers: servers,
+        user: user),
       layout: {WebchatWeb.LayoutView, "chat_live.html"}
     }
   end
@@ -46,7 +47,7 @@ defmodule WebchatWeb.ChatLive do
       selected_server: selected_server,
       chatrooms: chatrooms,
       selected_chatroom: Chat.select_first_room(chatrooms) 
-      )}
+    )}
   end
 
   def handle_params(_, _, socket) do
@@ -65,33 +66,51 @@ defmodule WebchatWeb.ChatLive do
     <%= if Map.has_key?(assigns, :action) do %>
       <div class="action">
         <div class="page-container">
-        <%= render_action_component(assigns) %>
-      </div>
+          <%= live_component @socket, action_component(assigns), Map.put(assigns, :id, "action")  %>
+        </div>
       </div>
     <% end %>
     """
   end
 
-  def handle_event("cancel_action", _, socket) do
+  # Removing component 
+  def handle_event("cancel-action", _, socket) do
     socket_without_action = 
       %{ socket |
         assigns: Map.delete(socket.assigns, :action), 
-        changed: Map.put_new(socket.changed, :action, true)
-      } 
-
+        changed: Map.put_new(socket.changed, :action, true) } 
     {:noreply, socket_without_action} 
   end
 
+  # Adding component
   def handle_event("server-action", _, socket) do
-    {:noreply, assign(socket, action: "server_action")}
+    {:noreply, assign(socket, action: "server_action") }
   end
 
-  def render_action_component(%{action: action} = assigns) do
+  def handle_event("create-server", _, socket) do
+    {:noreply, assign(socket, action: "create_server") }
+  end
+
+  def handle_event("join-server", _, socket) do
+    {:noreply, assign(socket, action: "join_server") }
+  end
+
+  def handle_event("create-room", _, socket) do
+    {:noreply, assign(socket, action: "create_chatroom") }
+  end
+
+  # Conditional component
+  def action_component(%{action: action} = _assigns) do
     case action do
-      "server_action" -> 
-        assigns = Map.put(assigns, :id, "sever-creation")
-        assigns = Map.put(assigns, :changeset, Server.changeset(%Server{}, %{}))
-        WebchatWeb.Chat.ServerActionComponent.render(assigns)
+      "server_action" ->
+        ServerActionComponent
+      "create_server" ->
+        ServerCreationComponent 
+      "join_server" ->
+        ServerSubscriptionComponent
+      "create_chatroom" ->
+        RoomCreationComponent
     end
   end
+
 end
