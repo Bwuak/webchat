@@ -3,7 +3,7 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
 
   def render(assigns) do
     ~L"""
-    <div>
+    <div class="page-container">
       <p>HELLO</p>
     </div>
     """

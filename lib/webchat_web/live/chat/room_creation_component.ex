@@ -3,7 +3,7 @@ defmodule WebchatWeb.Chat.RoomCreationComponent do
 
   def render(assigns) do
     ~L"""
-    <div>
+    <div class="page-container" >
       <p>Room creation</p>
     </div>
     """

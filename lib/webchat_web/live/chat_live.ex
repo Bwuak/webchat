@@ -9,6 +9,19 @@ defmodule WebchatWeb.ChatLive do
   alias WebchatWeb.Chat.RoomCreationComponent
 
 
+  def render(assigns) do
+    ~L"""
+    <!-- Layout <- chat_live <- components " -->
+
+    <!-- conditional rendering of live components -->
+    <%= if Map.has_key?(assigns, :action) do %>
+      <div class="action">
+        <%= live_component @socket, action_component(assigns), Map.put(assigns, :id, "action" )  %>
+      </div>
+    <% end %>
+    """
+  end
+
   def mount(_params, session, socket) do
     user = Accounts.get_user!(session["user_id"])
     servers = Chat.list_servers()
@@ -61,18 +74,6 @@ defmodule WebchatWeb.ChatLive do
     )}
   end
 
-  def render(assigns) do
-    ~L"""
-    <%= if Map.has_key?(assigns, :action) do %>
-      <div class="action">
-        <div class="page-container">
-          <%= live_component @socket, action_component(assigns), Map.put(assigns, :id, "action")  %>
-        </div>
-      </div>
-    <% end %>
-    """
-  end
-
   # Removing component 
   def handle_event("cancel-action", _, socket) do
     socket_without_action = 
@@ -100,7 +101,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   # Conditional component
-  def action_component(%{action: action} = _assigns) do
+  defp action_component(%{action: action} = _assigns) do
     case action do
       "server_action" ->
         ServerActionComponent

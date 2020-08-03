@@ -5,7 +5,7 @@ defmodule WebchatWeb.Chat.ServerActionComponent do
 
   def render(assigns) do
     ~L"""
-    <div>
+    <div class="page-container" >
       <p>Join or Create a server</p>
       <button phx-click="join-server" > 
         Join
