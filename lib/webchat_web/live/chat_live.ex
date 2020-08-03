@@ -59,7 +59,7 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket,
       selected_server: selected_server,
       chatrooms: chatrooms,
-      selected_chatroom: Chat.select_first_room(chatrooms) 
+      selected_chatroom: Chat.select_default_room(chatrooms) 
     )}
   end
 
@@ -70,7 +70,7 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket,
       selected_server: default_server,
       chatrooms: chatrooms,
-      selected_chatroom: Chat.select_first_room(chatrooms)
+      selected_chatroom: Chat.select_default_room(chatrooms)
     )}
   end
 

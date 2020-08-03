@@ -168,7 +168,8 @@ defmodule Webchat.ChatTest do
       assert server.name == "some name"
     end
 
-    test "create_server/1 with invalid user id returns error changeset" do
+    test "create_server/1 requires valid user id" do
+      assert {:error, %Ecto.Changeset{}} = Chat.create_server(Map.put(@valid_attrs, :user_id, 1231231))
     end
 
     test "create_server/1 with invalid data returns error changeset" do

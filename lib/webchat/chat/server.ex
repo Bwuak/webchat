@@ -16,5 +16,6 @@ defmodule Webchat.Chat.Server do
     server
     |> cast(attrs, [:name, :user_id])
     |> validate_required([:name])
+    |> assoc_constraint(:user)
   end
 end

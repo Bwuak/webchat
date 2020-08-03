@@ -135,8 +135,8 @@ defmodule Webchat.Chat do
       do: [], else: get_server_chatrooms(server)
   end
 
-  def select_first_room([]), do: select_null_chatroom() 
-  def select_first_room([head|_tail]), do: head
+  def select_default_room([]), do: select_null_chatroom() 
+  def select_default_room([head|_tail]), do: head
 
   defp select_null_chatroom(), do: %Chatroom{roomname: :nil} 
 
