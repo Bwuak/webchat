@@ -14,8 +14,16 @@ defmodule Webchat.Chat.Server do
   @doc false
   def changeset(server, attrs) do
     server
-    |> cast(attrs, [:name, :user_id])
+    |> cast(attrs, [:name])
     |> validate_required([:name])
+  end
+
+  def creation_changeset(server, attrs) do
+    server
+    |> changeset(attrs)
+    |> put_assoc(:user, attrs.user)
+    |> validate_required([:user])
     |> assoc_constraint(:user)
   end
+
 end

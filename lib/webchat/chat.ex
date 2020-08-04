@@ -105,9 +105,9 @@ defmodule Webchat.Chat do
   def get_server!(id), do: Repo.get!(Server, id)
   def get_server(id), do: Repo.get!(Server, id)
 
-  def create_server(attrs \\ %{}) do
+  def create_server(attrs) do
     %Server{}
-    |> Server.changeset(attrs)
+    |> Server.creation_changeset(attrs)
     |> Repo.insert()
   end
 

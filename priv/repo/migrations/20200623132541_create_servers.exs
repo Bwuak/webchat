@@ -3,8 +3,8 @@ defmodule Webchat.Repo.Migrations.CreateServers do
 
   def change do
     create table(:servers) do
-      add :name, :string
-      add :user_id, references(:users)
+      add :name, :string, null: false
+      add :user_id, references(:users), null: false
 
       timestamps()
     end
