@@ -37,7 +37,7 @@ let App = (function(socket) {
 
   document.onkeyup = function(e) {
     if(e.keyCode == 13) {
-      sendMessage()
+      // sendMessage()
     }
   }
 

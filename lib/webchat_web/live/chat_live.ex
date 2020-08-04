@@ -97,24 +97,20 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket, action: "create_chatroom") }
   end
 
+  # server creation callback
   def handle_info({ServerCreationComponent, :server_created, new_server}, socket) do
     new_socket = 
       socket
       |> remove_socket_action()
-      |> update_socket_servers(new_server)
+      |> assign(servers: Chat.list_servers() )
+
     {:noreply, push_patch(new_socket, 
       to: Routes.live_path(new_socket, __MODULE__, server_id: new_server.id),
       replace: true
     ) } 
   end
 
-  defp update_socket_servers(socket, new_server) do
-    %{ socket |
-      assigns: put_in(socket.assigns.servers, new_server),
-      changed: Map.put_new(socket.changed, :servers, true)
-    }
-  end
-
+  # removing conditional component
   defp remove_socket_action(socket) do
     %{ socket |
       assigns: Map.delete(socket.assigns, :action), 
