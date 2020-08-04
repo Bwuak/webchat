@@ -16,6 +16,7 @@ defmodule Webchat.Chat.Server do
     server
     |> cast(attrs, [:name])
     |> validate_required([:name])
+    |> validate_length(:name, min: 2, max: 20)
   end
 
   def creation_changeset(server, attrs) do

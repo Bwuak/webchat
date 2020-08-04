@@ -15,7 +15,7 @@ defmodule Webchat.Chat.Chatroom do
     room 
     |> cast(attrs, [:roomname, :server_id])
     |> validate_required([:roomname])
-    |> validate_length(:roomname, min: 1, max: 20)
+    |> validate_length(:roomname, min: 2, max: 20)
   end
 
 end

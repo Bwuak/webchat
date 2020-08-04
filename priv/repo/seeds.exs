@@ -27,9 +27,9 @@ user = Accounts.get_user_by(email: "admin@admin")
 {:ok, server2} = Chat.create_server(%{name: "server", user: user})
 
 # create chatrooms 
- Chat.create_chatroom(server2.id, %{roomname: "General"}) 
- Chat.create_chatroom(server1.id, %{roomname: "General"})
- Chat.create_chatroom(server1.id, %{roomname: "Another room"})
+Chat.create_chatroom(server2.id, %{roomname: "General"}) 
+Chat.create_chatroom(server1.id, %{roomname: "General"})
+Chat.create_chatroom(server1.id, %{roomname: "Another room"})
  
 # create a website admin
 user = Accounts.get_user!(user.id)
