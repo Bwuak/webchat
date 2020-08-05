@@ -50,7 +50,7 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
     case socket.assigns.changeset.valid? do
       true ->
         user = socket.assigns.user
-        {:ok, new_server} = Chat.create_server(%{name: params["name"], user: user})
+        {:ok, new_server} = Chat.create_server(%{name: params["name"], user_id: user.id})
         send(self(), {__MODULE__, :server_created, new_server})
         {:noreply, socket}
 

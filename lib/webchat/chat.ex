@@ -142,5 +142,4 @@ defmodule Webchat.Chat do
 
   defp select_null_server(), do: %Server{name: :nil} 
 
-
 end

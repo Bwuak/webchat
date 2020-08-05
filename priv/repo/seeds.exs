@@ -16,30 +16,30 @@ alias Webchat.Accounts
 alias Webchat.Accounts.{User, Admin}
 
 # Create a user 
-User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", password: "123456"})
-|> Repo.insert
-
-# get user 
-user = Accounts.get_user_by(email: "admin@admin")
-
-# create servers 
-{:ok, server1} = Chat.create_server(%{name: "ServerTwo", user: user})
-{:ok, server2} = Chat.create_server(%{name: "server", user: user})
-
-# create chatrooms 
-Chat.create_chatroom(server2.id, %{roomname: "General"}) 
-Chat.create_chatroom(server1.id, %{roomname: "General"})
-Chat.create_chatroom(server1.id, %{roomname: "Another room"})
+# User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", password: "123456"})
+# |> Repo.insert
+# 
+# # get user 
+# user = Accounts.get_user_by(email: "admin@admin")
+# 
+# # create servers 
+# {:ok, server1} = Chat.create_server(%{name: "ServerTwo", user: user})
+# {:ok, server2} = Chat.create_server(%{name: "server", user: user})
+# 
+# # create chatrooms 
+# Chat.create_chatroom(server2.id, %{roomname: "General"}) 
+# Chat.create_chatroom(server1.id, %{roomname: "General"})
+# Chat.create_chatroom(server1.id, %{roomname: "Another room"})
+#  
+# # create a website admin
+# {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
  
-# create a website admin
-user = Accounts.get_user!(user.id)
-{:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
-
-# creating server from changeset
+user = Accounts.get_user_by(email: "admin@admin")
+# # creating server from changeset
 %Server{}
-|> Changeset.cast(%{name: "s2"}, [:name] )
-|> Changeset.put_assoc(:user, user)
-|> Changeset.validate_required([:name, :user])
-|> IO.inspect
+|> Changeset.cast(%{name: "s233", user_id: 123123}, [:name, :user_id] )
+|> Changeset.validate_required([:name, :user_id])
+|> Changeset.assoc_constraint(:user)
 |> Repo.insert
+|> IO.inspect
 

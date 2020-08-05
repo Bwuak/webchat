@@ -18,4 +18,12 @@ defmodule Webchat.Chat.Chatroom do
     |> validate_length(:roomname, min: 2, max: 20)
   end
 
+  def creation_changeset(room, attrs) do
+    room 
+    |> changeset(attrs)
+    |> put_assoc(:server, attrs.server)
+    |> validate_required([:server])
+    |> assoc_constraint(:server)
+  end
+
 end
