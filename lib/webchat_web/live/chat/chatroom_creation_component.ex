@@ -32,6 +32,10 @@ defmodule WebchatWeb.Chat.ChatroomCreationComponent do
     """
   end
 
+  def mount(socket) do
+    {:ok, socket} 
+  end
+
   # called after mount, has assigns sent to socket
   def update(assigns, socket) do
     {:ok, assign(socket,
