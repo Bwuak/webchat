@@ -1,9 +1,10 @@
-defmodule WebchatWeb.Chat.RoomCreationComponent do
+defmodule WebchatWeb.Chat.ChatroomCreationComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
   import WebchatWeb.ErrorHelpers
 
+  alias Webchat.Chat
   alias Webchat.Chat.Chatroom
 
 
@@ -32,8 +33,16 @@ defmodule WebchatWeb.Chat.RoomCreationComponent do
   end
 
   def mount(socket) do
-    changeset = Chatroom.changeset(%Chatroom{}, %{})
-    {:ok, assign(socket, changeset: changeset) }
+    {:ok, socket} 
+  end
+
+  # called after mount, has assigns sent to socket
+  def update(assigns, socket) do
+    {:ok, assign(socket,
+      changeset: Chatroom.changeset(%Chatroom{}, %{}),
+      server: assigns.selected_server,
+      id: assigns.id
+    )}
   end
 
   def handle_event("validate", %{"chatroom" => params}, socket) do
@@ -49,7 +58,11 @@ defmodule WebchatWeb.Chat.RoomCreationComponent do
   def handle_event("save", %{"chatroom" => params}, socket) do
     case socket.assigns.changeset.valid? do
       true ->
-        user = socket.assigns.user
+        server_id = socket.assigns.server.id
+        {:ok, new_chatroom} = Chat.create_chatroom(server_id, params)
+        send(self(), {__MODULE__, :chatroom_created, new_chatroom})
+        {:noreply, socket}
+
       false ->
         changeset = 
           %Chatroom{}
@@ -57,20 +70,6 @@ defmodule WebchatWeb.Chat.RoomCreationComponent do
           |> Map.put(:action, :insert)
         {:noreply, assign(socket, changeset: changeset) }
     end
-    # case socket.assigns.changeset.valid? do
-    #   true ->
-    #     user = socket.assigns.user
-    #     {:ok, new_server} = Chat.create_server(%{name: params["name"], user: user})
-    #     send(self(), {__MODULE__, :server_created, new_server})
-    #     {:noreply, socket}
-
-    #   false ->
-    #     changeset =
-    #       %Server{}
-    #       |> Server.changeset(params)
-    #       |> Map.put(:action, :insert)
-    #     {:noreply, assign(socket, changeset: changeset)}
-    # end
   end
 
 end

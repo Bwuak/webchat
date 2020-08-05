@@ -6,7 +6,7 @@ defmodule WebchatWeb.ChatLive do
   alias WebchatWeb.Chat.ServerActionComponent
   alias WebchatWeb.Chat.ServerCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
-  alias WebchatWeb.Chat.RoomCreationComponent
+  alias WebchatWeb.Chat.ChatroomCreationComponent
 
 
   def render(assigns) do
@@ -36,7 +36,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Chat.get_server!()
-    chatrooms = Chat.select_chatrooms(selected_server) 
+    chatrooms = Chat.get_server_chatrooms(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.get_chatroom!()
 
     case Enum.member?(chatrooms, selected_chatroom)  do
@@ -54,7 +54,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Chat.get_server()
-    chatrooms = Chat.select_chatrooms(selected_server) 
+    chatrooms = Chat.get_server_chatrooms(selected_server) 
 
     {:noreply, assign(socket,
       selected_server: selected_server,
@@ -65,7 +65,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(_, _, socket) do
     default_server = Chat.select_default_server(socket.assigns.servers)
-    chatrooms = Chat.select_chatrooms(default_server)
+    chatrooms = Chat.get_server_chatrooms(default_server)
 
     {:noreply, assign(socket,
       selected_server: default_server,
@@ -110,6 +110,18 @@ defmodule WebchatWeb.ChatLive do
     ) } 
   end
 
+  # chatroom creation callback
+  def handle_info({ChatroomCreationComponent, :chatroom_created, new_chatroom}, socket) do
+    new_socket = remove_socket_action(socket)
+
+    {:noreply, push_patch(new_socket,
+      to: Routes.live_path(new_socket, __MODULE__, 
+        %{server_id: socket.assigns.selected_server.id,
+          room_id: new_chatroom.id}),
+        replace: true
+    )}
+  end
+
   # removing conditional component
   defp remove_socket_action(socket) do
     %{ socket |
@@ -128,7 +140,7 @@ defmodule WebchatWeb.ChatLive do
       "join_server" ->
         ServerSubscriptionComponent
       "create_chatroom" ->
-        RoomCreationComponent
+        ChatroomCreationComponent
     end
   end
 

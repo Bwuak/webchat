@@ -10,7 +10,7 @@ defmodule Webchat.Chat do
 
   def create_chatroom(server_id, attrs \\ %{}) do
     %Chatroom{server_id: server_id}
-    |> Chatroom.changeset(attrs)
+    |> Chatroom.creation_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -94,7 +94,8 @@ defmodule Webchat.Chat do
 
   def server_chatrooms_query(query, %Server{id: server_id}) do
     from( c in query,
-      where: c.server_id == ^server_id
+      where: c.server_id == ^server_id,
+      order_by: [asc: c.inserted_at]
     )
   end
 
@@ -128,11 +129,6 @@ defmodule Webchat.Chat do
   def select_default_server(servers) do
     if servers == [], 
       do: select_null_server(), else: servers |> Enum.at(0)
-  end
-
-  def select_chatrooms(server) do
-    if server.name == :nil, 
-      do: [], else: get_server_chatrooms(server)
   end
 
   def select_default_room([]), do: select_null_chatroom() 

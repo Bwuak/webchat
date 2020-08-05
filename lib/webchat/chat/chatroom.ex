@@ -21,8 +21,7 @@ defmodule Webchat.Chat.Chatroom do
   def creation_changeset(room, attrs) do
     room 
     |> changeset(attrs)
-    |> put_assoc(:server, attrs.server)
-    |> validate_required([:server])
+    |> validate_required([:server_id])
     |> assoc_constraint(:server)
   end
 
