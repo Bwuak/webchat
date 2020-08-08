@@ -3,16 +3,16 @@ defmodule Webchat.Repo.Migrations.CreateChatroom do
 
   def change do
     create table(:chatrooms) do
-      add :roomname, :string
+      add :roomname, :string, null: false
 
       timestamps()
     end
 
 
     create table(:messages) do
-      add :content, :text
-      add :user_id, references(:users, on_delete: :nilify_all) 
-      add :chatroom_id, references(:chatrooms)
+      add :content, :text, null: false
+      add :user_id, references(:users, on_delete: :nilify_all)
+      add :chatroom_id, references(:chatrooms), null: false
 
       timestamps()
     end

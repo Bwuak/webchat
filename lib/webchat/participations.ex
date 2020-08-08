@@ -2,7 +2,6 @@ defmodule Webchat.Participations do
   import Ecto.Query
 
   alias Webchat.Repo
-  alias Webchat.Accounts.User
   alias Webchat.Chat.Server
   alias Webchat.Participations.Participant
   alias Webchat.Participations.Role
@@ -42,7 +41,22 @@ defmodule Webchat.Participations do
   Get all participants inside a server
   """
   def list_participants(%Server{} = server) do
+    from( p in Participant,
+      where: p.server_id == ^server.id,
+      preload: [:user, :role]
+    )
+    |> Repo.all()
+  end
 
+  @doc """
+  """
+  def list_servers( user) do
+    from( p in Participant,
+      where: p.user_id == ^user,
+      preload: [:server]
+    )
+    |> Repo.all()
+    |> Enum.map(&(&1.server))
   end
 
 end
