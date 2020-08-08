@@ -42,6 +42,7 @@ defmodule Webchat.Participations do
   Get all participants inside a server
   """
   def list_participants(%Server{} = server) do
+
   end
 
 end

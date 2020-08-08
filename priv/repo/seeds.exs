@@ -34,12 +34,31 @@ alias Webchat.Accounts.{User, Admin}
 # # create a website admin
 # {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
  
-user = Accounts.get_user_by(email: "admin@admin")
-# # creating server from changeset
-%Server{}
-|> Changeset.cast(%{name: "s233", user_id: 123123}, [:name, :user_id] )
-|> Changeset.validate_required([:name, :user_id])
-|> Changeset.assoc_constraint(:user)
-|> Repo.insert
-|> IO.inspect
+# user = Accounts.get_user_by(email: "admin@admin")
+# # # creating server from changeset
+# %Server{}
+# |> Changeset.cast(%{name: "s233", user_id: 123123}, [:name, :user_id] )
+# |> Changeset.validate_required([:name, :user_id])
+# |> Changeset.assoc_constraint(:user)
+# |> Repo.insert
+# |> IO.inspect
+#
+#
 
+
+alias Webchat.Participations.Role
+
+# Role.changeset(%Role{}, %{name: "Member"})
+# |> Repo.insert()
+
+# Repo.get!(Role, 1) |> Repo.delete!()
+# Repo.all(Role) |> IO.inspect
+#
+
+alias Webchat.Participations.Participant
+user = Accounts.get_user_by(email: "admin@admin")
+server = Repo.get_by(Server, %{name: "ServerTwo"}) 
+role = Repo.get_by(Role, %{name: "Member"})
+Participant.creation_changeset(%Participant{}, 
+  %{user_id: user.id, server_id: server.id, role_id: role.id}
+) |> Repo.insert!()
