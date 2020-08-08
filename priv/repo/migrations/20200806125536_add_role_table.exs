@@ -2,7 +2,7 @@ defmodule Webchat.Repo.Migrations.AddRoleTable do
   use Ecto.Migration
 
   def change do
-    create table("roles") do
+    create table(:roles) do
       add :name, :string, [null: false]
 
       timestamps()
