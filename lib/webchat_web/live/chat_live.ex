@@ -3,11 +3,13 @@ defmodule WebchatWeb.ChatLive do
 
   alias Webchat.Accounts
   alias Webchat.Chat
+  alias Webchat.Participations
   alias WebchatWeb.Chat.ServerActionComponent
   alias WebchatWeb.Chat.ServerCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.ChatroomCreationComponent
-
+  alias WebchatWeb.Chat.ServerSubscriptionComponent
+  alias WebchatWeb.Chat.ErrorComponent
 
   def render(assigns) do
     ~L"""
@@ -24,7 +26,7 @@ defmodule WebchatWeb.ChatLive do
 
   def mount(_params, session, socket) do
     user = Accounts.get_user!(session["user_id"])
-    servers = Chat.list_servers()
+    servers = Participations.list_servers(user)
 
     {:ok, 
       assign(socket, 
@@ -35,6 +37,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
+    IO.puts "hey there"
     selected_server = String.to_integer(sid) |> Chat.get_server!()
     chatrooms = Chat.get_server_chatrooms(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.get_chatroom!()
@@ -97,12 +100,20 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket, action: "create_chatroom") }
   end
 
+  # Handle errors
+  def handle_info({_AnyComponent, :error, msg}, socket) do
+    {:noreply, assign(socket, 
+      action: "error",
+      error: msg
+    ) }
+  end
+
   # server creation callback
   def handle_info({ServerCreationComponent, :server_created, new_server}, socket) do
     new_socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: Chat.list_servers() )
+      |> assign(servers: Participations.list_servers(socket.assigns.user) )
 
     {:noreply, push_patch(new_socket, 
       to: Routes.live_path(new_socket, __MODULE__, server_id: new_server.id),
@@ -120,6 +131,18 @@ defmodule WebchatWeb.ChatLive do
           room_id: new_chatroom.id}),
         replace: true
     )}
+  end
+
+  def handle_info({ServerSubscriptionComponent, :server_joined, server_joined}, socket) do
+    new_socket = 
+      socket
+      |> remove_socket_action()
+      |> assign(servers: Participations.list_servers(socket.assigns.user) ) 
+
+    {:noreply, push_patch(new_socket,
+      to: Routes.live_path(new_socket, __MODULE__, server_id: server_joined.id),
+      replace: true
+    ) }
   end
 
   # removing conditional component
@@ -141,6 +164,8 @@ defmodule WebchatWeb.ChatLive do
         ServerSubscriptionComponent
       "create_chatroom" ->
         ChatroomCreationComponent
+      "error" ->
+        ErrorComponent
     end
   end
 

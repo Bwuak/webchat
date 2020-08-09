@@ -3,15 +3,19 @@ defmodule Webchat.Participations do
 
   alias Webchat.Repo
   alias Webchat.Chat.Server
+  alias Webchat.Accounts.User
   alias Webchat.Participations.Participant
   alias Webchat.Participations.Role
 
   @doc """
   Create a link between a user and a server with a role
   """
-  def create_paticipation(attrs) do
+  def create_participation(
+    %User{} = user, %Role{} = role, %Server{} = server
+  ) do
     %Participant{}
-    |> Participant.creation_changeset(attrs)
+    |> Participant.creation_changeset(
+      %{user_id: user.id, role_id: role.id, server_id: server.id} )
     |> Repo.insert()
   end
   
@@ -50,9 +54,9 @@ defmodule Webchat.Participations do
 
   @doc """
   """
-  def list_servers( user) do
+  def list_servers(%Webchat.Accounts.User{} = user) do
     from( p in Participant,
-      where: p.user_id == ^user,
+      where: p.user_id == ^user.id,
       preload: [:server]
     )
     |> Repo.all()
