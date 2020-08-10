@@ -23,8 +23,8 @@ User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", 
 user = Accounts.get_user_by(email: "admin@admin")
 # 
 # # create servers 
-{:ok, server1} = Chat.create_server(%{name: "ServerTwo", user_id: user.id})
-{:ok, server2} = Chat.create_server(%{name: "server", user_id: user.id})
+{:ok, server1} = Chat.create_server(%{name: "First server", user_id: user.id})
+{:ok, server2} = Chat.create_server(%{name: "second server", user_id: user.id})
 # 
 # # create chatrooms 
 Chat.create_chatroom(server2.id, %{roomname: "General"}) 
@@ -34,16 +34,6 @@ Chat.create_chatroom(server1.id, %{roomname: "Another room"})
 # # create a website admin
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
  
-# user = Accounts.get_user_by(email: "admin@admin")
-# # # creating server from changeset
-%Server{}
-|> Changeset.cast(%{name: "s233", user_id: 123123}, [:name, :user_id] )
-|> Changeset.validate_required([:name, :user_id])
-|> Changeset.assoc_constraint(:user)
-|> Repo.insert
-|> IO.inspect
-
-
 
 
 alias Webchat.Participations.Role
@@ -54,6 +44,7 @@ Role.changeset(%Role{}, %{name: "Member"})
 # Repo.get!(Role, 1) |> Repo.delete!()
 Repo.all(Role) |> IO.inspect
 #
+
 
 alias Webchat.Participations.Participant
 user = Accounts.get_user_by(email: "admin@admin")

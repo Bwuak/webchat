@@ -37,7 +37,6 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
-    IO.puts "hey there"
     selected_server = String.to_integer(sid) |> Chat.get_server!()
     chatrooms = Chat.get_server_chatrooms(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.get_chatroom!()
