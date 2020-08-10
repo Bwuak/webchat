@@ -67,7 +67,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(_, _, socket) do
     default_server = Chat.select_default_server(socket.assigns.servers)
-    chatrooms = Chat.get_server_chatrooms(default_server)
+    chatrooms = Chat.select_chatrooms(default_server)
 
     {:noreply, assign(socket,
       selected_server: default_server,
