@@ -48,7 +48,7 @@ Repo.all(Role) |> IO.inspect
 
 alias Webchat.Participations.Participant
 user = Accounts.get_user_by(email: "admin@admin")
-server = Repo.get_by(Server, %{name: "ServerTwo"}) 
+server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})
 Participant.creation_changeset(%Participant{}, 
   %{user_id: user.id,
