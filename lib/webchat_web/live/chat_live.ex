@@ -11,6 +11,8 @@ defmodule WebchatWeb.ChatLive do
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.ErrorComponent
 
+  @topic "server:"
+
   def render(assigns) do
     ~L"""
     <!-- Layout <- chat_live <- components " -->
@@ -31,7 +33,9 @@ defmodule WebchatWeb.ChatLive do
     {:ok, 
       assign(socket, 
         servers: servers,
-        user: user),
+        user: user,
+        users: [],
+        subscription: nil),
       layout: {WebchatWeb.LayoutView, "chat_live.html"}
     }
   end
@@ -41,6 +45,7 @@ defmodule WebchatWeb.ChatLive do
     chatrooms = Chat.get_server_chatrooms(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.get_chatroom!()
 
+    socket = subscribe_to_server(selected_server, socket)
     case Enum.member?(chatrooms, selected_chatroom)  do
       true ->
         {:noreply, assign(socket,
@@ -58,6 +63,7 @@ defmodule WebchatWeb.ChatLive do
     selected_server = String.to_integer(sid) |> Chat.get_server()
     chatrooms = Chat.get_server_chatrooms(selected_server) 
 
+    socket = subscribe_to_server(selected_server, socket)
     {:noreply, assign(socket,
       selected_server: selected_server,
       chatrooms: chatrooms,
@@ -69,6 +75,7 @@ defmodule WebchatWeb.ChatLive do
     default_server = Chat.select_default_server(socket.assigns.servers)
     chatrooms = Chat.select_chatrooms(default_server)
 
+    socket = subscribe_to_server(default_server, socket)
     {:noreply, assign(socket,
       selected_server: default_server,
       chatrooms: chatrooms,
@@ -107,6 +114,14 @@ defmodule WebchatWeb.ChatLive do
     ) }
   end
 
+  # Presence tracking changes callback
+  def handle_info(%Phoenix.Socket.Broadcast{} = broadcast, socket) do
+    {:noreply, assign(socket, 
+      users: subscribed_server_userlist(broadcast.topic) 
+    ) }
+  end
+   
+
   # server creation callback
   def handle_info({ServerCreationComponent, :server_created, new_server}, socket) do
     new_socket = 
@@ -144,6 +159,8 @@ defmodule WebchatWeb.ChatLive do
     ) }
   end
 
+  def handle_infO(_, _), do: nil
+
   # removing conditional component
   defp remove_socket_action(socket) do
     %{ socket |
@@ -167,5 +184,34 @@ defmodule WebchatWeb.ChatLive do
         ErrorComponent
     end
   end
+
+  defp subscribe_to_server(%Webchat.Chat.Server{} = server, socket) do
+    socket = unsubscribe_to_server(socket.assigns.subscription, socket)
+    case server.id do
+      nil ->
+        socket
+      id ->
+        topic = @topic <> Integer.to_string(id)
+        WebchatWeb.Endpoint.subscribe(topic)
+        assign(socket, 
+          subscription: topic,
+          users: subscribed_server_userlist(topic)
+        ) 
+    end
+  end
+
+  defp unsubscribe_to_server(nil, socket), do: socket 
+  defp unsubscribe_to_server(topic, socket) do
+    WebchatWeb.Endpoint.unsubscribe(topic)
+    assign(socket, subscription: nil)
+  end
+
+  defp subscribed_server_userlist(topic) do
+    users = 
+      topic
+      |> WebchatWeb.Presence.list()
+      |> Enum.map(&(elem(&1, 1).user))
+  end
+
 
 end

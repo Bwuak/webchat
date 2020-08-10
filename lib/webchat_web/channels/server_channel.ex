@@ -19,8 +19,8 @@ defmodule WebchatWeb.ServerChannel do
   @very_high_number 90000000
   def handle_in("request_messages", 
     %{"room_id" => id, "oldest" => oldest}, _user, socket) when id > 0 do
-    oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
 
+    oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
     messages = 
       id
       |> Chat.get_chatroom!

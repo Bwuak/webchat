@@ -3,12 +3,19 @@ defmodule WebchatWeb.Chat.UserListComponent do
 
   def render(assigns) do
     ~L"""
-      <div id="users-listing" phx-update="ignore">
+      <div id="users-listing" >
         <h3>Users</h3>
         <div id="online-users-list">
+        <%= for user <- @users do %>
+          <p><%= user.username %></p>
+        <% end %>
         </div>
       </div>
     """
+  end
+
+  def update(assigns, socket) do
+    {:ok, assign(socket, users: assigns.users) }
   end
 
 end

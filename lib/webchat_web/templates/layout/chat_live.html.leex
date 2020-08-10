@@ -7,7 +7,7 @@
       <%= live_component @socket, WebchatWeb.Chat.UserComponent, assigns %>
     </div>
     <%= live_component @socket, WebchatWeb.Chat.ChatroomComponent, assigns %> 
-    <%= live_component @socket, WebchatWeb.Chat.UserListComponent %>
+    <%= live_component @socket, WebchatWeb.Chat.UserListComponent, assigns %>
   </div> 
 
   <%= @inner_content %>

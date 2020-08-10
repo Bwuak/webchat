@@ -61,7 +61,6 @@ let App = (function(socket) {
      * in the chatroom div, which is delayed when creating a new chatroom
      * TODO investigate this later
      */
-    await sleep(50)
     const newServerId = updateServer()
     updateChatroom(newServerId)
     sync(state.getCurrentChatroom())
@@ -137,14 +136,7 @@ let App = (function(socket) {
     if( ! channel ) {
       channel = createChannel(socket, serverId)
     }
-    const presence = new Presence(channel)
 
-    presence.onSync(() => {
-      elements.userListContainer.innerHTML = presence.list((id, 
-      {user: user, metas: [first, ...rest]}) => {
-      return `<p>${user.username}</p>`
-      }).join("")
-    })
 
     state.setCurrentPresence(presence, serverId)
   };
@@ -164,9 +156,7 @@ let App = (function(socket) {
   function updateChatroom(serverId) {
     const toChatroomId = DOM.getCurrentChatroomId()
     const noChange = state.getCurrentChatroomId() == toChatroomId
-    console.log(`from: ${state.getCurrentChatroomId()}, to: ${toChatroomId}`)
     if(noChange) { return; }
-    console.log("There was a change")
     
     const chatroom = state.getChatroom(serverId, toChatroomId)
     state.setCurrentChatroom(chatroom)

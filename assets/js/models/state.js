@@ -36,7 +36,7 @@ State.prototype.getChannel = function() {
 
 State.prototype.deletePresence = function() {
   if(this.currentPresence) {
-    delete this.currentPresence
+    delete this.currentPresence.onSync
   }
 }
 
@@ -46,7 +46,6 @@ State.prototype.addNewChannel = function(channel, serverId) {
 }
 
 State.prototype.createChatroom = function(serverId, chatroomId) {
-  console.log(`creating chatroom #${chatroomId}`)
   chatroomId = Number(chatroomId)
   const newChatroom = new Chatroom(serverId, chatroomId)
   this.chatrooms[chatroomId] = newChatroom
