@@ -1,7 +1,7 @@
 defmodule Webchat.ChatTest do
   use Webchat.DataCase, async: true
 
-  alias Webchat.Accounts
+  alias Webchat.Administration.Users.User
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
   alias Webchat.Chat.Message
@@ -48,7 +48,7 @@ defmodule Webchat.ChatTest do
       room
     end
 
-    defp message_fixture(%Accounts.User{} = user, %Chatroom{} = room) do
+    defp message_fixture(%User{} = user, %Chatroom{} = room) do
       {:ok, %Message{} = message} = Chat.add_message(user, room.id, @valid_attrs)
       message = %Message{message | user:  user}
       message

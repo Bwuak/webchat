@@ -1,9 +1,9 @@
-defmodule Webchat.Accounts do
+defmodule Webchat.Administration.Users do
   import Ecto.Query, warn: false
   alias Webchat.Repo
 
-  alias Webchat.Accounts.User
-  alias Webchat.Accounts.Admin
+  alias Webchat.Administration.Users.User
+
 
   def list_users do
     Repo.all(User)
@@ -38,26 +38,6 @@ defmodule Webchat.Accounts do
 
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
-  end 
-
-  def is_admin?(%User{id: user_id}) do
-    Repo.get_by(Admin, %{user_id: user_id}) != nil
   end
-
-  def authenticate_user(email, given_pass) do
-    down_cased_email = String.downcase email
-    user = get_user_by(email: down_cased_email)
-
-    cond do
-      user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->
-        {:ok, user}
-
-      user ->
-        {:error, :unauthorized}
-
-      true ->
-        Pbkdf2.no_user_verify()
-        {:error, :not_found}
-    end
-  end
+ 
 end

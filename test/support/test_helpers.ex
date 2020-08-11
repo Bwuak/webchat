@@ -1,5 +1,6 @@
 defmodule Webchat.TestHelpers do
-  alias Webchat.Accounts 
+  alias Webchat.Administration.Users
+  alias Webchat.Administration.Users.User
 
   @valid_attrs %{email: "some@email", password: "some password", username: "some username"}
 
@@ -8,11 +9,11 @@ defmodule Webchat.TestHelpers do
     {:ok, user} =
       attrs
       |> Enum.into(@valid_attrs)
-      |> Accounts.create_user()
+      |> Users.create_user()
 
     # We normally don't see user password outside of creation
     # We remove it for equality in our tests
-    user = %Accounts.User{user | password: nil}
+    user = %User{user | password: nil}
     user
   end
 

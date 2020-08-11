@@ -6,7 +6,7 @@ defmodule Webchat.Chat.Message do
     field :content, :string
 
     belongs_to :chatroom, Webchat.Chat.Chatroom
-    belongs_to :user, Webchat.Accounts.User
+    belongs_to :user, Webchat.Administration.Users.User
 
     timestamps()
   end

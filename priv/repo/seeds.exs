@@ -12,15 +12,15 @@ alias Ecto.Changeset
 alias Webchat.Repo
 alias Webchat.Chat
 alias Webchat.Chat.{Chatroom, Server, Message}
-alias Webchat.Accounts
-alias Webchat.Accounts.{User, Admin}
+alias Webchat.Administration.Admins
+alias Webchat.Administration.Admins.{User, Admin}
 
 # Create a user 
 User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", password: "123456"})
 |> Repo.insert!
 # 
 # # get user 
-user = Accounts.get_user_by(email: "admin@admin")
+user = Admins.get_user_by(email: "admin@admin")
 # 
 # # create servers 
 {:ok, server1} = Chat.create_server(%{name: "First server", user_id: user.id})
@@ -47,7 +47,7 @@ Repo.all(Role) |> IO.inspect
 
 
 alias Webchat.Participations.Participant
-user = Accounts.get_user_by(email: "admin@admin")
+user = Admins.get_user_by(email: "admin@admin")
 server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})
 Participant.creation_changeset(%Participant{}, 

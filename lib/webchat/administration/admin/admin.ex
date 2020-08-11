@@ -1,9 +1,9 @@
-defmodule Webchat.Accounts.Admin do
+defmodule Webchat.Administration.Admins.Admin do
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "admins" do
-    belongs_to :user, Webchat.Accounts.User
+    belongs_to :user, Webchat.Administration.Users.User
 
     timestamps()
   end

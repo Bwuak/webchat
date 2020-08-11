@@ -2,8 +2,8 @@ defmodule WebchatWeb.ServerChannel do
   use WebchatWeb, :channel
 
   alias Webchat.Chat
-  alias Webchat.Accounts
   alias WebchatWeb.MessageView
+  alias Webchat.Administration.Users
 
   def join("server:" <> server_id, _params, socket) do
     send(self(), :after_join)
@@ -12,7 +12,7 @@ defmodule WebchatWeb.ServerChannel do
   end
 
   def handle_in(event, params, socket) do
-    user = Accounts.get_user!(socket.assigns.user_id)
+    user = Users.get_user!(socket.assigns.user_id)
     handle_in(event, params, user, socket)
   end
 

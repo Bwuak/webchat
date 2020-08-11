@@ -1,15 +1,15 @@
 defmodule WebchatWeb.SessionController do
   use WebchatWeb, :controller
 
+  alias Webchat.Administration
+
   def new(conn, _) do
     render(conn, "new.html")
   end
 
-  def create(
-    conn,
-    %{"session" => %{"email" => email, "password" => password}}
-  ) do
-    case Webchat.Accounts.authenticate_user(email, password) do
+  def create(conn,
+      %{"session" => %{"email" => email, "password" => password} } ) do
+    case Administration.authenticate_user(email, password) do
       {:ok, user} ->
         conn
         |> WebchatWeb.Auth.login(user)

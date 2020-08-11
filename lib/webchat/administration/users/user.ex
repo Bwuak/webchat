@@ -1,4 +1,4 @@
-defmodule Webchat.Accounts.User do
+defmodule Webchat.Administration.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
 

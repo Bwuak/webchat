@@ -1,7 +1,8 @@
 defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
-  alias Webchat.Accounts
+  alias Webchat.Administration.Users
+  alias Webchat.Administration.Admins
   alias Webchat.Chat
   alias Webchat.Participations
   alias WebchatWeb.Chat.ServerActionComponent
@@ -27,7 +28,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def mount(_params, session, socket) do
-    user = Accounts.get_user!(session["user_id"])
+    user = Users.get_user!(session["user_id"])
     servers = Participations.list_servers(user)
 
     {:ok, 

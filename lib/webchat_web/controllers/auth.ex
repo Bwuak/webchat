@@ -17,7 +17,7 @@ defmodule WebchatWeb.Auth do
       user = conn.assigns[:current_user] ->
         put_current_user(conn, user)
 
-      user = user_id && Webchat.Accounts.get_user(user_id) ->
+      user = user_id && Webchat.Administration.Users.get_user(user_id) ->
         put_current_user(conn, user)
 
       true -> 
@@ -66,7 +66,7 @@ defmodule WebchatWeb.Auth do
   def authenticate_admin(conn, _opts) do
     user = conn.assigns.current_user
 
-    case Webchat.Accounts.is_admin?(user) do
+    case Webchat.Administration.is_admin?(user) do
       true ->
         conn
       _ -> 

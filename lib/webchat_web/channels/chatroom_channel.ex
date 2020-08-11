@@ -2,7 +2,7 @@ defmodule WebchatWeb.ChatroomChannel do
   use WebchatWeb, :channel
 
   alias Webchat.Chat
-  alias Webchat.Accounts
+  alias Webchat.Administration.Users
   alias WebchatWeb.MessageView
 
   def join("room:" <> room_id, _params, socket) do
@@ -18,7 +18,7 @@ defmodule WebchatWeb.ChatroomChannel do
   end
 
   def handle_in(event, params, socket) do
-    user = Accounts.get_user!(socket.assigns.user_id)
+    user = Users.get_user!(socket.assigns.user_id)
     handle_in(event, params, user, socket)
   end
 

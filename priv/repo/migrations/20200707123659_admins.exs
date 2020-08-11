@@ -1,4 +1,4 @@
-defmodule Webchat.Repo.Migrations.Admins do
+defmodule Webchat.Repo.Migrations.Administration.Admins do
   use Ecto.Migration
 
   def change do

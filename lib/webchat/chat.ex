@@ -2,7 +2,8 @@ defmodule Webchat.Chat do
   import Ecto.Query, warn: false
 
   alias Webchat.Repo
-  alias Webchat.Accounts
+  alias Webchat.Administration.Admins
+  alias Webchat.Administration.Users.User
   alias Webchat.Chat.Chatroom
   alias Webchat.Chat.Message
   alias Webchat.Chat.Server
@@ -73,7 +74,7 @@ defmodule Webchat.Chat do
     Message.changeset(message, attrs)
   end
 
-  def add_message(%Accounts.User{id: user_id}, chatroom_id, attrs) do
+  def add_message(%User{id: user_id}, chatroom_id, attrs) do
     %Message{user_id: user_id, chatroom_id: chatroom_id}
     |> Message.changeset(attrs)
     |> Repo.insert()
