@@ -13,7 +13,7 @@ alias Webchat.Repo
 alias Webchat.Chat
 alias Webchat.Chat.Models.Chatroom
 alias Webchat.Chat.erver
-alias Webchat.Chat.Message
+alias Webchat.Chat.Models.Message
 alias Webchat.Administration.Admins
 alias Webchat.Administration.Admins.{User, Admin}
 
@@ -48,7 +48,7 @@ Repo.all(Role) |> IO.inspect
 #
 
 
-alias Webchat.Participations.Participant
+alias Webchat.Chat.Models.Participant
 user = Admins.get_by(email: "admin@admin")
 server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})

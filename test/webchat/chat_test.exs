@@ -3,7 +3,7 @@ defmodule Webchat.ChatTest do
 
   alias Webchat.Administration.Models.User
   alias Webchat.Chat
-  alias Webchat.Chat.Message
+  alias Webchat.Chat.Models.Message
   alias Webchat.Chat.Models.Chatroom
   alias Webchat.Chat.Models.Server
 
@@ -50,7 +50,7 @@ defmodule Webchat.ChatTest do
     end
 
     defp message_fixture(%User{} = user, %Chatroom{} = room) do
-      {:ok, %Message{} = message} = Chat.add_message(user, room.id, @valid_attrs)
+      {:ok, %Message{} = message} = Chat.Messages.add_message(user, room.id, @valid_attrs)
       message = %Message{message | user:  user}
       message
     end
@@ -61,7 +61,7 @@ defmodule Webchat.ChatTest do
       room = chatroom_fixture(server)
 
       {:ok, %Message{} = message} =
-        Chat.add_message(user, room.id, @valid_attrs)
+        Chat.Messages.add_message(user, room.id, @valid_attrs)
       assert message.content == "some message"
     end
     
@@ -71,10 +71,10 @@ defmodule Webchat.ChatTest do
       room = chatroom_fixture(server)
 
       {:ok, %Message{} = message} =
-        Chat.add_message(user, room.id, @valid_attrs)
+        Chat.Messages.add_message(user, room.id, @valid_attrs)
 
       message = %Message{message | user: user}
-      messages = Chat.get_chatroom_messages(room)
+      messages = Chat.Messages.get_chatroom_messages(room)
       assert messages == [message]
     end
 
@@ -83,13 +83,13 @@ defmodule Webchat.ChatTest do
       server = server_fixture(%{user_id: user.id})
       room = chatroom_fixture(server)
 
-      {:error, _err} = Chat.add_message(user, room.id, @invalid_attrs)
+      {:error, _err} = Chat.Messages.add_message(user, room.id, @invalid_attrs)
 
-      messages = Chat.get_chatroom_messages(room)
+      messages = Chat.Messages.get_chatroom_messages(room)
       assert messages == []
     end
 
-    test "get_chatroom_old_messages/2 gives up to 50 messages older than
+    test "Messages.get_chatroom_old_messages/2 gives up to 50 messages older than
     the last message seen" do
       user = user_fixture()
       server = server_fixture(%{user_id: user.id})
@@ -102,7 +102,7 @@ defmodule Webchat.ChatTest do
       oldest_message_seen = message_fixture(user, room)
 
       queried_messages = 
-        Chat.get_chatroom_old_messages(room, oldest_message_seen.id)
+        Chat.Messages.get_chatroom_old_messages(room, oldest_message_seen.id)
       
       assert length(old_messages) == 50
       assert length(queried_messages) == 50
@@ -121,7 +121,7 @@ defmodule Webchat.ChatTest do
       old_messages = 
         for _msg <- 1..50 do message_fixture(user, room) end
 
-      queried_messages = Chat.chatroom_messages(room)
+      queried_messages = Chat.Messages.chatroom_messages(room)
 
       assert not Enum.member?(queried_messages, older_message)
       assert queried_messages == old_messages
@@ -136,7 +136,7 @@ defmodule Webchat.ChatTest do
       new_unseen_messages = 
         for _msg <- 1..100 do message_fixture(user, room) end
 
-      _queried_messages = Chat.chatroom_messages(room, last_seen_message.id)
+      _queried_messages = Chat.Messages.chatroom_messages(room, last_seen_message.id)
 
       assert queried_messages = new_unseen_messages
       assert not Enum.member?(queried_messages, last_seen_message)

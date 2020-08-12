@@ -1,12 +1,13 @@
-defmodule Webchat.Participations do
-  import Ecto.Query
+defmodule Webchat.Chat.Participants do
+  import Ecto.Query, warn: false
 
   alias Webchat.Repo
   alias Webchat.Chat.Models.Server
   alias Webchat.Administration.Models.User
-  alias Webchat.Participations.Participant
+  alias Webchat.Chat.Models.Participant
   alias Webchat.Chat.Models.Role
   alias Webchat.Administration.Models.User
+
 
   @doc """
   Create a link between a user and a server with a role

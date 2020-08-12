@@ -31,5 +31,9 @@ defmodule Webchat.Chat.Servers do
     Server.changeset(server, attrs)
   end
 
+  def with_chatrooms(%Server{} = server) do
+    Repo.preload(server, :chatrooms)
+  end
+
 
 end

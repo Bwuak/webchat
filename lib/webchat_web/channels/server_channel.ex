@@ -24,7 +24,7 @@ defmodule WebchatWeb.ServerChannel do
     messages = 
       id
       |> Chat.Chatrooms.get_chatroom!
-      |> Chat.get_chatroom_old_messages(oldest_id)
+      |> Chat.Messages.get_chatroom_old_messages(oldest_id)
       |> Phoenix.View.render_many(MessageView, "message.json")
 
     {:reply, {:ok, %{messages: messages, room_id: id}}, socket} 
@@ -33,7 +33,7 @@ defmodule WebchatWeb.ServerChannel do
   def handle_in("new_message", params, user, socket) do
     {:ok, room_id} = Map.fetch(params, "room_id")
 
-    case Chat.add_message(user, room_id, params) do
+    case Chat.Messages.add_message(user, room_id, params) do
       {:ok, message} ->
         broadcast_message(socket, user, message, room_id)
         {:reply, :ok, socket}

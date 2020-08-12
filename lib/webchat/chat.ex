@@ -1,89 +1,15 @@
 defmodule Webchat.Chat do
   import Ecto.Query, warn: false
 
-  alias Webchat.Repo
-  alias Webchat.Administration.Models.User
   alias Webchat.Chat.Models.Chatroom
-  alias Webchat.Chat.Message
   alias Webchat.Chat.Models.Server
+  alias Webchat.Chat.Servers
 
-
-  def get_chatroom_messages(%Chatroom{id: chatroom_id}) do
-    Message
-    |> chatroom_messages_query(chatroom_id)
-    |> Repo.all()  
-  end
-
-  @doc "gives up to 50 messages older than oldest seen, chatroom history"
-  def get_chatroom_old_messages(%Chatroom{} = room, oldest_id) do
-    Repo.all(
-      from msg in Ecto.assoc(room, :messages),
-      where: msg.id < ^oldest_id,
-      order_by: [desc: msg.id],
-      limit: 50,
-      preload: [:user]
-    )
-    |> Enum.reverse
-  end
-
-  def chatroom_messages(room, last_seen_id \\ 0)
-  @doc "get all the messages between last_seen_id and current msg,
-  this happens when a user has changed server and comes back
-  "
-  def chatroom_messages(%Chatroom{} = room, last_seen_id) when last_seen_id > 0 do
-    Repo.all(
-      from msg in Ecto.assoc(room, :messages),
-      where: msg.id > ^last_seen_id,
-      order_by: [desc: msg.id],
-      preload: [:user]
-    )
-    |> Enum.reverse
-  end
-
-  @doc "get 50 newest messages when a user join a chatroom"
-  def chatroom_messages(%Chatroom{} = room, _) do
-    Repo.all(
-      from msg in Ecto.assoc(room, :messages),
-      order_by: [desc: msg.id],
-      limit: 50,
-      preload: [:user]
-    )
-    |> Enum.reverse
-  end
-
-  defp chatroom_messages_query(query, chatroom_id) do
-    from( v in query, 
-      where: v.chatroom_id == ^chatroom_id,
-      preload: [:user]
-    )
-  end
-
-
-  def change_message(%Message{} = message, attrs \\ %{}) do
-    Message.changeset(message, attrs)
-  end
-
-  def add_message(%User{id: user_id}, chatroom_id, attrs) do
-    %Message{user_id: user_id, chatroom_id: chatroom_id}
-    |> Message.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def get_server_chatrooms(%Server{} = server) do
-    Chatroom
-    |> server_chatrooms_query(server)
-    |> Repo.all()
-  end
-
-  def server_chatrooms_query(query, %Server{id: server_id}) do
-    from( c in query,
-      where: c.server_id == ^server_id,
-      order_by: [asc: c.inserted_at]
-    )
-  end
 
   def select_chatrooms(server) do
-    if server.id == :nil, do: [], else: get_server_chatrooms(server)
+    if server.id == :nil, 
+      do: [], 
+      else: Enum.reverse( Servers.with_chatrooms(server).chatrooms )
   end
 
   def select_default_server(servers) do
@@ -91,8 +17,8 @@ defmodule Webchat.Chat do
       do: select_null_server(), else: servers |> Enum.at(0)
   end
 
-  def select_default_room([]), do: select_null_chatroom() 
-  def select_default_room([head|_tail]), do: head
+  def select_default_chatroom([]), do: select_null_chatroom() 
+  def select_default_chatroom([head|_tail]), do: head
 
   defp select_null_chatroom(), do: %Chatroom{roomname: :nil} 
 

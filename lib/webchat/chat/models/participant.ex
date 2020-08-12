@@ -1,4 +1,4 @@
-defmodule Webchat.Participations.Participant do
+defmodule Webchat.Chat.Models.Participant do
   use Ecto.Schema
 
   import Ecto.Changeset

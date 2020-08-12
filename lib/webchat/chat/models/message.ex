@@ -1,4 +1,4 @@
-defmodule Webchat.Chat.Message do
+defmodule Webchat.Chat.Models.Message do
   use Ecto.Schema
   import Ecto.Changeset
 

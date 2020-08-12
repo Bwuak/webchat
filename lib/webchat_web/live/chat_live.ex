@@ -3,7 +3,7 @@ defmodule WebchatWeb.ChatLive do
 
   alias Webchat.Administration.Users
   alias Webchat.Chat
-  alias Webchat.Participations
+  alias Webchat.Chat.Participants
   alias Webchat.Chat.Models.Server
   alias WebchatWeb.Chat.ServerActionComponent
   alias WebchatWeb.Chat.ServerCreationComponent
@@ -29,7 +29,7 @@ defmodule WebchatWeb.ChatLive do
 
   def mount(_params, session, socket) do
     user = Users.get!(session["user_id"])
-    servers = Participations.list_servers(user)
+    servers = Participants.list_servers(user)
 
     {:ok, 
       assign(socket, 
@@ -43,7 +43,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Chat.Servers.get!()
-    chatrooms = Chat.get_server_chatrooms(selected_server) 
+    chatrooms = Chat.select_chatrooms(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.Chatrooms.get_chatroom!()
 
     socket = subscribe_to_server(selected_server, socket)
@@ -62,13 +62,13 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Chat.Servers.get()
-    chatrooms = Chat.get_server_chatrooms(selected_server) 
+    chatrooms = Chat.select_chatrooms(selected_server) 
 
     socket = subscribe_to_server(selected_server, socket)
     {:noreply, assign(socket,
       selected_server: selected_server,
       chatrooms: chatrooms,
-      selected_chatroom: Chat.select_default_room(chatrooms) 
+      selected_chatroom: Chat.select_default_chatroom(chatrooms) 
     )}
   end
 
@@ -80,7 +80,7 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket,
       selected_server: default_server,
       chatrooms: chatrooms,
-      selected_chatroom: Chat.select_default_room(chatrooms)
+      selected_chatroom: Chat.select_default_chatroom(chatrooms)
     )}
   end
 
@@ -128,7 +128,7 @@ defmodule WebchatWeb.ChatLive do
     new_socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: Participations.list_servers(socket.assigns.user) )
+      |> assign(servers: Participants.list_servers(socket.assigns.user) )
 
     {:noreply, push_patch(new_socket, 
       to: Routes.live_path(new_socket, __MODULE__, server_id: new_server.id),
@@ -152,7 +152,7 @@ defmodule WebchatWeb.ChatLive do
     new_socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: Participations.list_servers(socket.assigns.user) ) 
+      |> assign(servers: Participants.list_servers(socket.assigns.user) ) 
 
     {:noreply, push_patch(new_socket,
       to: Routes.live_path(new_socket, __MODULE__, server_id: server_joined.id),

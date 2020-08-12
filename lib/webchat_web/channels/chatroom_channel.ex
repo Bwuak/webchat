@@ -11,7 +11,7 @@ defmodule WebchatWeb.ChatroomChannel do
 
     messages = 
       room
-      |> Chat.get_chatroom_messages 
+      |> Chat.Messages.get_chatroom_messages 
       |> Phoenix.View.render_many(MessageView, "message.json")
 
     {:ok, %{messages: messages}, assign(socket, :room_id, room_id)}
@@ -25,7 +25,7 @@ defmodule WebchatWeb.ChatroomChannel do
   def handle_in("new_message", params, user, socket) do
     room_id = socket.assigns.room_id
 
-    case Chat.add_message(user, room_id, params) do
+    case Chat.Messages.add_message(user, room_id, params) do
       {:ok, message} ->
         broadcast_message(socket, user, message, room_id)
         {:reply, :ok, socket}

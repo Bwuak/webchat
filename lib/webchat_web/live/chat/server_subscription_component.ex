@@ -4,7 +4,7 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
 
   import WebchatWeb.ErrorHelpers
 
-  alias Webchat.Participations
+  alias Webchat.Chat.Participants
   alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Models.Server
 
@@ -41,7 +41,7 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
 
         server = %Server{} ->
           user = socket.assigns.user
-          {:ok, _} = Participations.create_participation(
+          {:ok, _} = Participants.create_participation(
             user, Webchat.Repo.get!(Role, 1), server )
 
           {__MODULE__, :server_joined, server}
