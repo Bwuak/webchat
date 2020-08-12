@@ -2,7 +2,7 @@ defmodule Webchat.AdministrationTest do
   use Webchat.DataCase, async: true
 
   alias Webchat.Administration
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
 
 
   test "is_admin?/1 returns true if user is admin" do

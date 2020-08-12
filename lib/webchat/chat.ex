@@ -2,7 +2,7 @@ defmodule Webchat.Chat do
   import Ecto.Query, warn: false
 
   alias Webchat.Repo
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
   alias Webchat.Chat.Chatroom
   alias Webchat.Chat.Message
   alias Webchat.Chat.Server

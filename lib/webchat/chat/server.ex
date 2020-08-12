@@ -5,7 +5,7 @@ defmodule Webchat.Chat.Server do
   schema "servers" do
     field :name, :string
 
-    belongs_to :user, Webchat.Administration.Users.User
+    belongs_to :user, Webchat.Administration.Models.User
     has_many :chatrooms, Webchat.Chat.Chatroom
 
     timestamps()

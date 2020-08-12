@@ -2,8 +2,8 @@ defmodule Webchat.TestHelpers do
 
   alias Webchat.Repo
   alias Webchat.Administration.Users
-  alias Webchat.Administration.Admins.Admin
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.Admin
+  alias Webchat.Administration.Models.User
 
   @valid_attrs %{email: "some@email", password: "some password", username: "some username"}
 

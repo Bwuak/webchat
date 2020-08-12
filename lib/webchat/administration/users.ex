@@ -2,7 +2,7 @@ defmodule Webchat.Administration.Users do
   import Ecto.Query, warn: false
   alias Webchat.Repo
 
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
 
 
   def list(), do: Repo.all(User)

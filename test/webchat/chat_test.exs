@@ -1,7 +1,7 @@
 defmodule Webchat.ChatTest do
   use Webchat.DataCase, async: true
 
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
   alias Webchat.Chat
   alias Webchat.Chat.Chatroom
   alias Webchat.Chat.Message

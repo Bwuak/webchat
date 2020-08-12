@@ -11,7 +11,9 @@ import Ecto.Query
 alias Ecto.Changeset
 alias Webchat.Repo
 alias Webchat.Chat
-alias Webchat.Chat.{Chatroom, Server, Message}
+alias Webchat.Chat.Chatroom
+alias Webchat.Chat.erver
+alias Webchat.Chat.Message
 alias Webchat.Administration.Admins
 alias Webchat.Administration.Admins.{User, Admin}
 

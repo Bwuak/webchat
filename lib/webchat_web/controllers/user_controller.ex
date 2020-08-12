@@ -2,7 +2,7 @@ defmodule WebchatWeb.UserController do
   use WebchatWeb, :controller
 
   alias Webchat.Administration.Users
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
 
 
   def index(conn, _params) do

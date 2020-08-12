@@ -3,7 +3,7 @@ defmodule Webchat.Participations do
 
   alias Webchat.Repo
   alias Webchat.Chat.Server
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
   alias Webchat.Participations.Participant
   alias Webchat.Participations.Role
 
@@ -54,7 +54,7 @@ defmodule Webchat.Participations do
 
   @doc """
   """
-  def list_servers(%Webchat.Administration.Users.User{} = user) do
+  def list_servers(%Webchat.Administration.Models.User{} = user) do
     from( p in Participant,
       where: p.user_id == ^user.id,
       preload: [:server]

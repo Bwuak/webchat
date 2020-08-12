@@ -25,7 +25,7 @@ defmodule WebchatWeb.AuthTest do
     test "Auth.authenticate_user/2 is not halted for an existing current_user", %{conn: conn} do
       conn = 
         conn
-        |> assign(:current_user, %Webchat.Administration.Users.User{})
+        |> assign(:current_user, %Webchat.Administration.Models.User{})
         |> Auth.authenticate_user([])
       refute conn.halted
     end
@@ -33,7 +33,7 @@ defmodule WebchatWeb.AuthTest do
     test "Auth.login/2 puts the user in the session", %{conn: conn} do
       login_conn =
         conn
-        |> Auth.login(%Webchat.Administration.Users.User{id: 1})
+        |> Auth.login(%Webchat.Administration.Models.User{id: 1})
         |> send_resp(:ok, "")
       next_conn = get(login_conn, "/")
       assert get_session(next_conn, :user_id) == 1

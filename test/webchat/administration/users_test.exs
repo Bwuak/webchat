@@ -2,7 +2,7 @@ defmodule Webchat.Administration.UsersTest do
   use Webchat.DataCase, async: true
 
   alias Webchat.Administration.Users
-  alias Webchat.Administration.Users.User
+  alias Webchat.Administration.Models.User
 
 
   @valid %{email: "some@email", password: "some password", username: "some username"}
