@@ -2,8 +2,6 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
-  import WebchatWeb.ErrorHelpers
-
   alias Webchat.Chat.Participants
   alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Models.Server
