@@ -79,7 +79,7 @@ Webchat.Accounts => Webchat.Administration
 
 -----------------------------a secondary context function
 
-Users now has all the basic crud operations on User struct
+Users module contains basic CRUD operation with User struct
 
 ex:
 
