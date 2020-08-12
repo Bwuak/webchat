@@ -30,6 +30,16 @@ However most information about Phoenix projects seem to be structured that way.
 <h4>This blog post seems to share my concerns:
 http://devonestes.herokuapp.com/a-proposal-for-context-rules
 </h4>
+<h6>Instead of having a single folder for every schema and module names such as Webchat.administration.Users.User, Webchat.Chat.Chatrooms.Chatroom etc...</h6>
+</br>
+<h6>
+  I propose to create a models folder for every context such as:
+  
+    - Webchat.administration.Models.User
+    - Webchat.administration.Models.Admin
+    - Webchat.Chat.Models.Chatroom
+    - Webchat.Chat.Models.Server
+  
 
 </br>
 <h3>Goals:</h3>
@@ -65,7 +75,7 @@ Allowed to use changesets directly for validation.
 
 --------------------Modules changes
 
-Webchat.Accounts.User => Webchat.Administration.Users.User
+Webchat.Accounts.User => Webchat.Administration.Models.User
 
 
 Webchat.Administration.Users = created
