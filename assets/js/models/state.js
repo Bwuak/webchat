@@ -8,9 +8,6 @@ var State = function() {
   this.currentChatroom = nullRoom
 }
 
-State.prototype.setCurrentPresence = function(presence, serverId) {
-  this.currentPresence = presence
-}
 
 State.prototype.getCurrentChatroom = function() {
   return this.currentChatroom
@@ -34,11 +31,6 @@ State.prototype.getChannel = function() {
   return this.channels[currentChannelId]
 }
 
-State.prototype.deletePresence = function() {
-  if(this.currentPresence) {
-    delete this.currentPresence.onSync
-  }
-}
 
 // creates and store a new channel linked to a server
 State.prototype.addNewChannel = function(channel, serverId) {
