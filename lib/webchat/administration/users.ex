@@ -5,9 +5,7 @@ defmodule Webchat.Administration.Users do
   alias Webchat.Administration.Users.User
 
 
-  def list do
-    Repo.all(User)
-  end
+  def list(), do: Repo.all(User)
 
   def list_with_ids(ids) do
     Repo.all(from(user in User, where: user.id in ^ids))
@@ -16,9 +14,7 @@ defmodule Webchat.Administration.Users do
   def get!(id), do: Repo.get!(User, id)
   def get(id), do: Repo.get(User, id)
 
-  def get_by(params) do
-    Repo.get_by(User, params)
-  end
+  def get_by(params), do: Repo.get_by(User, params)
 
   def create(attrs \\ %{}) do
     %User{}
@@ -32,9 +28,7 @@ defmodule Webchat.Administration.Users do
     |> Repo.update()
   end
 
-  def delete(%User{} = user) do
-    Repo.delete(user)
-  end
+  def delete(%User{} = user), do: Repo.delete(user)
 
   def change(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)

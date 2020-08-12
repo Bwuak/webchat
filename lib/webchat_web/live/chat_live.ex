@@ -206,12 +206,11 @@ defmodule WebchatWeb.ChatLive do
     assign(socket, subscription: nil)
   end
 
+  # Only temporary, will remove unecessary elements
   defp subscribed_server_userlist(topic) do
-    users = 
-      topic
-      |> WebchatWeb.Presence.list()
-      |> Enum.map(&(elem(&1, 1).user))
+    topic
+    |> WebchatWeb.Presence.list()
+    |> Enum.map(&(elem(&1, 1).user))
   end
-
 
 end

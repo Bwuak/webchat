@@ -6,7 +6,7 @@ defmodule Webchat.Administration do
 
 
   def is_admin?(%User{} = user) do
-    Admins.get_admin(user) != nil
+    Admins.get_by(%{user_id: user.id}) != nil
   end
 
   def authenticate_user(email, given_pass) do
