@@ -1,9 +1,13 @@
 defmodule WebchatWeb.ServerChannel do
   use WebchatWeb, :channel
 
-  alias Webchat.Chat
-  alias WebchatWeb.MessageView
   alias Webchat.Administration.Users
+
+  alias Webchat.Chat.Messages
+  alias Webchat.Chat.Chatrooms
+  alias WebchatWeb.MessageView
+
+
 
   def join("server:" <> server_id, _params, socket) do
     send(self(), :after_join)
@@ -23,17 +27,18 @@ defmodule WebchatWeb.ServerChannel do
     oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
     messages = 
       id
-      |> Chat.Chatrooms.get_chatroom!
-      |> Chat.Messages.get_chatroom_old_messages(oldest_id)
+      |> Chatrooms.get_chatroom!
+      |> Messages.get_chatroom_old_messages(oldest_id)
       |> Phoenix.View.render_many(MessageView, "message.json")
 
     {:reply, {:ok, %{messages: messages, room_id: id}}, socket} 
   end
 
   def handle_in("new_message", params, user, socket) do
+    IO.puts "hey"
     {:ok, room_id} = Map.fetch(params, "room_id")
 
-    case Chat.Messages.add_message(user, room_id, params) do
+    case Messages.add_message(user, room_id, params) do
       {:ok, message} ->
         broadcast_message(socket, user, message, room_id)
         {:reply, :ok, socket}

@@ -12,7 +12,6 @@ defmodule Webchat.AdministrationTest do
     assert Administration.is_admin?(user) == true
   end
 
-
   # We need to know the user's password
   @valid_attrs %{password: "some random pas"}
   test "authenticate_user/2 returns a user with valid attrs" do
