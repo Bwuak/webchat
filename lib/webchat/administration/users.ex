@@ -1,7 +1,7 @@
 defmodule Webchat.Administration.Users do
   import Ecto.Query, warn: false
+  
   alias Webchat.Repo
-
   alias Webchat.Administration.Models.User
 
 
