@@ -11,7 +11,7 @@ import Ecto.Query
 alias Ecto.Changeset
 alias Webchat.Repo
 alias Webchat.Chat
-alias Webchat.Chat.Chatroom
+alias Webchat.Chat.Models.Chatroom
 alias Webchat.Chat.erver
 alias Webchat.Chat.Message
 alias Webchat.Administration.Admins
@@ -25,20 +25,20 @@ User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", 
 user = Admins.get_by(email: "admin@admin")
 # 
 # # create servers 
-{:ok, server1} = Chat.create_server(%{name: "First server", user_id: user.id})
-{:ok, server2} = Chat.create_server(%{name: "second server", user_id: user.id})
+{:ok, server1} = Chat.Servers.create_server(%{name: "First server", user_id: user.id})
+{:ok, server2} = Chat.Servers.create_server(%{name: "second server", user_id: user.id})
 # 
 # # create chatrooms 
-Chat.create_chatroom(server2.id, %{roomname: "General"}) 
-Chat.create_chatroom(server1.id, %{roomname: "General"})
-Chat.create_chatroom(server1.id, %{roomname: "Another room"})
+Chat.Chatrooms.create_chatroom(server2.id, %{roomname: "General"}) 
+Chat.Chatrooms.create_chatroom(server1.id, %{roomname: "General"})
+Chat.Chatrooms.create_chatroom(server1.id, %{roomname: "Another room"})
 #  
 # # create a website admin
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
  
 
 
-alias Webchat.Participations.Role
+alias Webchat.Chat.Models.Role
 
 Role.changeset(%Role{}, %{name: "Member"})
 |> Repo.insert()

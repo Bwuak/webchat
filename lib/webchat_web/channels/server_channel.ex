@@ -23,7 +23,7 @@ defmodule WebchatWeb.ServerChannel do
     oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
     messages = 
       id
-      |> Chat.get_chatroom!
+      |> Chat.Chatrooms.get_chatroom!
       |> Chat.get_chatroom_old_messages(oldest_id)
       |> Phoenix.View.render_many(MessageView, "message.json")
 

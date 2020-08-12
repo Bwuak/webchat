@@ -2,10 +2,11 @@ defmodule Webchat.Participations do
   import Ecto.Query
 
   alias Webchat.Repo
-  alias Webchat.Chat.Server
+  alias Webchat.Chat.Models.Server
   alias Webchat.Administration.Models.User
   alias Webchat.Participations.Participant
-  alias Webchat.Participations.Role
+  alias Webchat.Chat.Models.Role
+  alias Webchat.Administration.Models.User
 
   @doc """
   Create a link between a user and a server with a role
@@ -54,7 +55,7 @@ defmodule Webchat.Participations do
 
   @doc """
   """
-  def list_servers(%Webchat.Administration.Models.User{} = user) do
+  def list_servers(%User{} = user) do
     from( p in Participant,
       where: p.user_id == ^user.id,
       preload: [:server]

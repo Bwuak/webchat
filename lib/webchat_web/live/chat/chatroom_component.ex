@@ -1,4 +1,4 @@
-defmodule WebchatWeb.Chat.ChatroomComponent do
+defmodule WebchatWeb.Chat.Models.ChatroomComponent do
   use Phoenix.LiveComponent
 
   def render(assigns) do

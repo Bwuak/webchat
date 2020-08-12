@@ -3,8 +3,9 @@ defmodule Webchat.ChatTest do
 
   alias Webchat.Administration.Models.User
   alias Webchat.Chat
-  alias Webchat.Chat.Chatroom
   alias Webchat.Chat.Message
+  alias Webchat.Chat.Models.Chatroom
+  alias Webchat.Chat.Models.Server
 
 
   describe "chatroom" do
@@ -16,13 +17,13 @@ defmodule Webchat.ChatTest do
       server = server_fixture(%{user_id: user.id})
 
       assert {:ok, %Chatroom{} = room} =
-        Chat.create_chatroom(server.id, @valid_attrs)
+        Chat.Chatrooms.create_chatroom(server.id, @valid_attrs)
       assert room.roomname == "general"
     end
 
     test "create_chatroom/1 with invalid name doesn't create a chatroom" do
       assert {:error, %Ecto.Changeset{}} =
-        Chat.create_chatroom(@invalid_attrs)
+        Chat.Chatrooms.create_chatroom(@invalid_attrs)
     end
 
     test "get_all_chatrooms/0 returns all chatrooms" do
@@ -30,7 +31,7 @@ defmodule Webchat.ChatTest do
       server = server_fixture(%{user_id: user.id})
       room = chatroom_fixture(server)
       
-      chatrooms = Chat.get_all_chatrooms()
+      chatrooms = Chat.Chatrooms.get_all_chatrooms()
       assert chatrooms == [room]
     end
 
@@ -41,9 +42,9 @@ defmodule Webchat.ChatTest do
     @valid_attrs %{content: "some message"}
     @invalid_attrs %{content: "               "}
 
-    defp chatroom_fixture(%Chat.Server{} = server) do
+    defp chatroom_fixture(%Server{} = server) do
       {:ok, %Chatroom{} = room} =
-        Chat.create_chatroom(server.id, %{roomname: "some name"})
+        Chat.Chatrooms.create_chatroom(server.id, %{roomname: "some name"})
 
       room
     end
@@ -146,7 +147,7 @@ defmodule Webchat.ChatTest do
 
 
   describe "servers" do
-    alias Webchat.Chat.Server
+    alias Webchat.Chat.Models.Server
 
     @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}
@@ -156,7 +157,7 @@ defmodule Webchat.ChatTest do
       {:ok, server} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Chat.create_server()
+        |> Chat.Servers.create_server()
 
       server
     end
@@ -165,61 +166,61 @@ defmodule Webchat.ChatTest do
       user = user_fixture()
       server = server_fixture(%{user_id: user.id})
 
-      assert Chat.list_servers() == [server]
+      assert Chat.Servers.list() == [server]
     end
 
     test "get_server!/1 returns the server with given id" do
       user = user_fixture()
       server = server_fixture(%{user_id: user.id})
 
-      assert Chat.get_server!(server.id) == server
+      assert Chat.Servers.get!(server.id) == server
     end
 
     test "create_server/1 with valid data creates a server" do
       user = user_fixture()
       assert {:ok, %Server{} = server} =
-        Chat.create_server(Map.put(@valid_attrs, :user_id, user.id))
+        Chat.Servers.create_server(Map.put(@valid_attrs, :user_id, user.id))
       assert server.name == "some name"
     end
 
     test "create_server/1 requires user id" do
-      assert {:error, %Ecto.Changeset{}} = Chat.create_server(@valid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Chat.Servers.create_server(@valid_attrs)
     end
 
     test "create_server/1 requires valid data" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = 
-        Chat.create_server(Map.put(@invalid_attrs, :user_id, user.id))
+        Chat.Servers.create_server(Map.put(@invalid_attrs, :user_id, user.id))
     end
 
     test "update_server/2 with valid data updates the server" do
       user = user_fixture()
       server = server_fixture(%{user_id: user.id})
-      assert {:ok, %Server{} = server} = Chat.update_server(server, @update_attrs)
+      assert {:ok, %Server{} = server} = Chat.Servers.update_server(server, @update_attrs)
       assert server.name == "some updated name"
     end
 
     test "update_server/2 with invalid data returns error changeset" do
       user = user_fixture() 
       server = server_fixture(%{user_id: user.id})
-      assert {:error, %Ecto.Changeset{}} = Chat.update_server(server, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Chat.Servers.update_server(server, @invalid_attrs)
 
       # fetched_server needs user for equality
-      fetched_server = Map.put(Chat.get_server!(server.id), :user, server.user)
+      fetched_server = Map.put(Chat.Servers.get!(server.id), :user, server.user)
       assert server == fetched_server 
     end
 
     test "delete_server/1 deletes the server" do
       user = user_fixture()
       server = server_fixture(%{user_id: user.id})
-      assert {:ok, %Server{}} = Chat.delete_server(server)
-      assert_raise Ecto.NoResultsError, fn -> Chat.get_server!(server.id) end
+      assert {:ok, %Server{}} = Chat.Servers.delete_server(server)
+      assert_raise Ecto.NoResultsError, fn -> Chat.Servers.get!(server.id) end
     end
 
     test "change_server/1 returns a server changeset" do
       user = user_fixture()
       server = server_fixture(%{user_id: user.id})
-      assert %Ecto.Changeset{} = Chat.change_server(server)
+      assert %Ecto.Changeset{} = Chat.Servers.change_server(server)
     end
   end #server tests
 end #module

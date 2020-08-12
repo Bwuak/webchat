@@ -7,7 +7,7 @@ defmodule WebchatWeb.ChatroomChannel do
 
   def join("room:" <> room_id, _params, socket) do
     room_id = String.to_integer(room_id)
-    room = Chat.get_chatroom(room_id)
+    room = Chat.Chatrooms.get_chatroom(room_id)
 
     messages = 
       room

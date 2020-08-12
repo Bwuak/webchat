@@ -6,8 +6,8 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
 
   alias Webchat.Chat
   alias Webchat.Participations
-  alias Webchat.Participations.Role
-  alias Webchat.Chat.Server
+  alias Webchat.Chat.Models.Role
+  alias Webchat.Chat.Models.Server
 
   
   def render(assigns) do
@@ -53,7 +53,7 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
     case socket.assigns.changeset.valid? do
       true ->
         user = socket.assigns.user
-        {:ok, new_server} = Chat.create_server(%{name: params["name"], user_id: user.id})
+        {:ok, new_server} = Chat.Servers.create_server(%{name: params["name"], user_id: user.id})
         {:ok, _part} = Participations.create_participation(
           user, Webchat.Repo.get!(Role, 1), new_server )
 

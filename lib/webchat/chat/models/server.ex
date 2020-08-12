@@ -1,4 +1,4 @@
-defmodule Webchat.Chat.Server do
+defmodule Webchat.Chat.Models.Server do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,7 +6,7 @@ defmodule Webchat.Chat.Server do
     field :name, :string
 
     belongs_to :user, Webchat.Administration.Models.User
-    has_many :chatrooms, Webchat.Chat.Chatroom
+    has_many :chatrooms, Webchat.Chat.Models.Chatroom
 
     timestamps()
   end

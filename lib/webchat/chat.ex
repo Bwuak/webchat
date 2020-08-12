@@ -3,21 +3,10 @@ defmodule Webchat.Chat do
 
   alias Webchat.Repo
   alias Webchat.Administration.Models.User
-  alias Webchat.Chat.Chatroom
+  alias Webchat.Chat.Models.Chatroom
   alias Webchat.Chat.Message
-  alias Webchat.Chat.Server
+  alias Webchat.Chat.Models.Server
 
-
-  def create_chatroom(server_id, attrs \\ %{}) do
-    %Chatroom{server_id: server_id}
-    |> Chatroom.creation_changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def get_all_chatrooms() do
-    Chatroom
-    |> Repo.all
-  end
 
   def get_chatroom_messages(%Chatroom{id: chatroom_id}) do
     Message
@@ -61,13 +50,14 @@ defmodule Webchat.Chat do
     )
     |> Enum.reverse
   end
-  
-  def get_chatroom!(chatroom_id), do: Repo.get!(Chatroom, chatroom_id)
-  def get_chatroom(chatroom_id), do: Repo.get(Chatroom, chatroom_id)
 
-  def change_chatroom(%Chatroom{} = chatroom, attrs \\ %{}) do
-    Chatroom.changeset(chatroom, attrs)
+  defp chatroom_messages_query(query, chatroom_id) do
+    from( v in query, 
+      where: v.chatroom_id == ^chatroom_id,
+      preload: [:user]
+    )
   end
+
 
   def change_message(%Message{} = message, attrs \\ %{}) do
     Message.changeset(message, attrs)
@@ -77,13 +67,6 @@ defmodule Webchat.Chat do
     %Message{user_id: user_id, chatroom_id: chatroom_id}
     |> Message.changeset(attrs)
     |> Repo.insert()
-  end
-
-  defp chatroom_messages_query(query, chatroom_id) do
-    from( v in query, 
-      where: v.chatroom_id == ^chatroom_id,
-      preload: [:user]
-    )
   end
 
   def get_server_chatrooms(%Server{} = server) do
@@ -97,33 +80,6 @@ defmodule Webchat.Chat do
       where: c.server_id == ^server_id,
       order_by: [asc: c.inserted_at]
     )
-  end
-
-  def list_servers do
-    Repo.all(Server)
-  end
-
-  def get_server!(id), do: Repo.get!(Server, id)
-  def get_server(id), do: Repo.get!(Server, id)
-
-  def create_server(attrs) do
-    %Server{}
-    |> Server.creation_changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def update_server(%Server{} = server, attrs) do
-    server
-    |> Server.changeset(attrs)
-    |> Repo.update()
-  end
-
-  def delete_server(%Server{} = server) do
-    Repo.delete(server)
-  end
-
-  def change_server(%Server{} = server, attrs \\ %{}) do
-    Server.changeset(server, attrs)
   end
 
   def select_chatrooms(server) do

@@ -6,9 +6,9 @@ defmodule Webchat.Participations.Participant do
 
   @primary_key false 
   schema "participants" do
-    belongs_to :server, Webchat.Chat.Server, [primary_key: true]
+    belongs_to :server, Webchat.Chat.Models.Server, [primary_key: true]
     belongs_to :user, Webchat.Administration.Models.User, [primary_key: true]
-    belongs_to :role, Webchat.Participations.Role
+    belongs_to :role, Webchat.Chat.Models.Role
     
     timestamps()
   end

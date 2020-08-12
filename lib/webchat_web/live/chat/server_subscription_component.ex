@@ -5,8 +5,8 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
   import WebchatWeb.ErrorHelpers
 
   alias Webchat.Participations
-  alias Webchat.Participations.Role
-  alias Webchat.Chat.Server
+  alias Webchat.Chat.Models.Role
+  alias Webchat.Chat.Models.Server
 
   def render(assigns) do
     ~L"""

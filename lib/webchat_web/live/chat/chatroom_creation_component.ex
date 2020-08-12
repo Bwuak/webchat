@@ -1,11 +1,11 @@
-defmodule WebchatWeb.Chat.ChatroomCreationComponent do
+defmodule WebchatWeb.Chat.Models.ChatroomCreationComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
   import WebchatWeb.ErrorHelpers
 
   alias Webchat.Chat
-  alias Webchat.Chat.Chatroom
+  alias Webchat.Chat.Models.Chatroom
 
 
   def render(assigns) do
@@ -59,7 +59,7 @@ defmodule WebchatWeb.Chat.ChatroomCreationComponent do
     case socket.assigns.changeset.valid? do
       true ->
         server_id = socket.assigns.server.id
-        {:ok, new_chatroom} = Chat.create_chatroom(server_id, params)
+        {:ok, new_chatroom} = Chat.Chatrooms.create_chatroom(server_id, params)
         send(self(), {__MODULE__, :chatroom_created, new_chatroom})
         {:noreply, socket}
 

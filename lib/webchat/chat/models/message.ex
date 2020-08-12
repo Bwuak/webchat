@@ -5,7 +5,7 @@ defmodule Webchat.Chat.Message do
   schema "messages" do
     field :content, :string
 
-    belongs_to :chatroom, Webchat.Chat.Chatroom
+    belongs_to :chatroom, Webchat.Chat.Models.Chatroom
     belongs_to :user, Webchat.Administration.Models.User
 
     timestamps()
