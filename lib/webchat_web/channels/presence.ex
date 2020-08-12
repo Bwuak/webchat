@@ -12,7 +12,7 @@ defmodule WebchatWeb.Presence do
     users =
       entries
       |> Map.keys()
-      |> Webchat.Administration.Users.get_users_with_ids()
+      |> Webchat.Administration.Users.list_with_ids()
       |> Enum.into(%{}, fn user ->
         { to_string(user.id), %{username: user.username}}
       end)

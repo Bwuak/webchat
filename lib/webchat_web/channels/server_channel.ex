@@ -12,7 +12,7 @@ defmodule WebchatWeb.ServerChannel do
   end
 
   def handle_in(event, params, socket) do
-    user = Users.get_user!(socket.assigns.user_id)
+    user = Users.get!(socket.assigns.user_id)
     handle_in(event, params, user, socket)
   end
 

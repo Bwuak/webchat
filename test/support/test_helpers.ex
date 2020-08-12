@@ -9,7 +9,7 @@ defmodule Webchat.TestHelpers do
     {:ok, user} =
       attrs
       |> Enum.into(@valid_attrs)
-      |> Users.create_user()
+      |> Users.create()
 
     # We normally don't see user password outside of creation
     # We remove it for equality in our tests

@@ -11,7 +11,7 @@ defmodule Webchat.Administration do
 
   def authenticate_user(email, given_pass) do
     down_cased_email = String.downcase email
-    user = Users.get_user_by(email: down_cased_email)
+    user = Users.get_by(email: down_cased_email)
 
     cond do
       user && Pbkdf2.verify_pass(given_pass, user.password_hash) ->

@@ -11,40 +11,40 @@ defmodule Webchat.Administration.AdminsTest do
     @valid_attrs %{email: "some@email", password: "some password", username: "some username"}
     @invalid_attrs %{email: nil, password: nil, username: nil}
 
-    test "list_users/0 returns all users" do
+    test "list/0 returns all users" do
       user = user_fixture()
-      assert Users.list_users() == [%User{user | password: nil}]
+      assert Users.list() == [%User{user | password: nil}]
     end
 
-    test "get_user!/1 returns the user with given id" do
+    test "get!/1 returns the user with given id" do
       user = user_fixture()
-      assert Users.get_user!(user.id) == %User{user | password: nil}
+      assert Users.get!(user.id) == %User{user | password: nil}
     end
 
-    test "create_user/1 with valid data creates an anthenticable user" do
-      assert {:ok, %User{} = user} = Users.create_user(@valid_attrs)
+    test "create/1 with valid data creates an anthenticable user" do
+      assert {:ok, %User{} = user} = Users.create(@valid_attrs)
       assert user.email == "some@email"
       assert user.username == "some username"
       assert {:ok, user} = Administration.authenticate_user("some@email", "some password") 
     end
 
-    test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Users.create_user(@invalid_attrs)
+    test "create/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Users.create(@invalid_attrs)
     end
 
-    test "create_user/1 with invalid length name returns error changeset" do
+    test "create/1 with invalid length name returns error changeset" do
       attrs_with_long_name = Map.put(@valid_attrs, :username, String.duplicate("x", 21))
       attrs_with_short_name = Map.put(@valid_attrs, :username, "x")
-      {:error, _changeset} = Users.create_user(attrs_with_long_name)
-      {:error, _changeset} = Users.create_user(attrs_with_short_name)
+      {:error, _changeset} = Users.create(attrs_with_long_name)
+      {:error, _changeset} = Users.create(attrs_with_short_name)
 
-      assert Users.list_users() == []
+      assert Users.list() == []
     end
 
-    test "delete_user/1 deletes the user" do
+    test "delete/1 deletes the user" do
       user = user_fixture()
-      assert {:ok, %User{}} = Users.delete_user(user)
-      assert_raise Ecto.NoResultsError, fn -> Users.get_user!(user.id) end
+      assert {:ok, %User{}} = Users.delete(user)
+      assert_raise Ecto.NoResultsError, fn -> Users.get!(user.id) end
     end
   end
 

@@ -6,17 +6,17 @@ defmodule WebchatWeb.UserController do
 
 
   def index(conn, _params) do
-    users = Users.list_users()
+    users = Users.list()
     render(conn, "index.html", users: users)
   end
 
   def new(conn, _params) do
-    changeset = Users.change_user(%User{})
+    changeset = Users.change(%User{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
-    case Users.create_user(user_params) do
+    case Users.create(user_params) do
       {:ok, user} ->
         conn
         |> WebchatWeb.Auth.login(user)
@@ -30,8 +30,8 @@ defmodule WebchatWeb.UserController do
 
   def delete(conn, %{"id" => id}) do
     IO.puts "hey"
-    user = Users.get_user!(id)
-    {:ok, _user} = Users.delete_user(user)
+    user = Users.get!(id)
+    {:ok, _user} = Users.delete(user)
 
     conn
     |> put_flash(:info, "User deleted successfully.")

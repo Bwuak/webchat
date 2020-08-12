@@ -20,7 +20,7 @@ User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", 
 |> Repo.insert!
 # 
 # # get user 
-user = Admins.get_user_by(email: "admin@admin")
+user = Admins.get_by(email: "admin@admin")
 # 
 # # create servers 
 {:ok, server1} = Chat.create_server(%{name: "First server", user_id: user.id})
@@ -47,7 +47,7 @@ Repo.all(Role) |> IO.inspect
 
 
 alias Webchat.Participations.Participant
-user = Admins.get_user_by(email: "admin@admin")
+user = Admins.get_by(email: "admin@admin")
 server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})
 Participant.creation_changeset(%Participant{}, 
