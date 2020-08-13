@@ -18,6 +18,7 @@ defmodule WebchatWeb.Chat.Models.ChatroomComponent do
             id="msg-input"
             placeholder="Message..."
             maxlength="500"
+            phx-update="ignore"
           ></textarea>
           <button id="msg-submit">
             Send
