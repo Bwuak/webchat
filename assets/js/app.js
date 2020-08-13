@@ -18,13 +18,24 @@ import {LiveSocket} from "phoenix_live_view"
 
 import socket from "./socket"
 import initApplication from "./chat_controller"
+import hooksInitializer from "./hooks_events"
+import State from "./models/state"
 
 
 if(document.getElementById("chatroom")) {
   let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-  let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
+  // initialize app state
+  let state = new State()
+
+  // creating liveview events hooks
+  let Hooks = hooksInitializer(state)
+
+  // liveview socket
+  let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks.Hooks, params: {_csrf_token: csrfToken}})
   
   liveSocket.connect()
-  socket.connect()
-  initApplication(socket)
+  socket.connect() // used for channels
+  
+  initApplication(socket, state)
 }

@@ -30,7 +30,7 @@ export const DOM = {
 }
 
 
-if(elements.msgContainer){
+if(elements.msgContainer) {
   elements.msgContainer.innerHTML = 
   `<div id="messages">
     <div v-for="msg in chatroom.messages" class="a-message">

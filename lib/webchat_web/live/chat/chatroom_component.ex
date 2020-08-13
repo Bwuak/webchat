@@ -4,7 +4,9 @@ defmodule WebchatWeb.Chat.Models.ChatroomComponent do
   def render(assigns) do
     ~L"""
     <div
-      id="chatroom" data-id="<%= @selected_chatroom.id %>"
+    id="chatroom" 
+    phx-hook="Chatroom"
+    data-id="<%= @selected_chatroom.id %>"
     >
       <div id="name-container">
         <h1 id="chatroom-name"><%= @selected_chatroom.roomname %></h1>

@@ -3,17 +3,15 @@ import regeneratorRuntime from "regenerator-runtime"
 
 import {elements, DOM} from "./views/app_view"
 import {Chatroom, nullRoom} from "./models/chatroom.js"
-import State from "./models/state"
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
-let App = (function(socket) {
+let App = (function(socket, state) {
 
   socket.connect()
-  var state = new State()
   var scroll = {
     state: "locked"
   }
@@ -145,6 +143,7 @@ let App = (function(socket) {
   }
 
   function updateChatroom(serverId) {
+    
     const toChatroomId = DOM.getCurrentChatroomId()
     const noChange = state.getCurrentChatroomId() == toChatroomId
     if(noChange) { return; }
@@ -152,6 +151,7 @@ let App = (function(socket) {
     const chatroom = state.getChatroom(serverId, toChatroomId)
     state.setCurrentChatroom(chatroom)
     DOM.renderChatroom(chatroom)
+    
   };
 
   function getChatroom(serverId, roomId) {
