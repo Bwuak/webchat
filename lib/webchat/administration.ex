@@ -1,8 +1,8 @@
 defmodule Webchat.Administration do
 
+  alias Webchat.Administration.Models.User
   alias Webchat.Administration.Admins
   alias Webchat.Administration.Users
-  alias Webchat.Administration.Models.User
 
 
   def is_admin?(%User{} = user) do

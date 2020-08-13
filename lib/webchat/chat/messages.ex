@@ -2,9 +2,9 @@ defmodule Webchat.Chat.Messages do
   import Ecto.Query, warn: false
 
   alias Webchat.Repo
+  alias Webchat.Administration.Models.User
   alias Webchat.Chat.Models.Chatroom
   alias Webchat.Chat.Models.Message
-  alias Webchat.Administration.Models.User
 
 
   def get_chatroom_messages(%Chatroom{id: chatroom_id}) do

@@ -1,16 +1,18 @@
 defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
-  alias Webchat.Administration.Users
-  alias Webchat.Chat
-  alias Webchat.Chat.Participants
-  alias Webchat.Chat.Models.Server
   alias WebchatWeb.Chat.ServerActionComponent
   alias WebchatWeb.Chat.ServerCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.Models.ChatroomCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.ErrorComponent
+
+  alias Webchat.Chat.Models.Server
+  alias Webchat.Chat
+  alias Webchat.Chat.Servers
+  alias Webchat.Chat.Participants
+  alias Webchat.Administration.Users
 
   @topic "server:"
 
@@ -42,7 +44,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
-    selected_server = String.to_integer(sid) |> Chat.Servers.get!()
+    selected_server = String.to_integer(sid) |> Servers.get!()
     chatrooms = Chat.select_chatrooms(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.Chatrooms.get_chatroom!()
 
@@ -61,7 +63,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
-    selected_server = String.to_integer(sid) |> Chat.Servers.get()
+    selected_server = String.to_integer(sid) |> Servers.get()
     chatrooms = Chat.select_chatrooms(selected_server) 
 
     socket = subscribe_to_server(selected_server, socket)

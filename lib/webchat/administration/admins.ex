@@ -4,6 +4,7 @@ defmodule Webchat.Administration.Admins do
 
   alias Webchat.Administration.Models.Admin
 
+
   def get_by(params) do
     Repo.get_by(Admin, params)
   end
