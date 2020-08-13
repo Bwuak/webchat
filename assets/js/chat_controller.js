@@ -26,11 +26,11 @@ let App = (function(socket, state, requests) {
   const linkContainer = document.getElementById("link-container")
   linkContainer.appendChild(link)
 
-  function listenToServers() {
+  let listenToServers = (function() {
     const servers = DOM.getAllServersId()
-    servers.forEach( id => createChannel(socket, id))
-  }
-  listenToServers()
+    servers.forEach( id => requests.joinServerChannel(socket, id))
+  })()
+  
 
   elements.msgInput.onkeyup = function(e) {
     if(e.keyCode == 13) {
@@ -66,28 +66,9 @@ let App = (function(socket, state, requests) {
     elements.msgInput.value = ""
   }
 
-  function createChannel(socket, serverId){
-    const channel = socket.channel("server:" + serverId, () => {})
-    channel.join()
-      .receive("error", reason => console.log(reason))
-    channel.on("new_message", resp => {
-      state.getChatroom(serverId, resp.message.room_id).addNewMessage(resp.message)
-    })
-
-    state.addNewChannel(channel, serverId)
-    return channel
-  }
-
   function getChatroom(serverId, roomId) {
     return state.getChatroom(serverId, roomId) 
   };
-
-  function sync(currentRoom) {
-    if(currentRoom.getMessagesCount() < 50) {
-      requestMessages(currentRoom)
-    }
-  }
-
 
 })
 

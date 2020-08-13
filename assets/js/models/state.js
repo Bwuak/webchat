@@ -35,10 +35,16 @@ State.prototype.getChannel = function() {
   return this.channels[currentChannelId]
 }
 
-
 // creates and store a new channel linked to a server
 State.prototype.addNewChannel = function(channel, serverId) {
   this.channels[serverId] = channel
+}
+
+// When user unsubscribe to a server
+State.prototype.leaveServer = function(serverId) {
+  const channel = getChannelById(serverId)
+  channel.leave()
+  delete this.channels[serverId]
 }
 
 State.prototype.createChatroom = function(serverId, chatroomId) {

@@ -1,6 +1,12 @@
 import {DOM} from "./views/app_view" 
 import State from "./models/state"
 
+function updateChatroom(state) {
+  const chatroom = state
+    .getChatroom(DOM.getCurrentServerId(), DOM.getCurrentChatroomId())
+  state.setCurrentChatroom(chatroom)
+  DOM.renderChatroom(chatroom)
+}
 
 let hooksInitializer = (function(state, requests) {
   let Hooks = {}
@@ -8,27 +14,23 @@ let hooksInitializer = (function(state, requests) {
   Hooks.Chatroom = {
     // Chatroom change 
     mounted() {
-      const chatroom = state
-        .getChatroom(DOM.getCurrentServerId(), DOM.getCurrentChatroomId())
-
-      DOM.renderChatroom(chatroom)
-      requests.requestMessages(chatroom)
+      updateChatroom(state)
+      requests.requestMessages(state.getCurrentChatroom() )
     },
 
     updated() {
-      console.log("update")
-      const toRoomId = DOM.getCurrentChatroomId()
-      const serverId = DOM.getCurrentServerId()
-      const chatroom = state.getChatroom(serverId, toRoomId)
-
-      state.setCurrentChatroom(chatroom)
-      DOM.renderChatroom(chatroom)
-      requests.requestMessages(chatroom)
+      updateChatroom(state)
+      requests.requestMessages(state.getCurrentChatroom() )
     },
   }
 
 
   Hooks.Server = {
+    mounted() {
+      const serverId = DOM.getCurrentServerId()
+      state.setCurrentServerId( serverId ) 
+    },
+
     // Server change
     updated() {
       const serverId = DOM.getCurrentServerId()

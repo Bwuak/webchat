@@ -19,6 +19,7 @@ let Requests = (function(state) {
       .receive( "error", reason => console.log(reason))
   }
 
+
   return {
 
     requestMessages: (chatroom) => {
@@ -34,7 +35,6 @@ let Requests = (function(state) {
       pushRequestMessages(chatroom.serverId, payload)
     },
 
-/* only send if user is in a chatroom */
     sendMessage: (msgContent) => {
       const room = state.getCurrentChatroom()
       if(msgContent && (room != nullRoom) ) {
@@ -44,6 +44,25 @@ let Requests = (function(state) {
         })
       }
     },
+
+    joinServerChannel: (socket, serverId) => {
+      const channel = socket.channel("server:" + serverId, () => {})
+      channel.join()
+        .receive("error", reason => console.log(reason) )
+
+      channel.on("new_message", resp => {
+        state.getChatroom(serverId, resp.message.room_id)
+          .addNewMessage(resp.message)
+      })
+
+      state.addNewChannel(channel, serverId)
+      return channel
+    },
+
+    leaveServerChannel: (serverId) => {
+      state.leaveServer(serverId)
+    }
+
 
 
   }
