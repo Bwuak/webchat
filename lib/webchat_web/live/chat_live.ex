@@ -140,10 +140,14 @@ defmodule WebchatWeb.ChatLive do
 
   # chatroom creation callback
   def handle_info({ChatroomCreationComponent, :chatroom_created, new_chatroom}, socket) do
-    new_socket = remove_socket_action(socket)
+    socket = 
+      socket
+      |> remove_socket_action()
+      |> assign(:selected_chatroom, new_chatroom)
+    IO.inspect new_chatroom
 
-    {:noreply, push_patch(new_socket,
-      to: Routes.live_path(new_socket, __MODULE__, 
+    {:noreply, push_patch(socket,
+      to: Routes.live_path(socket, __MODULE__, 
         %{server_id: socket.assigns.selected_server.id,
           room_id: new_chatroom.id}),
         replace: true

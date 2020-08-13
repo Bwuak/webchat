@@ -7,26 +7,15 @@ let hooksInitializer = (function(state) {
   let Hooks = {}
 
   Hooks.Chatroom = {
-    mounted() {
-      console.log("chatroom change")
-    },
-  
-    // chatroom had an update
+    // Chatroom change 
     updated() {
-      console.log("updated chatroom")
-      const fromChatroomId = state.getCurrentChatroomId()
       const toRoomId = DOM.getCurrentChatroomId()
+      const serverId = DOM.getCurrentServerId()
+      const chatroom = state.getChatroom(serverId, toRoomId)
 
-      const hasChanged = fromChatroomId == toRoomId
-
-      if(hasChanged) {
-        const chatroom = state.getChatroom(toRoomId)
-        state.setCurrentChatroom(chatroom)
-
-        const serverId = DOM.getCurrentServerId()
-        DOM.renderChatroom(serverId, chatroom)
-      }
-    }
+      state.setCurrentChatroom(chatroom)
+      DOM.renderChatroom(chatroom)
+    },
   }
 
   return {

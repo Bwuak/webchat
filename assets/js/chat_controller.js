@@ -4,10 +4,6 @@ import regeneratorRuntime from "regenerator-runtime"
 import {elements, DOM} from "./views/app_view"
 import {Chatroom, nullRoom} from "./models/chatroom.js"
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 
 let App = (function(socket, state) {
 
@@ -44,22 +40,8 @@ let App = (function(socket, state) {
 
   setTimeout(scrolldown, 5)
 
-  async function refresh() {
-    /***
-     * For some reasons not yet known,
-     * the event "phx:page-loading-stop" waits for
-     * a full live_patch when it comes for the component
-     * 
-     * BUT when a new chatroom is created, a messages is sent to the liveview
-     * I guess that since the live_patch comes from the liveview instead of
-     * the component where the changes happen, the loading happen
-     * before the changes happen to the component
-     *
-     * 50ms is to force the app to wait the id dataset.id change
-     * in the chatroom div, which is delayed when creating a new chatroom
-     * TODO investigate this later
-     */
-    await sleep(2000)
+  function refresh() {
+    /* will be changed to liveview hooks */
     const newServerId = updateServer()
     updateChatroom(newServerId)
     sync(state.getCurrentChatroom())
@@ -94,7 +76,7 @@ let App = (function(socket, state) {
 
   /* only send if user is in a chatroom */
   function sendMessage() {
-    const chatroom_id = elements.chatroom.dataset.id
+    const chatroom_id = DOM.getCurrentChatroomId()
     const msgContent = elements.msgInput.value.trim() 
     if(chatroom_id && msgContent) {
       pushMessage({
@@ -143,7 +125,6 @@ let App = (function(socket, state) {
   }
 
   function updateChatroom(serverId) {
-    
     const toChatroomId = DOM.getCurrentChatroomId()
     const noChange = state.getCurrentChatroomId() == toChatroomId
     if(noChange) { return; }
