@@ -62,7 +62,7 @@ let App = (function(socket) {
      * TODO investigate this later
      */
     const newServerId = updateServer()
-    await sleep(100)
+    await sleep(1000)
     updateChatroom(newServerId)
     sync(state.getCurrentChatroom())
   }

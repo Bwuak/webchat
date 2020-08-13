@@ -63,7 +63,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
-    selected_server = String.to_integer(sid) |> Servers.get()
+    selected_server = String.to_integer(sid) |> Servers.get!()
     chatrooms = Chat.select_chatrooms(selected_server) 
 
     socket = subscribe_to_server(selected_server, socket)
