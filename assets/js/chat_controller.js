@@ -12,7 +12,6 @@ function sleep(ms) {
 
 let App = (function(socket) {
 
-  
   socket.connect()
   var state = new State()
   var scroll = {
@@ -25,22 +24,23 @@ let App = (function(socket) {
     }
   }, 50)
 
-  // hack to log out
-  // Was not able to find conn in liveview socket
-  // Was not able to find a replacement for link in liveview
+  /* hack so user can log out from it's conn session 
+  *  Was not able to find conn in liveview socket
+  *  Was not able to find a replacement for link in liveview
+  */
   const link = document.getElementById("if-anyone-knows-how-to-fix-this-tell-me-please")
   const linkContainer = document.getElementById("link-container")
   linkContainer.appendChild(link)
 
-  var listenToServers = function() {
+  function listenToServers() {
     const servers = DOM.getAllServersId()
     servers.forEach( id => createChannel(socket, id))
   }
   listenToServers()
 
-  document.onkeyup = function(e) {
+  elements.msgInput.onkeyup = function(e) {
     if(e.keyCode == 13) {
-      // sendMessage()
+      sendMessage()
     }
   }
 
@@ -62,6 +62,7 @@ let App = (function(socket) {
      * TODO investigate this later
      */
     const newServerId = updateServer()
+    await sleep(100)
     updateChatroom(newServerId)
     sync(state.getCurrentChatroom())
   }
@@ -93,12 +94,17 @@ let App = (function(socket) {
     elements.msgInput.value = ""
   }
 
+  /* only send if user is in a chatroom */
   function sendMessage() {
-    pushMessage({
-      content: elements.msgInput.value,
-      room_id: state.getCurrentChatroomId()
-    })
-    clearMsgInputField()
+    const chatroom_id = elements.chatroom.dataset.id
+    const msgContent = elements.msgInput.value.trim() 
+    if(chatroom_id && msgContent) {
+      pushMessage({
+        content: msgContent,
+        room_id: state.getCurrentChatroomId()
+      })
+      clearMsgInputField()
+    }
   }
 
   function pushMessage(payload) {
