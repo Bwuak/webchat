@@ -14,7 +14,11 @@ State.prototype.getCurrentChatroom = function() {
 }
 
 State.prototype.getCurrentServerId = function() {
-  return this.getCurrentChatroom().serverId
+  return this.currentServerId
+}
+
+State.prototype.setCurrentServerId = function(id) {
+  this.currentServerId = id
 }
 
 State.prototype.getCurrentChatroomId = function() {
@@ -50,8 +54,13 @@ State.prototype.setCurrentChatroom = function(chatroom) {
 }
 
 State.prototype.getChatroom = function(serverId, roomId) {
-  return this.chatrooms[roomId] ? 
-    this.chatrooms[roomId] : this.createChatroom(serverId, roomId);
+  if(! (serverId && roomId) ) { 
+    return nullRoom 
+  }
+  else {
+    return this.chatrooms[roomId] ? 
+      this.chatrooms[roomId] : this.createChatroom(serverId, roomId);
+  }
 }
 
 

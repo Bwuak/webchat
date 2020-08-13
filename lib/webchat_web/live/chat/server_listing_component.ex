@@ -7,7 +7,11 @@ defmodule WebchatWeb.Chat.ServerListingComponent do
   def render(assigns) do
     ~L"""
     <div id="servers-listing">
-      <h3>Servers</h3>
+      <h3 
+        data-id="<%= @selected_server.id %>" 
+        id="servers-listing-title" 
+        phx-hook="Server"
+      >Servers</h3>
       <nav id="servers-list">
         <%= for server <- @servers do %>
           <div>

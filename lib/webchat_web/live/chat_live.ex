@@ -144,7 +144,6 @@ defmodule WebchatWeb.ChatLive do
       socket
       |> remove_socket_action()
       |> assign(:selected_chatroom, new_chatroom)
-    IO.inspect new_chatroom
 
     {:noreply, push_patch(socket,
       to: Routes.live_path(socket, __MODULE__, 

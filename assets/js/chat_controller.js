@@ -5,7 +5,7 @@ import {elements, DOM} from "./views/app_view"
 import {Chatroom, nullRoom} from "./models/chatroom.js"
 
 
-let App = (function(socket, state) {
+let App = (function(socket, state, requests) {
 
   socket.connect()
   var scroll = {
@@ -34,23 +34,13 @@ let App = (function(socket, state) {
 
   elements.msgInput.onkeyup = function(e) {
     if(e.keyCode == 13) {
-      sendMessage()
+      const msgContent = elements.msgInput.value.trim()
+      requests.sendMessage(msgContent)
+      clearMsgInputField()
     }
   }
 
   setTimeout(scrolldown, 5)
-
-  function refresh() {
-    /* will be changed to liveview hooks */
-    const newServerId = updateServer()
-    updateChatroom(newServerId)
-    sync(state.getCurrentChatroom())
-  }
-
-  window.addEventListener("phx:page-loading-stop", () => {
-    refresh()
-  });
-
 
   const div = document.getElementById("messages-container")
   div.addEventListener("scroll", function() {
@@ -62,7 +52,9 @@ let App = (function(socket, state) {
   });
 
   elements.sendButton.addEventListener("click", () => {
-    sendMessage()
+    const msgContent = elements.msgInput.value.trim()
+    requests.sendMessage(msgContent)
+    clearMsgInputField()
   });
 
   function scrolldown() {
@@ -73,44 +65,6 @@ let App = (function(socket, state) {
   function clearMsgInputField() {
     elements.msgInput.value = ""
   }
-
-  /* only send if user is in a chatroom */
-  function sendMessage() {
-    const chatroom_id = DOM.getCurrentChatroomId()
-    const msgContent = elements.msgInput.value.trim() 
-    if(chatroom_id && msgContent) {
-      pushMessage({
-        content: msgContent,
-        room_id: state.getCurrentChatroomId()
-      })
-      clearMsgInputField()
-    }
-  }
-
-  function pushMessage(payload) {
-    const channel = state.getChannel()
-    channel.push("new_message", payload)
-      .receive("error", e => console.log(e))
-  }
-
-  function pushRequestMessages(serverId, payload) {
-    const channel = state.getChannelById(serverId)
-    channel.push("request_messages", payload)
-      .receive( "ok", resp => {
-        const room = getChatroom(serverId, resp.room_id)
-        room.addOldMessages(resp.messages)
-      }) 
-      .receive( "error", reason => console.log(reason))
-  }
-
-  function updateServer() {
-    const toServerId = DOM.getCurrentServerId()
-    const currentServerId = state.getCurrentServerId() 
-    if(currentServerId == toServerId ) { return currentServerId; }
-
-    return toServerId
-  };
-
 
   function createChannel(socket, serverId){
     const channel = socket.channel("server:" + serverId, () => {})
@@ -124,17 +78,6 @@ let App = (function(socket, state) {
     return channel
   }
 
-  function updateChatroom(serverId) {
-    const toChatroomId = DOM.getCurrentChatroomId()
-    const noChange = state.getCurrentChatroomId() == toChatroomId
-    if(noChange) { return; }
-    
-    const chatroom = state.getChatroom(serverId, toChatroomId)
-    state.setCurrentChatroom(chatroom)
-    DOM.renderChatroom(chatroom)
-    
-  };
-
   function getChatroom(serverId, roomId) {
     return state.getChatroom(serverId, roomId) 
   };
@@ -145,18 +88,6 @@ let App = (function(socket, state) {
     }
   }
 
-  function requestMessages(chatroom) {
-    if(chatroom.roomId == 0) { return; }
-    const oldestMsgId = chatroom.oldest != "nil" 
-      ? chatroom.oldest : chatroom.newest 
-
-    const payload = {
-      room_id: chatroom.roomId,
-      oldest: oldestMsgId
-    }
-
-    pushRequestMessages(chatroom.serverId, payload)
-  };
 
 })
 

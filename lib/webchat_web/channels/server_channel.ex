@@ -35,7 +35,6 @@ defmodule WebchatWeb.ServerChannel do
   end
 
   def handle_in("new_message", params, user, socket) do
-    IO.puts "hey"
     {:ok, room_id} = Map.fetch(params, "room_id")
 
     case Messages.add_message(user, room_id, params) do

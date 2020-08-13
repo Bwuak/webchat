@@ -9,24 +9,29 @@ export const elements = {
   sendButton:  document.getElementById("msg-submit"),
   userListContainer: document.getElementById("online-users-list"),
   allServers: () => document.querySelectorAll("a.server-link"),
-  activeServerLink: () => document.querySelector("a.active-server")
 }
 
 export const DOM = {
-  getCurrentServerId: () => idFromHref(elements.activeServerLink()),
+  getCurrentServerId: () => 
+    document.getElementById("servers-listing-title").dataset.id, 
+
   getAllServersId: () => {
     var arr = []
     elements.allServers().forEach(x => arr.push(idFromHref(x)))
     return arr
   },
+
   getCurrentChatroomId: () => document.getElementById("chatroom-name").dataset.id,
+
   renderChatroom: (chatroom) => vm.chatroom = chatroom, 
+
   clearMessages: () => {
     const node = elements.msgContainer
     while(node.firstChild) {
       node.removeChild(node.lastChild)
     }
-  }
+  },
+
 }
 
 

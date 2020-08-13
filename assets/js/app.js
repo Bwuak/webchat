@@ -20,6 +20,7 @@ import socket from "./socket"
 import initApplication from "./chat_controller"
 import hooksInitializer from "./hooks_events"
 import State from "./models/state"
+import WebchatRequests from "./webchat_requests"
 
 
 if(document.getElementById("chatroom")) {
@@ -28,8 +29,11 @@ if(document.getElementById("chatroom")) {
   // initialize app state
   let state = new State()
 
+  // create requets handler
+  let webchatRequests = WebchatRequests(state)
+
   // creating liveview events hooks
-  let Hooks = hooksInitializer(state)
+  let Hooks = hooksInitializer(state, webchatRequests)
 
   // liveview socket
   let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks.Hooks, params: {_csrf_token: csrfToken}})
@@ -37,5 +41,5 @@ if(document.getElementById("chatroom")) {
   liveSocket.connect()
   socket.connect() // used for channels
   
-  initApplication(socket, state)
+  initApplication(socket, state, webchatRequests)
 }
