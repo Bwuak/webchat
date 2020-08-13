@@ -5,11 +5,10 @@ defmodule WebchatWeb.Chat.Models.ChatroomComponent do
     ~L"""
     <div
     id="chatroom" 
-    phx-hook="Chatroom"
-    data-id="<%= @selected_chatroom.id %>"
+    
     >
       <div id="name-container">
-        <h1 id="chatroom-name"><%= @selected_chatroom.roomname %></h1>
+        <h1 id="chatroom-name" phx-hook="Chatroom" data-id="<%= @selected_chatroom.id %>" ><%= @selected_chatroom.roomname %></h1>
       </div>
       <div id="messages-container" phx-update="ignore">
       </div>
@@ -22,7 +21,9 @@ defmodule WebchatWeb.Chat.Models.ChatroomComponent do
             maxlength="500"
             phx-update="ignore"
           ></textarea>
-          <button id="msg-submit">
+          <button 
+            id="msg-submit"
+            >
             Send
           </button>
         </div>

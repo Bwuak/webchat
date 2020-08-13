@@ -2,9 +2,6 @@ import {DOM} from "./views/app_view"
 import State from "./models/state"
 
 
-function has_changed(n1, n2) {
-  return n1 == n2
-}
 
 let hooksInitializer = (function(state) {
   let Hooks = {}
@@ -14,14 +11,21 @@ let hooksInitializer = (function(state) {
       console.log("chatroom change")
     },
   
+    // chatroom had an update
     updated() {
       console.log("updated chatroom")
-      /*
-      const chatroomId = DOM.getCurrentChatroomId()
-      const serverId = DOM.getCurrentServerId()
-      const chatroom = state.getChatroom(serverId, chatroomId) 
-      DOM.renderChatroom(chatroom)
-      */
+      const fromChatroomId = state.getCurrentChatroomId()
+      const toRoomId = DOM.getCurrentChatroomId()
+
+      const hasChanged = fromChatroomId == toRoomId
+
+      if(hasChanged) {
+        const chatroom = state.getChatroom(toRoomId)
+        state.setCurrentChatroom(chatroom)
+
+        const serverId = DOM.getCurrentServerId()
+        DOM.renderChatroom(serverId, chatroom)
+      }
     }
   }
 

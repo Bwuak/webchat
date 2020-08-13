@@ -19,7 +19,7 @@ export const DOM = {
     elements.allServers().forEach(x => arr.push(idFromHref(x)))
     return arr
   },
-  getCurrentChatroomId: () => elements.chatroom.dataset.id,
+  getCurrentChatroomId: () => document.getElementById("chatroom-name").dataset.id,
   renderChatroom: (chatroom) => vm.chatroom = chatroom, 
   clearMessages: () => {
     const node = elements.msgContainer
