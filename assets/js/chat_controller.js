@@ -61,8 +61,8 @@ let App = (function(socket) {
      * in the chatroom div, which is delayed when creating a new chatroom
      * TODO investigate this later
      */
+    await sleep(2000)
     const newServerId = updateServer()
-    await sleep(1000)
     updateChatroom(newServerId)
     sync(state.getCurrentChatroom())
   }
