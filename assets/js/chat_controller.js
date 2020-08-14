@@ -48,11 +48,11 @@ const controller = {
   },
 
   joinServers: (serversIds) => {
-    serversIds.forEach( id => WebchatRequests.joinServerChannel(id) )
+    serversIds.forEach( id => WebchatRequests.joinServer(id) )
   },
 
   joinServer: (id) => {
-    State.setCurrentServerId = id
+    WebchatRequests.joinServer(id)
   }
 
 }

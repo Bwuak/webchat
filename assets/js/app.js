@@ -16,9 +16,9 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
-import initApplication from "./chat_controller"
 
 import Hooks from "./hooks_events"
+import State from "./models/state"
 import UserEvents from "./user_events"
 import Controller from "./chat_controller"
 

@@ -31,8 +31,7 @@ State.prototype.getChannelById = function(id) {
 }
 
 State.prototype.getChannel = function() {
-  const currentChannelId = this.getCurrentServerId()
-  return this.channels[currentChannelId]
+  return this.channels[ this.getCurrentServerId() ]
 }
 
 // creates and store a new channel linked to a server

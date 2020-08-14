@@ -49,25 +49,21 @@ let Requests = (function() {
       }
     },
 
-    joinServerChannel: (serverId) => {
-      const channel = socket.channel("server:" + serverId, () => {})
-      channel.join()
-        .receive("error", reason => console.log(reason) )
+    joinServer: (serverId) => {
+      // Join a server channel
+      if( serverId && (! State.getChannelById(serverId)) ) {
+        const channel = socket.channel("server:" + serverId, () => {})
+        channel.join()
+          .receive("error", reason => console.log(reason) )
 
-      channel.on("new_message", resp => {
-        State.getChatroom(serverId, resp.message.room_id)
-          .addNewMessage(resp.message)
-      })
-
-      State.addNewChannel(channel, serverId)
-      return channel
+        channel.on("new_message", resp => {
+          State.getChatroom(serverId, resp.message.room_id)
+            .addNewMessage(resp.message)
+        })
+        State.addNewChannel(channel, serverId)
+      }
+      State.setCurrentServerId(serverId)
     },
-
-    leaveServerChannel: (serverId) => {
-      State.leaveServer(serverId)
-    }
-
-
 
   }
 

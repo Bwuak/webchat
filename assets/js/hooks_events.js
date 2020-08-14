@@ -29,6 +29,7 @@ let hooksInitializer = (function() {
 
   Hooks.Server = {
     mounted() {
+      console.log("mounted")
       const servers = DOM.getAllServersId()
       Controller.joinServers(servers)
 
@@ -37,6 +38,7 @@ let hooksInitializer = (function() {
     },
 
     updated() {
+      console.log("updated")
       const serverId = DOM.getCurrentServerId()
       Controller.joinServer( serverId ) 
     },
