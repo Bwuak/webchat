@@ -5,9 +5,8 @@ import {elements, DOM} from "./views/app_view"
 import {Chatroom, nullRoom} from "./models/chatroom.js"
 
 
-let App = (function(socket, state, requests) {
+let App = (function(state, requests) {
 
-  socket.connect()
   var scroll = {
     state: "locked"
   }
@@ -26,10 +25,6 @@ let App = (function(socket, state, requests) {
   const linkContainer = document.getElementById("link-container")
   linkContainer.appendChild(link)
 
-  let listenToServers = (function() {
-    const servers = DOM.getAllServersId()
-    servers.forEach( id => requests.joinServerChannel(socket, id))
-  })()
   
 
   elements.msgInput.onkeyup = function(e) {
@@ -66,9 +61,6 @@ let App = (function(socket, state, requests) {
     elements.msgInput.value = ""
   }
 
-  function getChatroom(serverId, roomId) {
-    return state.getChatroom(serverId, roomId) 
-  };
 
 })
 

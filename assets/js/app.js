@@ -30,7 +30,7 @@ if(document.getElementById("chatroom")) {
   let state = new State()
 
   // create requets handler
-  let webchatRequests = WebchatRequests(state)
+  let webchatRequests = WebchatRequests(state, socket)
 
   // creating liveview events hooks
   let Hooks = hooksInitializer(state, webchatRequests)
@@ -41,5 +41,5 @@ if(document.getElementById("chatroom")) {
   liveSocket.connect()
   socket.connect() // used for channels
   
-  initApplication(socket, state, webchatRequests)
+  initApplication(state, webchatRequests)
 }

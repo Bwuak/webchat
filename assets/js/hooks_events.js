@@ -8,7 +8,7 @@ function updateChatroom(state) {
   DOM.renderChatroom(chatroom)
 }
 
-let hooksInitializer = (function(state, requests) {
+let hooksInitializer = (function(state, requests, socket) {
   let Hooks = {}
 
   Hooks.Chatroom = {
@@ -27,6 +27,11 @@ let hooksInitializer = (function(state, requests) {
 
   Hooks.Server = {
     mounted() {
+      // subscribe to servers
+      const servers = DOM.getAllServersId()
+      servers.forEach( id => requests.joinServerChannel(id) )
+
+      // set current server
       const serverId = DOM.getCurrentServerId()
       state.setCurrentServerId( serverId ) 
     },

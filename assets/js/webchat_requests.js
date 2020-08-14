@@ -1,7 +1,9 @@
 import {nullRoom} from "./models/chatroom"
 
 
-let Requests = (function(state) {
+let Requests = (function(state, socket) {
+
+  socket.connect()
 
   function pushMessage(payload) { 
     const channel = state.getChannel()
@@ -45,7 +47,7 @@ let Requests = (function(state) {
       }
     },
 
-    joinServerChannel: (socket, serverId) => {
+    joinServerChannel: (serverId) => {
       const channel = socket.channel("server:" + serverId, () => {})
       channel.join()
         .receive("error", reason => console.log(reason) )
