@@ -1,21 +1,23 @@
+import socket from "./socket"
 import {nullRoom} from "./models/chatroom"
+import State from "./models/state"
 
 
-let Requests = (function(state, socket) {
+let Requests = (function() {
 
   socket.connect()
 
   function pushMessage(payload) { 
-    const channel = state.getChannel()
+    const channel = State.getChannel()
     channel.push("new_message", payload)
       .receive("error", e => console.log(e))
   }
 
   function pushRequestMessages(serverId, payload) {
-    const channel = state.getChannelById(serverId)
+    const channel = State.getChannelById(serverId)
     channel.push("request_messages", payload)
       .receive( "ok", resp => {
-        const room = state.getChatroom(serverId, resp.room_id)
+        const room = State.getChatroom(serverId, resp.room_id)
         room.addOldMessages(resp.messages)
       }) 
       .receive( "error", reason => console.log(reason))
@@ -38,7 +40,7 @@ let Requests = (function(state, socket) {
     },
 
     sendMessage: (msgContent) => {
-      const room = state.getCurrentChatroom()
+      const room = State.getCurrentChatroom()
       if(msgContent && (room != nullRoom) ) {
         pushMessage({
           content: msgContent,
@@ -53,23 +55,23 @@ let Requests = (function(state, socket) {
         .receive("error", reason => console.log(reason) )
 
       channel.on("new_message", resp => {
-        state.getChatroom(serverId, resp.message.room_id)
+        State.getChatroom(serverId, resp.message.room_id)
           .addNewMessage(resp.message)
       })
 
-      state.addNewChannel(channel, serverId)
+      State.addNewChannel(channel, serverId)
       return channel
     },
 
     leaveServerChannel: (serverId) => {
-      state.leaveServer(serverId)
+      State.leaveServer(serverId)
     }
 
 
 
   }
 
-});
+})()
 
 
 export default Requests

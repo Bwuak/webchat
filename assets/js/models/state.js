@@ -70,4 +70,5 @@ State.prototype.getChatroom = function(serverId, roomId) {
 }
 
 
-export default State 
+let state = new State()
+export default state 

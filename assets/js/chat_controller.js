@@ -1,68 +1,61 @@
-import {Presence} from "phoenix"
-import regeneratorRuntime from "regenerator-runtime"
-
-import {elements, DOM} from "./views/app_view"
-import {Chatroom, nullRoom} from "./models/chatroom.js"
+import State from "./models/state"
+import DOM from "./views/app_view"
+import WebchatRequests from "./webchat_requests"
 
 
-let App = (function(state, requests) {
+var scroll = {
+  state: "locked"
+}
 
-  var scroll = {
-    state: "locked"
+setInterval(() => {
+  if(scroll.state == "locked"){
+    scrolldown()
   }
+}, 50)
 
-  setInterval(() => {
-    if(scroll.state == "locked"){
-      scrolldown()
-    }
-  }, 50)
+function scrolldown() {
+  var div = document.getElementById("messages-container")
+  div.scrollTop = div.scrollHeight
+}
 
-  /* hack so user can log out from it's conn session 
-  *  Was not able to find conn in liveview socket
-  *  Was not able to find a replacement for link in liveview
-  */
-  const link = document.getElementById("if-anyone-knows-how-to-fix-this-tell-me-please")
-  const linkContainer = document.getElementById("link-container")
-  linkContainer.appendChild(link)
+setTimeout(scrolldown, 5)
 
+
+
+const controller = {
+  sendMessage: (msgContent) => {
+    WebchatRequests.sendMessage(msgContent)
+  },
+
+  updateChatroom: (serverId, chatroomId) => {
+    // state update
+    const chatroom = State.getChatroom(serverId, chatroomId)
+    State.setCurrentChatroom(chatroom)
   
+    // DOM update
+    DOM.renderChatroom(chatroom)
+    scrolldown()
 
-  elements.msgInput.onkeyup = function(e) {
-    if(e.keyCode == 13) {
-      const msgContent = elements.msgInput.value.trim()
-      requests.sendMessage(msgContent)
-      clearMsgInputField()
-    }
-  }
+    WebchatRequests.requestMessages(State.getCurrentChatroom() )
+  },
 
-  setTimeout(scrolldown, 5)
-
-  const div = document.getElementById("messages-container")
-  div.addEventListener("scroll", function() {
-    if(div.scrollHeight - div.scrollTop == div.clientHeight) {
+  scrollMoved: (height, scrollTop, clientHeight) => {
+    if(height - scrollTop == clientHeight) {
       scroll.state = "locked"
     }else{
       scroll.state = "unlocked"
     }
-  });
+  },
 
-  elements.sendButton.addEventListener("click", () => {
-    const msgContent = elements.msgInput.value.trim()
-    requests.sendMessage(msgContent)
-    clearMsgInputField()
-  });
+  joinServers: (serversIds) => {
+    serversIds.forEach( id => WebchatRequests.joinServerChannel(id) )
+  },
 
-  function scrolldown() {
-    var div = document.getElementById("messages-container")
-    div.scrollTop = div.scrollHeight
+  joinServer: (id) => {
+    State.setCurrentServerId = id
   }
 
-  function clearMsgInputField() {
-    elements.msgInput.value = ""
-  }
+}
 
 
-})
-
-
-export default App
+export default controller

@@ -1,53 +1,53 @@
-import {DOM} from "./views/app_view" 
-import State from "./models/state"
+// could remove DOM dependency by using 
+// *this* inside hooks, but we'd need to add datasets
+// in html
+import DOM from "./views/app_view" 
+import Controller from "./chat_controller"
 
-function updateChatroom(state) {
-  const chatroom = state
-    .getChatroom(DOM.getCurrentServerId(), DOM.getCurrentChatroomId())
-  state.setCurrentChatroom(chatroom)
-  DOM.renderChatroom(chatroom)
+
+
+function updateChatroom() {
+  Controller.updateChatroom(
+    DOM.getCurrentServerId(),
+    DOM.getCurrentChatroomId()
+  )
 }
 
-let hooksInitializer = (function(state, requests, socket) {
+let hooksInitializer = (function() {
   let Hooks = {}
 
   Hooks.Chatroom = {
-    // Chatroom change 
     mounted() {
-      updateChatroom(state)
-      requests.requestMessages(state.getCurrentChatroom() )
+      updateChatroom()
     },
 
     updated() {
-      updateChatroom(state)
-      requests.requestMessages(state.getCurrentChatroom() )
+      updateChatroom()
     },
   }
 
 
   Hooks.Server = {
     mounted() {
-      // subscribe to servers
       const servers = DOM.getAllServersId()
-      servers.forEach( id => requests.joinServerChannel(id) )
+      Controller.joinServers(servers)
 
-      // set current server
       const serverId = DOM.getCurrentServerId()
-      state.setCurrentServerId( serverId ) 
+      Controller.joinServer(serverId)
     },
 
-    // Server change
     updated() {
       const serverId = DOM.getCurrentServerId()
-      state.setCurrentServerId( serverId ) 
+      Controller.joinServer( serverId ) 
     },
 
   }
+
 
   return {
     Hooks: Hooks
   }
-})
+})()
 
 
 export default hooksInitializer 

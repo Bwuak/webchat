@@ -10,10 +10,10 @@ defmodule WebchatWeb.Chat.Models.ChatroomComponent do
       <div id="name-container">
         <h1 id="chatroom-name" phx-hook="Chatroom" data-id="<%= @selected_chatroom.id %>" ><%= @selected_chatroom.roomname %></h1>
       </div>
-      <div id="messages-container" phx-update="ignore">
+      <div id="messages-container" phx-update="ignore" >
       </div>
       <div id="chatbox">
-        <div id="msg-box">
+        <div id="msg-box" >
           <textarea
             autofocus
             id="msg-input"
