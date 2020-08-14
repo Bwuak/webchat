@@ -12,7 +12,7 @@ alias Ecto.Changeset
 alias Webchat.Repo
 alias Webchat.Chat
 alias Webchat.Chat.Models.Chatroom
-alias Webchat.Chat.erver
+alias Webchat.Chat.Servers
 alias Webchat.Chat.Models.Message
 alias Webchat.Administration.Admins
 alias Webchat.Administration.Admins.{User, Admin}
