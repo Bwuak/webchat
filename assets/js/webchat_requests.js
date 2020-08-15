@@ -5,7 +5,6 @@ import State from "./models/state"
 
 let Requests = (function() {
 
-  socket.connect()
 
   function pushMessage(payload) { 
     const channel = State.getChannel()
@@ -64,6 +63,10 @@ let Requests = (function() {
       }
       State.setCurrentServerId(serverId)
     },
+
+    connect: () => {
+      socket.connect()
+    }
 
   }
 

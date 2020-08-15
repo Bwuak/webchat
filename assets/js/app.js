@@ -17,6 +17,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
 
+import WebchatRequests from "./webchat_requests"
 import Hooks from "./hooks_events"
 import State from "./models/state"
 import UserEvents from "./user_events"
@@ -29,5 +30,6 @@ if(document.getElementById("chatroom")) {
   // liveview socket
   let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks.Hooks, params: {_csrf_token: csrfToken}})
   
+  WebchatRequests.connect()
   liveSocket.connect()
 }

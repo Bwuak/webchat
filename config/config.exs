@@ -7,10 +7,6 @@
 # General application configuration
 use Mix.Config
 
-# faster tests for development
-# TODO check this later for production
-config :pbkdf2_elixir, :rounds, 1
-
 config :webchat,
   ecto_repos: [Webchat.Repo]
 

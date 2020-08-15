@@ -2,6 +2,8 @@ defmodule Webchat.Administration.Models.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Webchat.Administration.Encryption
+
   schema "users" do
     field :username, :string
     field :email, :string
@@ -33,7 +35,7 @@ defmodule Webchat.Administration.Models.User do
   defp put_pass_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
-          put_change(changeset, :password_hash, Pbkdf2.hash_pwd_salt(pass))
+          put_change(changeset, :password_hash, Encryption.hash(pass))
           
         _ ->
           changeset
