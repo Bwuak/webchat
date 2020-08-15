@@ -23,7 +23,7 @@ defmodule WebchatWeb.ChatLive do
     <!-- conditional rendering of live components -->
     <%= if Map.has_key?(assigns, :action) do %>
       <div class="action">
-        <%= live_component @socket, action_component(assigns), Map.put(assigns, :id, "action" )  %>
+        <%= live_component @socket, assigns.action, Map.put(assigns, :id, "action" )  %>
       </div>
     <% end %>
     """
@@ -94,25 +94,25 @@ defmodule WebchatWeb.ChatLive do
 
   # Adding component
   def handle_event("server-action", _, socket) do
-    {:noreply, assign(socket, action: "server_action") }
+    {:noreply, assign(socket, action: ServerActionComponent) }
   end
 
   def handle_event("create-server", _, socket) do
-    {:noreply, assign(socket, action: "create_server") }
+    {:noreply, assign(socket, action: ServerCreationComponent) }
   end
 
   def handle_event("join-server", _, socket) do
-    {:noreply, assign(socket, action: "join_server") }
+    {:noreply, assign(socket, action: ServerSubscriptionComponent) }
   end
 
   def handle_event("create-room", _, socket) do
-    {:noreply, assign(socket, action: "create_chatroom") }
+    {:noreply, assign(socket, action: ChatroomCreationComponent) }
   end
 
   # Handle errors
   def handle_info({_AnyComponent, :error, msg}, socket) do
     {:noreply, assign(socket, 
-      action: "error",
+      action: ErrorComponent,
       error: msg
     ) }
   end
@@ -173,22 +173,6 @@ defmodule WebchatWeb.ChatLive do
       assigns: Map.delete(socket.assigns, :action), 
       changed: Map.put_new(socket.changed, :action, true)
     }
-  end
-
-  # Conditional component
-  defp action_component(%{action: action} = _assigns) do
-    case action do
-      "server_action" ->
-        ServerActionComponent
-      "create_server" ->
-        ServerCreationComponent 
-      "join_server" ->
-        ServerSubscriptionComponent
-      "create_chatroom" ->
-        ChatroomCreationComponent
-      "error" ->
-        ErrorComponent
-    end
   end
 
   defp subscribe_to_server(%Server{} = server, socket) do
