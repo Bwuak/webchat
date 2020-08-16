@@ -7,7 +7,7 @@ defmodule WebchatWeb.Chat.UserListComponent do
         <h3>Users</h3>
         <div id="online-users-list">
         <%= for user <- @users do %>
-          <p><%= user.username %></p>
+          <p class="<%= user.status %>" ><%= user.username %></p>
         <% end %>
         </div>
       </div>

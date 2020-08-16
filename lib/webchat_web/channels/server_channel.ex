@@ -22,8 +22,7 @@ defmodule WebchatWeb.ServerChannel do
 
   @very_high_number 90000000
   def handle_in("request_messages", 
-    %{"room_id" => id, "oldest" => oldest}, _user, socket) when id > 0 do
-
+      %{"room_id" => id, "oldest" => oldest}, _user, socket) when id > 0 do
     oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
     messages = 
       id
@@ -52,7 +51,7 @@ defmodule WebchatWeb.ServerChannel do
    {:ok, _} = WebchatWeb.Presence.track(
      socket,
      socket.assigns.user_id,
-     %{device: "broswer"}
+     %{device: "browser"}
    )
    {:noreply, socket}
  end

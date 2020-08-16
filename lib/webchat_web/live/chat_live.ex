@@ -14,7 +14,7 @@ defmodule WebchatWeb.ChatLive do
   alias Webchat.Chat.Participants
   alias Webchat.Administration.Users
 
-  @topic "server:"
+  @topic_prefix "server:"
 
   def render(assigns) do
     ~L"""
@@ -118,10 +118,13 @@ defmodule WebchatWeb.ChatLive do
   end
 
   # Presence tracking changes callback
-  def handle_info(%Phoenix.Socket.Broadcast{} = broadcast, socket) do
+  def handle_info(%Phoenix.Socket.Broadcast{} = _broadcast, socket) do
+    # not using broadcast
+    # We are fetching the full presence list
+    # Could become a bottleneck
     {:noreply, assign(socket, 
-      users: subscribed_server_userlist(broadcast.topic) 
-    ) }
+      users: participants_list(socket.assigns.selected_server) 
+    )}
   end
    
 
@@ -181,11 +184,11 @@ defmodule WebchatWeb.ChatLive do
       nil ->
         socket
       id ->
-        topic = @topic <> Integer.to_string(id)
+        topic = topic(id) 
         WebchatWeb.Endpoint.subscribe(topic)
         assign(socket, 
           subscription: topic,
-          users: subscribed_server_userlist(topic)
+          users: participants_list(server)
         ) 
     end
   end
@@ -196,11 +199,35 @@ defmodule WebchatWeb.ChatLive do
     assign(socket, subscription: nil)
   end
 
-  # Only temporary, will remove unecessary elements
-  defp subscribed_server_userlist(topic) do
-    topic
-    |> WebchatWeb.Presence.list()
-    |> Enum.map(&(elem(&1, 1).user))
+  defp topic(serverId) when is_integer(serverId) do
+    @topic_prefix <> Integer.to_string(serverId)
+  end
+  defp topic(serverId), do: @topic_prefix <> serverId
+
+  defp participants_list(%Server{} = server) do
+    all = all_participants(server)
+    onlines = online_participants(topic(server.id)) 
+    
+    for p <- all, into: [] do
+      if onlines[Integer.to_string(p.user_id)] do
+        %{username: p.user.username,
+          status: "online"}
+      else
+        %{username: p.user.username,
+          status: "offline"}
+      end
+    end
+    |> Enum.sort_by( &( String.at(&1.username, 0) ))
+    |> Enum.reverse()
+    |> Enum.sort_by( &(&1.status) ) 
+    |> Enum.reverse()
+    # I really hope there's a better way to sort this
+  end
+
+  defp online_participants(topic), do: WebchatWeb.Presence.list(topic) 
+
+  defp all_participants(%Server{} = server) do
+    Participants.list_participants(server)
   end
 
 end
