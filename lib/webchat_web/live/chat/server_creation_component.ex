@@ -4,10 +4,10 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
 
   import WebchatWeb.ErrorHelpers
 
-  alias Webchat.Chat
   alias Webchat.Chat.Participants
   alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Models.Server
+  alias Webchat.Chat.Servers
 
   
   def render(assigns) do
@@ -41,8 +41,8 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
 
   def handle_event("validate", %{"server" => params}, socket) do
     changeset = 
-      %Server{}
-      |> Server.changeset(params)
+      socket.assigns.changeset.data
+      |> Servers.change_server(params)
       |> Map.put(:action, :insert)
 
     {:noreply, assign(socket, changeset: changeset) }
@@ -50,21 +50,16 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
 
   # create the server if it is valid
   def handle_event("save", %{"server" => params}, socket) do
-    case socket.assigns.changeset.valid? do
-      true ->
-        user = socket.assigns.user
-        {:ok, new_server} = Chat.Servers.create_server(%{name: params["name"], user_id: user.id})
+    user = socket.assigns.user
+    case Servers.create_server(%{name: params["name"], user_id: user.id} ) do
+      {:ok, new_server} ->
         {:ok, _part} = Participants.create_participation(
           user, Webchat.Repo.get!(Role, 1), new_server )
 
         send(self(), {__MODULE__, :server_created, new_server})
         {:noreply, socket}
 
-      false ->
-        changeset =
-          %Server{}
-          |> Server.changeset(params)
-          |> Map.put(:action, :insert)
+      {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
