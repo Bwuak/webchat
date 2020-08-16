@@ -20,14 +20,12 @@ defmodule WebchatWeb.ServerChannel do
     handle_in(event, params, user, socket)
   end
 
-  @very_high_number 90000000
   def handle_in("request_messages", 
       %{"room_id" => id, "oldest" => oldest}, _user, socket) when id > 0 do
-    oldest_id = if oldest != "nil", do: oldest, else: @very_high_number
     messages = 
       id
       |> Chatrooms.get_chatroom!
-      |> Messages.get_chatroom_old_messages(oldest_id)
+      |> Messages.get_chatroom_old_messages(oldest)
       |> Phoenix.View.render_many(MessageView, "message.json")
 
     {:reply, {:ok, %{messages: messages, room_id: id}}, socket} 
