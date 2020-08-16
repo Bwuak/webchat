@@ -40,6 +40,11 @@ const controller = {
   },
 
   scrollMoved: (height, scrollTop, clientHeight) => {
+    if(scrollTop == 0) {
+      const chatroom = State.getCurrentChatroom()
+      WebchatRequests.requestMessages(chatroom)
+    }
+
     if(height - scrollTop == clientHeight) {
       scroll.state = "locked"
     }else{

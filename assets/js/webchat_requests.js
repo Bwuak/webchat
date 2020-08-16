@@ -34,7 +34,6 @@ let Requests = (function() {
         room_id: chatroom.roomId,
         oldest: oldestMsgId
       }
-  
       pushRequestMessages(chatroom.serverId, payload)
     },
 

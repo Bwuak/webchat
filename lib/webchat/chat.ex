@@ -6,7 +6,7 @@ defmodule Webchat.Chat do
   alias Webchat.Chat.Servers
 
 
-  def select_chatrooms(%Server{} = server) do
+  def get_server_chatrooms(%Server{} = server) do
     Enum.reverse( Servers.with_chatrooms(server).chatrooms )
   end
 
