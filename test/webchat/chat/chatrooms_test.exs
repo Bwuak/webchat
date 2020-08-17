@@ -22,12 +22,12 @@ defmodule Webchat.Chat.ChatroomsTest do
       Chatrooms.create_chatroom(@invalid)
   end
 
-  test "get_all_chatrooms/0 returns all chatrooms" do
+  test "list/0 returns all chatrooms" do
     user = user_fixture()
     server = server_fixture(%{user_id: user.id})
     room = chatroom_fixture(server)
     
-    chatrooms = Chatrooms.get_all_chatrooms()
+    chatrooms = Chatrooms.list()
     assert chatrooms == [room]
   end
 

@@ -11,6 +11,7 @@ defmodule WebchatWeb.ChatLive do
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat
   alias Webchat.Chat.Servers
+  alias Webchat.Chat.Chatrooms
   alias Webchat.Chat.Participants
   alias Webchat.Administration.Users
 
@@ -45,7 +46,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Servers.get!()
-    chatrooms = Chat.get_server_chatrooms(selected_server) 
+    chatrooms = Chatrooms.from_server(selected_server) 
     selected_chatroom = String.to_integer(rid) |> Chat.Chatrooms.get_chatroom!()
 
     socket = subscribe_to_server(selected_server, socket)
@@ -64,7 +65,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
     selected_server = String.to_integer(sid) |> Servers.get!()
-    chatrooms = Chat.get_server_chatrooms(selected_server) 
+    chatrooms = Chatrooms.from_server(selected_server) 
 
     socket = subscribe_to_server(selected_server, socket)
     {:noreply, assign(socket,
@@ -76,7 +77,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(_, _, socket) do
     default_server = Chat.select_default_server(socket.assigns.servers)
-    chatrooms = Chat.get_server_chatrooms(default_server)
+    chatrooms = Chatrooms.from_server(default_server)
 
     socket = subscribe_to_server(default_server, socket)
     {:noreply, assign(socket,

@@ -3,6 +3,7 @@ defmodule Webchat.Chat.Servers do
 
   alias Webchat.Repo
   alias Webchat.Chat.Models.Server
+  alias Webchat.Chat.Models.Chatroom
 
   def list do
     Repo.all(Server)
@@ -33,8 +34,12 @@ defmodule Webchat.Chat.Servers do
 
   def with_chatrooms(nil), do: %Server{chatrooms: [], name: nil}
   def with_chatrooms(%Server{} = server) do
-    Repo.preload(server, :chatrooms)
+    # Preloading chatrooms in creation order
+    Repo.preload(server, [chatrooms: from(c in Chatroom, order_by: c.id)] )
   end
 
+  def with_user(%Server{} = server) do
+    Repo.preload(server, :user)
+  end
 
 end
