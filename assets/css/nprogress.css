@@ -1,0 +1,7 @@
+@import "../node_modules/nprogress/nprogress.css";
+
+/* adding absolute position to nprogress */
+#nprogress {
+  position: absolute;
+  top: 0;
+}
