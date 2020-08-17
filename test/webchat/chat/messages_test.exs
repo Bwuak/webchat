@@ -27,7 +27,7 @@ defmodule Webchat.Chat.MessagesTest do
       Messages.add_message(user, room.id, @valid_attrs)
 
     message = %Message{message | user: user}
-    messages = Messages.get_chatroom_old_messages(room)
+    messages = Messages.list_for(room)
     assert messages == [message]
   end
 
@@ -38,11 +38,11 @@ defmodule Webchat.Chat.MessagesTest do
 
     {:error, _err} = Messages.add_message(user, room.id, @invalid_attrs)
 
-    messages = Messages.get_chatroom_old_messages(room)
+    messages = Messages.list_for(room)
     assert messages == []
   end
 
-  test "Messages.get_chatroom_old_messages/2 gives up to 50 messages older than
+  test "Messages.list_for/2 gives up to 50 messages older than
   the last message seen" do
     user = user_fixture()
     server = server_fixture(%{user_id: user.id})
@@ -55,7 +55,7 @@ defmodule Webchat.Chat.MessagesTest do
     oldest_message_seen = message_fixture(user, room)
 
     queried_messages = 
-      Messages.get_chatroom_old_messages(room, oldest_message_seen.id)
+      Messages.list_for(room, oldest_message_seen.id)
     
     assert length(old_messages) == 50
     assert length(queried_messages) == 50
@@ -74,7 +74,7 @@ defmodule Webchat.Chat.MessagesTest do
     old_messages = 
       for _msg <- 1..50 do message_fixture(user, room) end
 
-    queried_messages = Messages.get_chatroom_old_messages(room)
+    queried_messages = Messages.list_for(room)
 
     assert not Enum.member?(queried_messages, older_message)
     assert queried_messages == old_messages
@@ -89,7 +89,7 @@ defmodule Webchat.Chat.MessagesTest do
     new_unseen_messages = 
       for _msg <- 1..100 do message_fixture(user, room) end
 
-    _queried_messages = Messages.get_chatroom_old_messages(room, last_seen_message.id)
+    _queried_messages = Messages.list_for(room, last_seen_message.id)
 
     assert queried_messages = new_unseen_messages
     assert not Enum.member?(queried_messages, last_seen_message)

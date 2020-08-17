@@ -8,10 +8,10 @@ defmodule Webchat.Chat.Messages do
 
 
   @high_oldest_seen_id 900000000
-  def get_chatroom_old_messages(room, oldest \\ @high_oldest_seen_id) 
+  def list_for(room, oldest \\ @high_oldest_seen_id) 
 
   @doc "gives up to 50 messages older than oldest seen, chatroom history"
-  def get_chatroom_old_messages(%Chatroom{} = room, oldest_id) 
+  def list_for(%Chatroom{} = room, oldest_id) 
       when is_integer(oldest_id) do
     Repo.all(
       from msg in Ecto.assoc(room, :messages),
@@ -24,8 +24,8 @@ defmodule Webchat.Chat.Messages do
   end
 
   # Matches when no id provided
-  def get_chatroom_old_messages(room, _) do 
-    get_chatroom_old_messages(room, @high_oldest_seen_id)
+  def list_for(room, _) do 
+    list_for(room, @high_oldest_seen_id)
   end
 
   def change_message(%Message{} = message, attrs \\ %{}) do
