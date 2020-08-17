@@ -23,7 +23,7 @@ defmodule Webchat.Chat.Chatrooms do
     Chatroom.changeset(chatroom, attrs)
   end
 
-  def from_server(%Server{} = server) do
+  def for_server(%Server{} = server) do
     from(c in Chatroom,
       order_by: c.id,
       where: c.server_id == ^server.id

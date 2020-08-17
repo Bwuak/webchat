@@ -19,9 +19,9 @@ defmodule Webchat.Chat do
   def owner_of(%Server{} = server), do: Servers.with_user(server).user
 
   # Checks if user is owner 
-  # TODO Participant or user? TBD
-  def is_owner_of?(%Server{} = server, user) do
-    user == owner_of(server)
+  def is_owner?(%Server{} = server, user) do
+    server.user_id == user.id
   end
+
 
 end

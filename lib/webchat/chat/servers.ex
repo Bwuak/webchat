@@ -38,6 +38,7 @@ defmodule Webchat.Chat.Servers do
     Repo.preload(server, [chatrooms: from(c in Chatroom, order_by: c.id)] )
   end
 
+  # server.user => server's owner
   def with_user(%Server{} = server) do
     Repo.preload(server, :user)
   end

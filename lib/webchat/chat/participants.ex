@@ -36,7 +36,7 @@ defmodule Webchat.Chat.Participants do
   end
 
   @doc """
-  Transfer ownership of a server
+  TODO Transfer ownership of a server
   """
   def transfer_ownership(%Participant{} = _owner, %Participant{} = _new_owner) do
     :nil
@@ -54,14 +54,15 @@ defmodule Webchat.Chat.Participants do
   end
 
   @doc """
+  List servers associated with given user
   """
   def list_servers(%User{} = user) do
-    from( p in Participant,
-      where: p.user_id == ^user.id,
-      preload: [:server]
+    from( s in Server,
+      join: p in Participant,
+      on: p.server_id == s.id,
+      where: p.user_id == ^user.id
     )
     |> Repo.all()
-    |> Enum.map(&(&1.server))
   end
 
 end
