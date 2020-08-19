@@ -7,39 +7,32 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-import Ecto.Query
-alias Ecto.Changeset
-alias Webchat.Repo
-alias Webchat.Chat
-alias Webchat.Chat.Models.Chatroom
-alias Webchat.Chat.Servers
-alias Webchat.Chat.Models.Message
-alias Webchat.Administration.Admins
-alias Webchat.Administration.Admins.{User, Admin}
+use Webchat
 
 # Create a user 
 User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", password: "123456"})
 |> Repo.insert!
-# 
+
+
 # # get user 
-user = Admins.get_by(email: "admin@admin")
-# 
+user = Users.get_by(email: "admin@admin")
+
 # # create servers 
-{:ok, server1} = Chat.Servers.create_server(%{name: "First server", user_id: user.id})
-{:ok, server2} = Chat.Servers.create_server(%{name: "second server", user_id: user.id})
+{:ok, server1} = Servers.create_server(%{name: "First server", user_id: user.id})
+{:ok, server2} = Servers.create_server(%{name: "second server", user_id: user.id})
 # 
 # # create chatrooms 
-Chat.Chatrooms.create_chatroom(server2.id, %{roomname: "General"}) 
-Chat.Chatrooms.create_chatroom(server1.id, %{roomname: "General"})
-Chat.Chatrooms.create_chatroom(server1.id, %{roomname: "Another room"})
+Chatrooms.create_chatroom(server2.id, %{roomname: "General"}) 
+Chatrooms.create_chatroom(server1.id, %{roomname: "General"})
+Chatrooms.create_chatroom(server1.id, %{roomname: "Another room"})
 #  
 # # create a website admin
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
  
 
 
-alias Webchat.Chat.Models.Role
 
+# ccreate a role
 Role.changeset(%Role{}, %{name: "Member"})
 |> Repo.insert()
 
@@ -48,8 +41,8 @@ Repo.all(Role) |> IO.inspect
 #
 
 
-alias Webchat.Chat.Models.Participant
-user = Admins.get_by(email: "admin@admin")
+# create a participant
+user = Users.get_by(email: "admin@admin")
 server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})
 Participant.changeset(%Participant{}, 

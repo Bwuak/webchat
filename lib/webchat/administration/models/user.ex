@@ -13,15 +13,15 @@ defmodule Webchat.Administration.Models.User do
     timestamps()
   end
 
-  def changeset(user, attrs) do
-    user
+  def changeset(admin, attrs) do
+    admin
     |> cast(attrs, [:username])
     |> validate_required([:username ])
     |> validate_length(:username, min: 2, max: 20)
   end
 
-  def registration_changeset(user, attrs) do
-    user
+  def registration_changeset(admin, attrs) do
+    admin 
     |> changeset(attrs)
     |> cast(attrs, [:email, :password])
     |> validate_required([:email, :password])
