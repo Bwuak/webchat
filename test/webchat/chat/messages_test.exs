@@ -80,20 +80,4 @@ defmodule Webchat.Chat.MessagesTest do
     assert queried_messages == old_messages
   end
 
-  test "chatroom_message/2 gives all messages since last seen" do
-    user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
-    room = chatroom_fixture(server)
-
-    last_seen_message = message_fixture(user, room)
-    new_unseen_messages = 
-      for _msg <- 1..100 do message_fixture(user, room) end
-
-    _queried_messages = Messages.list_for(room, last_seen_message.id)
-
-    assert queried_messages = new_unseen_messages
-    assert not Enum.member?(queried_messages, last_seen_message)
-    assert "comebacklater" == ""
-  end
-
 end
