@@ -22,7 +22,7 @@ defmodule WebchatWeb.Chat.ServerListingComponent do
                 server_id: server.id
               ),
               class: "server-link",
-              class: if server == @selected_server, do: "active-server server-link"
+              class: if server.id == @selected_server.id, do: "active-server server-link"
             %>
           </div>
         <% end %>

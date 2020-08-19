@@ -4,12 +4,16 @@ defmodule Webchat.Chat do
   alias Webchat.Chat.Models.Chatroom
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Servers
-  alias Webchat.Chat.Chatrooms
 
+
+  def select_server_by_id(serverId) do
+    Servers.get!(serverId)
+    |> Servers.with_chatrooms()
+  end
 
   # First server for a given list of servers
-  def select_default_server([]), do: %Server{name: nil}
-  def select_default_server([head | _tail]), do: head
+  def select_default_server([]), do: %Server{name: nil, chatrooms: []}
+  def select_default_server([head | _tail]), do: Servers.with_chatrooms(head)
 
   # First chatroom for a given list of chatrooms
   def select_default_chatroom([]), do: %Chatroom{roomname: :nil}

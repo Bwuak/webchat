@@ -9,7 +9,10 @@ defmodule Webchat.Chat.Servers do
     Repo.all(Server)
   end
 
-  def get!(id), do: Repo.get!(Server, id)
+  def get!(id) do 
+    Repo.get!(Server, id)
+  end
+
   def get(id), do: Repo.get!(Server, id)
 
   def create_server(attrs) do

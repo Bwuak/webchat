@@ -10,7 +10,6 @@ defmodule WebchatWeb.ChatLive do
 
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat
-  alias Webchat.Chat.Servers
   alias Webchat.Chat.Chatrooms
   alias Webchat.Chat.Participants
   alias Webchat.Administration.Users
@@ -45,9 +44,9 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
-    selected_server = String.to_integer(sid) |> Servers.get!()
-    chatrooms = Servers.with_chatrooms(selected_server).chatrooms 
-    selected_chatroom = String.to_integer(rid) |> Chat.Chatrooms.get_chatroom!()
+    selected_server = Chat.select_server_by_id(sid)
+    chatrooms = selected_server.chatrooms 
+    selected_chatroom = Chatrooms.get_chatroom!(rid)
 
     socket = subscribe_to_server(selected_server, socket)
     case Enum.member?(chatrooms, selected_chatroom)  do
@@ -64,8 +63,8 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
-    selected_server = String.to_integer(sid) |> Servers.get!()
-    chatrooms = Servers.with_chatrooms(selected_server).chatrooms 
+    selected_server = Chat.select_server_by_id(sid)
+    chatrooms = selected_server.chatrooms 
 
     socket = subscribe_to_server(selected_server, socket)
     {:noreply, assign(socket,
@@ -77,7 +76,7 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_params(_, _, socket) do
     default_server = Chat.select_default_server(socket.assigns.servers)
-    chatrooms = Servers.with_chatrooms(default_server).chatrooms 
+    chatrooms = default_server.chatrooms 
 
     socket = subscribe_to_server(default_server, socket)
     {:noreply, assign(socket,
@@ -179,6 +178,7 @@ defmodule WebchatWeb.ChatLive do
     }
   end
 
+  defp subscribe_to_server(server, socket) when is_nil(server), do: socket 
   defp subscribe_to_server(%Server{} = server, socket) do
     socket = unsubscribe_to_server(socket.assigns.subscription, socket)
     case server.id do
