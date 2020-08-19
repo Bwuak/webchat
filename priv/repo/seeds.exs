@@ -52,7 +52,7 @@ alias Webchat.Chat.Models.Participant
 user = Admins.get_by(email: "admin@admin")
 server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})
-Participant.creation_changeset(%Participant{}, 
+Participant.changeset(%Participant{}, 
   %{user_id: user.id,
     server_id: server.id,
     role_id: role.id}

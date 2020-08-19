@@ -14,7 +14,7 @@ defmodule Webchat.Chat.Servers do
 
   def create_server(attrs) do
     %Server{}
-    |> Server.creation_changeset(attrs)
+    |> Server.changeset(attrs)
     |> Repo.insert()
   end
 

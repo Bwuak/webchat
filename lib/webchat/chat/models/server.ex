@@ -17,11 +17,6 @@ defmodule Webchat.Chat.Models.Server do
     |> cast(attrs, [:name, :user_id])
     |> validate_required([:name])
     |> validate_length(:name, min: 2, max: 20)
-  end
-
-  def creation_changeset(server, attrs) do
-    server
-    |> changeset(attrs)
     |> validate_required([:user_id])
     |> assoc_constraint(:user)
   end

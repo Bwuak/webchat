@@ -15,7 +15,7 @@ defmodule Webchat.Chat.Participants do
     %User{} = user, %Role{} = role, %Server{} = server
   ) do
     %Participant{}
-    |> Participant.creation_changeset(
+    |> Participant.changeset(
       %{user_id: user.id, role_id: role.id, server_id: server.id} )
     |> Repo.insert()
   end
@@ -31,7 +31,7 @@ defmodule Webchat.Chat.Participants do
   Change a user's role inside a server
   """
   def update_role(%Participant{} = participant, %Role{} = role) do
-    Participant.role_changeset(participant, %{role_id: role.id})
+    Participant.changeset(participant, %{role_id: role.id})
     |> Repo.update()
   end
 
