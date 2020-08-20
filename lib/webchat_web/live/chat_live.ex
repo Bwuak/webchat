@@ -1,5 +1,6 @@
 defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
+  import WebchatWeb.Subscriptions.Server
 
   # Components
   alias WebchatWeb.Chat.ServerActionComponent
@@ -10,7 +11,6 @@ defmodule WebchatWeb.ChatLive do
   alias WebchatWeb.Chat.ErrorComponent
 
   # Domain dependencies
-  alias Webchat.Chat.Models.Server
   alias Webchat.Chat
   alias Webchat.Chat.ServerParticipation
   alias Webchat.Administration.Users
@@ -107,7 +107,7 @@ defmodule WebchatWeb.ChatLive do
     {:noreply, assign(socket, action: ChatroomCreationComponent) }
   end
 
-  # Handle errors
+  # Error component 
   def handle_info({_AnyComponent, :error, msg}, socket) do
     {:noreply, assign(socket, 
       action: ErrorComponent,
@@ -123,17 +123,16 @@ defmodule WebchatWeb.ChatLive do
       users: participants_list(socket.assigns.selected_server) 
     )}
   end
-   
 
   # server creation callback
   def handle_info({ServerCreationComponent, :server_created, new_server}, socket) do
-    new_socket = 
+    socket = 
       socket
       |> remove_socket_action()
       |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) )
 
-    {:noreply, push_patch(new_socket, 
-      to: Routes.live_path(new_socket, __MODULE__, server_id: new_server.id),
+    {:noreply, push_patch(socket, 
+      to: Routes.live_path(socket, __MODULE__, server_id: new_server.id),
       replace: true
     ) } 
   end
@@ -143,7 +142,6 @@ defmodule WebchatWeb.ChatLive do
     socket = 
       socket
       |> remove_socket_action()
-      |> assign(:selected_chatroom, new_chatroom)
 
     {:noreply, push_patch(socket,
       to: Routes.live_path(socket, __MODULE__, 
@@ -154,13 +152,13 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_info({ServerSubscriptionComponent, :server_joined, server_joined}, socket) do
-    new_socket = 
+    socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) ) 
+      |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) )
 
-    {:noreply, push_patch(new_socket,
-      to: Routes.live_path(new_socket, __MODULE__, server_id: server_joined.id),
+    {:noreply, push_patch(socket,
+      to: Routes.live_path(socket, __MODULE__, server_id: server_joined.id),
       replace: true
     ) }
   end
@@ -173,61 +171,6 @@ defmodule WebchatWeb.ChatLive do
       assigns: Map.delete(socket.assigns, :action), 
       changed: Map.put_new(socket.changed, :action, true)
     }
-  end
-
-  defp subscribe_to_server(server, socket) when is_nil(server), do: socket 
-  defp subscribe_to_server(%Server{} = server, socket) do
-    socket = unsubscribe_to_server(socket.assigns.subscription, socket)
-    case server.id do
-      nil ->
-        socket
-      id ->
-        topic = topic(id) 
-        WebchatWeb.Endpoint.subscribe(topic)
-        assign(socket, 
-          subscription: topic,
-          users: participants_list(server)
-        ) 
-    end
-  end
-
-  defp unsubscribe_to_server(nil, socket), do: socket 
-  defp unsubscribe_to_server(topic, socket) do
-    WebchatWeb.Endpoint.unsubscribe(topic)
-    assign(socket, subscription: nil)
-  end
-
-  @topic_prefix "server:"
-  # turn a given serverId into a valid topic string
-  defp topic(serverId) when is_integer(serverId) do
-    @topic_prefix <> Integer.to_string(serverId)
-  end
-  defp topic(serverId), do: @topic_prefix <> serverId
-
-  defp participants_list(%Server{} = server) do
-    all = all_participants(server)
-    onlines = online_participants(topic(server.id)) 
-    
-    for p <- all, into: [] do
-      if onlines[Integer.to_string(p.user_id)] do
-        %{username: p.user.username,
-          status: "online"}
-      else
-        %{username: p.user.username,
-          status: "offline"}
-      end
-    end
-    |> Enum.sort_by( &( String.at(&1.username, 0) ))
-    |> Enum.reverse()
-    |> Enum.sort_by( &(&1.status) ) 
-    |> Enum.reverse()
-    # I really hope there's a better way to sort this
-  end
-
-  defp online_participants(topic), do: WebchatWeb.Presence.list(topic) 
-
-  defp all_participants(%Server{} = server) do
-    ServerParticipation.list_participants(server)
   end
 
 end
