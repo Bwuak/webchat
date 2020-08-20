@@ -6,23 +6,19 @@ defmodule Webchat.Chat.Servers do
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Models.Chatroom
 
-  def list do
-    Repo.all(Server)
-  end
+  def list, do: Repo.all(Server)
 
-  def get!(id) do 
-    Repo.get!(Server, id)
-  end
+  def get!(id), do: Repo.get!(Server, id)
 
   def get(id), do: Repo.get!(Server, id)
+
+  def delete(%Server{} = server), do: Repo.delete(server)
 
   def create(%User{} = user, attrs) do
     %Server{user_id: user.id}
     |> Server.changeset(attrs)
     |> Repo.insert()
   end
-
-  def delete(%Server{} = server), do: Repo.delete(server)
 
   def update_server(%Server{} = server, attrs) do
     server

@@ -10,8 +10,7 @@ defmodule WebchatWeb.ChatLive do
 
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat
-  alias Webchat.Chat.Chatrooms
-  alias Webchat.Chat.Participants
+  alias Webchat.Chat.ServerParticipation
   alias Webchat.Administration.Users
 
   @topic_prefix "server:"
@@ -31,7 +30,7 @@ defmodule WebchatWeb.ChatLive do
 
   def mount(_params, session, socket) do
     user = Users.get!(session["user_id"])
-    servers = Participants.list_servers(user)
+    servers = ServerParticipation.list_servers(user)
 
     {:ok, 
       assign(socket, 
@@ -44,26 +43,24 @@ defmodule WebchatWeb.ChatLive do
   end
 
   def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
-    selected_server = Chat.select_server_by_id(sid)
-    chatrooms = selected_server.chatrooms 
-    selected_chatroom = Chatrooms.get_chatroom!(rid)
+    selected_server = Chat.select_server(sid)
+    selected_chatroom = Chat.select_chatroom(selected_server, rid)
 
     socket = subscribe_to_server(selected_server, socket)
-    case Enum.member?(chatrooms, selected_chatroom)  do
-      true ->
+    case selected_chatroom do 
+      nil ->
+        {:noreply, push_patch(socket, to: "/chat", replace: true)}
+      _ ->
         {:noreply, assign(socket,
           selected_server: selected_server,
-          chatrooms: chatrooms,
+          chatrooms: selected_server.chatrooms, 
           selected_chatroom: selected_chatroom 
           )}
-
-      false ->
-        {:noreply, push_patch(socket, to: "/chat", replace: true)}
     end
   end
 
   def handle_params(%{"server_id" => sid}, _url, socket) do
-    selected_server = Chat.select_server_by_id(sid)
+    selected_server = Chat.select_server(sid)
     chatrooms = selected_server.chatrooms 
 
     socket = subscribe_to_server(selected_server, socket)
@@ -119,7 +116,6 @@ defmodule WebchatWeb.ChatLive do
 
   # Presence tracking changes callback
   def handle_info(%Phoenix.Socket.Broadcast{} = _broadcast, socket) do
-    # not using broadcast
     # We are fetching the full presence list
     # Could become a bottleneck
     {:noreply, assign(socket, 
@@ -133,7 +129,7 @@ defmodule WebchatWeb.ChatLive do
     new_socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: Participants.list_servers(socket.assigns.user) )
+      |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) )
 
     {:noreply, push_patch(new_socket, 
       to: Routes.live_path(new_socket, __MODULE__, server_id: new_server.id),
@@ -160,7 +156,7 @@ defmodule WebchatWeb.ChatLive do
     new_socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: Participants.list_servers(socket.assigns.user) ) 
+      |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) ) 
 
     {:noreply, push_patch(new_socket,
       to: Routes.live_path(new_socket, __MODULE__, server_id: server_joined.id),
@@ -228,7 +224,7 @@ defmodule WebchatWeb.ChatLive do
   defp online_participants(topic), do: WebchatWeb.Presence.list(topic) 
 
   defp all_participants(%Server{} = server) do
-    Participants.list_participants(server)
+    ServerParticipation.list_participants(server)
   end
 
 end

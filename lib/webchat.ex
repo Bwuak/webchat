@@ -32,6 +32,7 @@ defmodule Webchat do
       alias Webchat.Chat.Chatrooms
       alias Webchat.Chat.Participants
       alias Webchat.Chat.Messages
+      alias Webchat.Chat.Roles
     end
   end
 
