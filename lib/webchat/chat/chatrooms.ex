@@ -3,17 +3,12 @@ defmodule Webchat.Chat.Chatrooms do
 
   alias Webchat.Repo
   alias Webchat.Chat.Models.Chatroom
-  alias Webchat.Chat.Models.Server
+
 
   def create_chatroom(server_id, attrs \\ %{}) do
     %Chatroom{server_id: server_id}
     |> Chatroom.changeset(attrs)
     |> Repo.insert()
-  end
-
-  def list() do
-    Chatroom
-    |> Repo.all
   end
 
   def get_chatroom!(chatroom_id), do: Repo.get!(Chatroom, chatroom_id)
