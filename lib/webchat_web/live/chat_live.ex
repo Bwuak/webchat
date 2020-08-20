@@ -1,6 +1,7 @@
 defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
+  # Components
   alias WebchatWeb.Chat.ServerActionComponent
   alias WebchatWeb.Chat.ServerCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
@@ -8,12 +9,12 @@ defmodule WebchatWeb.ChatLive do
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.ErrorComponent
 
+  # Domain dependencies
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat
   alias Webchat.Chat.ServerParticipation
   alias Webchat.Administration.Users
 
-  @topic_prefix "server:"
 
   def render(assigns) do
     ~L"""
@@ -196,6 +197,8 @@ defmodule WebchatWeb.ChatLive do
     assign(socket, subscription: nil)
   end
 
+  @topic_prefix "server:"
+  # turn a given serverId into a valid topic string
   defp topic(serverId) when is_integer(serverId) do
     @topic_prefix <> Integer.to_string(serverId)
   end

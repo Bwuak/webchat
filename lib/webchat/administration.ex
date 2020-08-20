@@ -6,10 +6,16 @@ defmodule Webchat.Administration do
   alias Webchat.Administration.Encryption
 
 
+  @doc """
+  Validates the user is admin
+  """
   def is_admin?(%User{} = user) do
     Admins.get_by(%{user_id: user.id}) != nil
   end
 
+  @doc """
+  Gives user for correct credentials
+  """
   def authenticate_user(email, given_pass) do
     down_cased_email = String.downcase email
     user = Users.get_by(email: down_cased_email)

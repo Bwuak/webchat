@@ -7,10 +7,6 @@ defmodule Webchat.Administration.Users do
 
   def list(), do: Repo.all(User)
 
-  def list_with_ids(ids) do
-    Repo.all(from(user in User, where: user.id in ^ids))
-  end
-
   def get!(id), do: Repo.get!(User, id)
   def get(id), do: Repo.get(User, id)
 

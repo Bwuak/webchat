@@ -5,12 +5,12 @@ defmodule Webchat.Chat.ServerParticipation do
   alias Webchat.Administration.Models.User
   alias Webchat.Chat.Models.Participant
   alias Webchat.Chat.Models.Server
-  alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Roles
 
 
   @doc """
   Create a link between a user and a server with a role
+  - A new participant is created with a "Member" role
   """
   def join(%Server{} = server, %User{} = user) do
     role = Roles.get!("Member") 
