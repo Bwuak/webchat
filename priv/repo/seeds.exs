@@ -22,9 +22,9 @@ user = Users.get_by(email: "admin@admin")
 {:ok, server2} = Servers.create(user, %{name: "second server"} )
 # 
 # # create chatrooms 
-Chatrooms.create_chatroom(server2.id, %{roomname: "General"}) 
-Chatrooms.create_chatroom(server1.id, %{roomname: "General"})
-Chatrooms.create_chatroom(server1.id, %{roomname: "Another room"})
+Chatrooms.create(server2.id, %{roomname: "General"}) 
+Chatrooms.create(server1.id, %{roomname: "General"})
+Chatrooms.create(server1.id, %{roomname: "Another room"})
 #  
 # # create a website admin
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()

@@ -34,7 +34,7 @@ defmodule Webchat.TestHelpers do
 
   def chatroom_fixture(%Server{} = server) do
     {:ok, %Chatroom{} = room} =
-      Chatrooms.create_chatroom(server.id, %{roomname: "some name"})
+      Chatrooms.create(server.id, %{roomname: "some name"})
 
     room
   end

@@ -8,12 +8,12 @@ defmodule WebchatWeb.ChatroomController do
 
 
   def new(conn, _params) do
-    changeset = Chatrooms.change_chatroom(%Chatroom{})
+    changeset = Chatrooms.change(%Chatroom{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"chatroom" => chatroom_params}) do
-    case Chatrooms.create_chatroom(chatroom_params) do
+    case Chatrooms.create(chatroom_params) do
       {:ok, _chatroom} ->
         conn
         |> put_flash(:info, "Room created successfully.")

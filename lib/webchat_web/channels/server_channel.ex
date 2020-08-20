@@ -24,7 +24,7 @@ defmodule WebchatWeb.ServerChannel do
       %{"room_id" => id, "oldest" => oldest}, _user, socket) when id > 0 do
     messages = 
       id
-      |> Chatrooms.get_chatroom!
+      |> Chatrooms.get!
       |> Messages.list_for(oldest)
       |> Phoenix.View.render_many(MessageView, "message.json")
 

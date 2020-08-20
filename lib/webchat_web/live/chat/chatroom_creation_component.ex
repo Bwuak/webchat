@@ -48,7 +48,7 @@ defmodule WebchatWeb.Chat.Models.ChatroomCreationComponent do
   def handle_event("validate", %{"chatroom" => params}, socket) do
     changeset = 
       socket.assigns.changeset.data
-      |> Chatrooms.change_chatroom(params)
+      |> Chatrooms.change(params)
       |> Map.put(:action, :insert)
 
     {:noreply, assign(socket, changeset: changeset) }
@@ -57,7 +57,7 @@ defmodule WebchatWeb.Chat.Models.ChatroomCreationComponent do
   # create the server if it is valid
   def handle_event("save", %{"chatroom" => params}, socket) do
     server_id = socket.assigns.server.id
-    case Chatrooms.create_chatroom(server_id, params) do 
+    case Chatrooms.create(server_id, params) do 
       {:ok, new_chatroom} ->
         send(self(), {__MODULE__, :chatroom_created, new_chatroom})
         {:noreply, socket}

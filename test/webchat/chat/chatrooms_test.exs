@@ -8,18 +8,18 @@ defmodule Webchat.Chat.ChatroomsTest do
   @valid %{roomname: "general"}
   @invalid %{roomname: ""}
 
-  test "create_chatroom/1 with valid data creates a chatroom" do
+  test "create/1 with valid data creates a chatroom" do
     user = user_fixture()
     server = server_fixture(user)
 
     assert {:ok, %Chatroom{} = room} =
-      Chatrooms.create_chatroom(server.id, @valid)
+      Chatrooms.create(server.id, @valid)
     assert room.roomname == @valid.roomname 
   end
 
-  test "create_chatroom/1 with invalid name doesn't create a chatroom" do
+  test "create/1 with invalid name doesn't create a chatroom" do
     assert {:error, %Ecto.Changeset{}} =
-      Chatrooms.create_chatroom(@invalid)
+      Chatrooms.create(@invalid)
   end
 
 end
