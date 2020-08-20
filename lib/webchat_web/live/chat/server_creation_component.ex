@@ -51,7 +51,7 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
   # create the server if it is valid
   def handle_event("save", %{"server" => params}, socket) do
     user = socket.assigns.user
-    case Servers.create_server(%{name: params["name"], user_id: user.id} ) do
+    case Servers.create(user, %{name: params["name"]} ) do
       {:ok, new_server} ->
         {:ok, _part} = Participants.create_participation(
           user, Webchat.Repo.get!(Role, 1), new_server )

@@ -10,7 +10,7 @@ defmodule Webchat.Chat.ChatroomsTest do
 
   test "create_chatroom/1 with valid data creates a chatroom" do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
 
     assert {:ok, %Chatroom{} = room} =
       Chatrooms.create_chatroom(server.id, @valid)
@@ -24,7 +24,7 @@ defmodule Webchat.Chat.ChatroomsTest do
 
   test "list/0 returns all chatrooms" do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
     room = chatroom_fixture(server)
     
     chatrooms = Chatrooms.list()

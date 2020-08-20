@@ -47,11 +47,9 @@ defmodule Webchat.TestHelpers do
   end
 
   @valid_attrs %{name: "some name"}
-  def server_fixture(attrs \\ %{}) do
-    {:ok, server} =
-      attrs
-      |> Enum.into(@valid_attrs)
-      |> Servers.create_server()
+  def server_fixture(%User{} = user, attrs \\ %{}) do
+    attrs = Enum.into(attrs, @valid_attrs)
+    {:ok, server} = Servers.create(user, attrs)
 
     server
   end

@@ -18,8 +18,8 @@ User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", 
 user = Users.get_by(email: "admin@admin")
 
 # # create servers 
-{:ok, server1} = Servers.create_server(%{name: "First server", user_id: user.id})
-{:ok, server2} = Servers.create_server(%{name: "second server", user_id: user.id})
+{:ok, server1} = Servers.create(user, %{name: "First server"})
+{:ok, server2} = Servers.create(user, %{name: "second server"} )
 # 
 # # create chatrooms 
 Chatrooms.create_chatroom(server2.id, %{roomname: "General"}) 

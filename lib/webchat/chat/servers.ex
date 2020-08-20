@@ -2,6 +2,7 @@ defmodule Webchat.Chat.Servers do
   import Ecto.Query, warn: false
 
   alias Webchat.Repo
+  alias Webchat.Administration.Models.User
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Models.Chatroom
 
@@ -15,22 +16,20 @@ defmodule Webchat.Chat.Servers do
 
   def get(id), do: Repo.get!(Server, id)
 
-  def create_server(attrs) do
-    %Server{}
+  def create(%User{} = user, attrs) do
+    %Server{user_id: user.id}
     |> Server.changeset(attrs)
     |> Repo.insert()
   end
+
+  def delete(%Server{} = server), do: Repo.delete(server)
 
   def update_server(%Server{} = server, attrs) do
     server
     |> Server.changeset(attrs)
     |> Repo.update()
   end
-
-  def delete_server(%Server{} = server) do
-    Repo.delete(server)
-  end
-
+  
   def change_server(%Server{} = server, attrs \\ %{}) do
     Server.changeset(server, attrs)
   end
@@ -42,7 +41,7 @@ defmodule Webchat.Chat.Servers do
 
   # server.user => server's owner
   def with_user(%Server{} = server) do
-    Repo.preload(server, :user)
+    Repo.preload(server, :owner)
   end
 
 end

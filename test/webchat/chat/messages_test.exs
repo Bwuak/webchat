@@ -10,7 +10,7 @@ defmodule Webchat.Chat.MessagesTest do
   
   test "add_message/3 creates a message with a valid user, chatroom and content" do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
     room = chatroom_fixture(server)
 
     {:ok, %Message{} = message} =
@@ -20,7 +20,7 @@ defmodule Webchat.Chat.MessagesTest do
   
   test "add_message/3 new message is added to a room" do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
     room = chatroom_fixture(server)
 
     {:ok, %Message{} = message} =
@@ -33,7 +33,7 @@ defmodule Webchat.Chat.MessagesTest do
 
   test "add_message/3 empty message is ignored"  do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
     room = chatroom_fixture(server)
 
     {:error, _err} = Messages.add_message(user, room.id, @invalid_attrs)
@@ -45,7 +45,7 @@ defmodule Webchat.Chat.MessagesTest do
   test "Messages.list_for/2 gives up to 50 messages older than
   the last message seen" do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
     room = chatroom_fixture(server)
 
     older_message = message_fixture(user, room)
@@ -67,7 +67,7 @@ defmodule Webchat.Chat.MessagesTest do
 
   test "charoom_messages/1 gives up to 50 messages when no message seen" do
     user = user_fixture()
-    server = server_fixture(%{user_id: user.id})
+    server = server_fixture(user)
     room = chatroom_fixture(server)
 
     older_message = message_fixture(user, room)
