@@ -27,5 +27,8 @@ defmodule Webchat.Chat do
     server.user_id == user.id
   end
 
+  # List all the user's servers
+  def list_servers() do
+  end
 
 end

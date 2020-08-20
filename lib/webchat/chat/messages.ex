@@ -7,10 +7,12 @@ defmodule Webchat.Chat.Messages do
   alias Webchat.Chat.Models.Message
 
 
-  @high_oldest_seen_id 900000000
+  @high_oldest_seen_id 90000000000
   def list_for(room, oldest \\ @high_oldest_seen_id) 
 
-  @doc "gives up to 50 messages older than oldest seen, chatroom history"
+  @doc """
+  gives up to 50 messages older than oldest seen, chatroom history
+  """
   def list_for(%Chatroom{} = room, oldest_id) 
       when is_integer(oldest_id) do
     Repo.all(
@@ -23,13 +25,11 @@ defmodule Webchat.Chat.Messages do
     |> Enum.reverse
   end
 
-  # Matches when no id provided
-  def list_for(room, _) do 
+  @doc """
+  Gives 50 messages from last message
+  """
+  def list_for(%Chatroom{} = room, _) do 
     list_for(room, @high_oldest_seen_id)
-  end
-
-  def change_message(%Message{} = message, attrs \\ %{}) do
-    Message.changeset(message, attrs)
   end
 
   def add_message(%User{id: user_id}, chatroom_id, attrs) do
