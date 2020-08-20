@@ -8,7 +8,7 @@ defmodule Webchat.Chat.Participants do
   alias Webchat.Chat.Models.Role
 
 
-  def create_participation(
+  def create(
     %User{} = user, 
     %Role{} = role, 
     %Server{} = server
@@ -18,7 +18,7 @@ defmodule Webchat.Chat.Participants do
     |> Repo.insert()
   end
   
-  def delete_participation(%Participant{} = participation) do
+  def delete(%Participant{} = participation) do
     Repo.delete(participation)
   end
 
