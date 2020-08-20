@@ -5,18 +5,15 @@ defmodule Webchat.Chat.Roles do
   alias Webchat.Chat.Models.Role
 
 
-  table = :ets.new(:roles_registry, [:set, :protected])
-  :ets.insert(table, {"member", self()})
-
   def create(attrs) do
     %Role{}
     |> Role.changeset(attrs)
     |> Repo.insert()
   end
 
-  def get!(:member), do: :ets.lookup(:roles_registry, "member")
-  def get!(role_name) do
-    Repo.get_by!(Role, %{name: role_name} ) 
-  end
+  @doc """
+  Fetching %Role{} for a given role name
+  """
+  def get!(role_name), do: Repo.get_by!(Role, %{name: role_name}) 
 
 end
