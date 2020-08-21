@@ -28,6 +28,7 @@ defmodule Webchat.Chat.ServerParticipation do
   If the user is NOT a participant in the server
   We will create a participant linking the user and the server
   """
+  def maybe_join(serverId, _) when is_nil(serverId), do: nil
   def maybe_join(serverId, %User{} = user) do
     case Participants.get_by(%{server_id: serverId, user_id: user.id}) do
       nil -> 
