@@ -3,7 +3,8 @@ defmodule Webchat.Repo.Migrations.Administration.Admins do
 
   def change do
     create table(:admins) do
-      add :user_id, references(:users), null: false
+      # on_delete: :nothing -> an admin user will not be deleted
+      add :user_id, references(:users, on_delete: :nothing), null: false
 
       timestamps()
     end
