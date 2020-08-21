@@ -1,5 +1,7 @@
 defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
+
+  # Helper
   import WebchatWeb.Subscriptions.Server
 
   # Components
@@ -29,59 +31,61 @@ defmodule WebchatWeb.ChatLive do
     """
   end
 
-  def mount(_params, session, socket) do
-    user = Users.get!(session["user_id"])
-    servers = ServerParticipation.list_servers(user)
-
-    {:ok, 
-      assign(socket, 
-        servers: servers,
-        user: user,
-        users: [],
-        subscription: nil),
-      layout: {WebchatWeb.LayoutView, "chat_live.html"}
-    }
-  end
-
-  def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
-    selected_server = Chat.select_server(sid)
-    selected_chatroom = Chat.select_chatroom(selected_server, rid)
-
-    socket = subscribe_to_server(selected_server, socket)
-    case selected_chatroom do 
+  def mount(params, session, socket) do
+    case session["user_id"]  do
       nil ->
-        {:noreply, push_patch(socket, to: "/chat", replace: true)}
-      _ ->
-        {:noreply, assign(socket,
-          selected_server: selected_server,
-          chatrooms: selected_server.chatrooms, 
-          selected_chatroom: selected_chatroom 
-          )}
+        {:ok, push_redirect(socket, to: "/", replace: true)}
+
+      user_id -> 
+        user = Users.get!(user_id)
+        ServerParticipation.maybe_join(params["server_id"], user)
+        servers = ServerParticipation.list_servers(user)
+
+        {:ok, 
+          assign(socket, 
+            servers: servers,
+            user: user,
+            users: [],
+            subscription: nil),
+          layout: {WebchatWeb.LayoutView, "chat_live.html"}
+        }
     end
   end
 
-  def handle_params(%{"server_id" => sid}, _url, socket) do
-    selected_server = Chat.select_server(sid)
-    chatrooms = selected_server.chatrooms 
+  def handle_params(%{"server_id" => sid, "room_id" => rid}, _url, socket) do
+    server = Chat.select_server(sid)
+    chatroom = Chat.select_chatroom(server, rid)
 
-    socket = subscribe_to_server(selected_server, socket)
-    {:noreply, assign(socket,
-      selected_server: selected_server,
-      chatrooms: chatrooms,
-      selected_chatroom: Chat.select_default_chatroom(chatrooms) 
-    )}
+    redirect_to(socket, %{selected_server: server, selected_chatroom: chatroom})
+  end
+
+  def handle_params(%{"server_id" => sid}, _url, socket) do
+    server = Chat.select_server(sid)
+    redirect_to(socket, %{selected_server: server})
   end
 
   def handle_params(_, _, socket) do
-    default_server = Chat.select_default_server(socket.assigns.servers)
-    chatrooms = default_server.chatrooms 
+    server = Chat.select_default_server(socket.assigns.servers)
+    redirect_to(socket, %{selected_server: server})
+  end
 
-    socket = subscribe_to_server(default_server, socket)
-    {:noreply, assign(socket,
-      selected_server: default_server,
-      chatrooms: chatrooms,
-      selected_chatroom: Chat.select_default_chatroom(chatrooms)
-    )}
+  # Helper function for handle_params 
+  def redirect_to(socket, attrs) do
+    # Adding chatrooms to the attrs
+    attrs = Map.put(attrs, :chatrooms, attrs.selected_server.chatrooms)
+
+    # Default chatroom if none selected 
+    attrs = 
+      if Map.has_key?(attrs, :selected_chatroom), 
+        do: attrs, 
+        else: Map.put(attrs, 
+          :selected_chatroom, 
+          Chat.select_default_chatroom(attrs.chatrooms))
+    
+    # Subscribe to the server presence tracking 
+    socket = subscribe_to_server(attrs.selected_server, socket)
+
+    {:noreply, assign(socket, attrs) }
   end
 
   # Removing component 

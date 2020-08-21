@@ -17,6 +17,8 @@ defmodule Webchat.Chat.Participants do
     |> Participant.changeset(%{})
     |> Repo.insert()
   end
+
+  def get_by(params), do: Repo.get_by(Participant, params)
   
   def delete(%Participant{} = participation) do
     Repo.delete(participation)

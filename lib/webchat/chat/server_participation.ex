@@ -7,6 +7,9 @@ defmodule Webchat.Chat.ServerParticipation do
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Roles
 
+  alias Webchat.Chat.Servers
+  alias Webchat.Chat.Participants
+
 
   @doc """
   Create a link between a user and a server with a role
@@ -19,6 +22,20 @@ defmodule Webchat.Chat.ServerParticipation do
     |> Participant.changeset(
       %{user_id: user.id, role_id: role.id, server_id: server.id} )
     |> Repo.insert()
+  end
+
+  @doc """
+  If the user is NOT a participant in the server
+  We will create a participant linking the user and the server
+  """
+  def maybe_join(serverId, %User{} = user) do
+    case Participants.get_by(%{server_id: serverId, user_id: user.id}) do
+      nil -> 
+        Servers.get!(serverId)
+        |> join(user)
+      _ ->
+        nil
+    end
   end
 
   @doc """
