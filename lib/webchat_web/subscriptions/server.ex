@@ -58,6 +58,9 @@ defmodule WebchatWeb.Subscriptions.Server do
     |> sort_participants()
   end
 
+  # Sort by
+  # First letter of username
+  # Status -> online or offline
   defp sort_participants(participants) do
     participants
     |> Enum.sort_by( &( String.at(&1.username, 0) ))
