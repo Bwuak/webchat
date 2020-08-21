@@ -1,6 +1,8 @@
 defmodule WebchatWeb.UserController do
   use WebchatWeb, :controller
 
+  alias WebchatWeb.Endpoint
+
   alias Webchat.Administration.Users
   alias Webchat.Administration.Models.User
 
@@ -31,6 +33,9 @@ defmodule WebchatWeb.UserController do
   def delete(conn, %{"id" => id}) do
     user = Users.get!(id)
     {:ok, _user} = Users.delete(user)
+
+    # Disconnecting the deleted user's sockets
+    Endpoint.broadcast("users_socket: #{user.id}", "disconnect", %{})
 
     conn
     |> put_flash(:info, "User deleted successfully.")
