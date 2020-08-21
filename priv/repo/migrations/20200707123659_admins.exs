@@ -3,7 +3,7 @@ defmodule Webchat.Repo.Migrations.Administration.Admins do
 
   def change do
     create table(:admins) do
-      add :user_id, references(:users)
+      add :user_id, references(:users), null: false
 
       timestamps()
     end

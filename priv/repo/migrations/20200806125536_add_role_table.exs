@@ -3,7 +3,7 @@ defmodule Webchat.Repo.Migrations.AddRoleTable do
 
   def change do
     create table(:roles) do
-      add :name, :string, [null: false]
+      add :name, :string, null: false
 
       timestamps()
     end

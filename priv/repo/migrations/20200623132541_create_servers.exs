@@ -10,7 +10,7 @@ defmodule Webchat.Repo.Migrations.CreateServers do
     end
 
     alter table(:chatrooms) do
-      add :server_id, references(:servers)
+      add :server_id, references(:servers), null: false
     end
 
     create index(:chatrooms, [:server_id])
