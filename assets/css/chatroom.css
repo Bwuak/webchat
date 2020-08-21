@@ -51,6 +51,10 @@ h3 {
   pointer-events: none;
 }
 
+.no-username {
+  color: black;
+}
+
 #app {
   height: 100%;
   width: 100%;

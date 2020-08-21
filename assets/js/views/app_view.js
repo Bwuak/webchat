@@ -39,7 +39,7 @@ if(DOM.msgContainer) {
   `<div id="messages" >
     <div v-for="msg in chatroom.messages" class="a-message">
       <h4 v-if="msg.user" class="message-username">{{ msg.user.username }}</h4>
-      <h4 v-else class="message-username">Uknown</h4>
+      <h4 v-else class="no-username">Unknown</h4>
       <p class="message-content">{{ msg.content }}</p>
     </div>
   </div>`
