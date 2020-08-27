@@ -39,8 +39,9 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
 
         server = %Server{} ->
           user = socket.assigns.user
-          {:ok, _} = Participants.create(
-            user, Webchat.Repo.get!(Role, 1), server )
+          {:ok, _} = Participants.create( 
+            %{user_id: user.id, server_id: server.id}
+          )
 
           {__MODULE__, :server_joined, server}
       end

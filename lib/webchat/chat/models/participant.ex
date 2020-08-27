@@ -16,7 +16,7 @@ defmodule Webchat.Chat.Models.Participant do
   def changeset(participant, attrs) do
     participant
     |> cast(attrs, [:role_id, :user_id, :server_id])
-    |> validate_required([:role_id, :user_id, :server_id])
+    |> validate_required([:user_id, :server_id])
     |> assoc_constraint(:user)
     |> assoc_constraint(:server)
     |> assoc_constraint(:role)

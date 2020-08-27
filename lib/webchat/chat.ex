@@ -56,11 +56,7 @@ defmodule Webchat.Chat do
   def try_join(serverId, %User{} = user) do
     case Participants.get_by(%{server_id: serverId, user_id: user.id}) do
       nil -> 
-        Participants.create(
-          %{user_id: user.id, 
-            server_id: serverId, 
-            role_id: 1 
-          })
+        {:ok, _} = Participants.create(%{user_id: user.id, server_id: serverId})
       _ ->
         nil
     end

@@ -53,7 +53,7 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
     case Servers.create(user, %{name: params["name"]} ) do
       {:ok, new_server} ->
         {:ok, _part} = Participants.create(
-          %{user_id: user.id, role_id: 1, server_id: new_server.id})
+          %{user_id: user.id, server_id: new_server.id})
 
         send(self(), {__MODULE__, :server_created, new_server})
         {:noreply, socket}

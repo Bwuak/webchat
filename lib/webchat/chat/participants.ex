@@ -7,10 +7,9 @@ defmodule Webchat.Chat.Participants do
 
   def create(%{
     :user_id => userId,
-    :role_id => roleId, 
     :server_id => serverId
   }) do
-    %Participant{user_id: userId, role_id: roleId, server_id: serverId}
+    %Participant{user_id: userId, server_id: serverId}
     |> Participant.changeset(%{})
     |> Repo.insert()
   end
