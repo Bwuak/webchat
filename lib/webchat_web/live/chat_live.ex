@@ -2,19 +2,18 @@ defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
   # Helper
-  import WebchatWeb.Subscriptions.Server
+  alias WebchatWeb.Chat.Subscriptions.Server, as: Subs
 
   # Components
   alias WebchatWeb.Chat.ServerActionComponent
   alias WebchatWeb.Chat.ServerCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
-  alias WebchatWeb.Chat.Models.ChatroomCreationComponent
+  alias WebchatWeb.Chat.ChatroomCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.ErrorComponent
 
   # Domain dependencies
   alias Webchat.Chat
-  alias Webchat.Chat.ServerParticipation
   alias Webchat.Administration.Users
 
 
@@ -38,8 +37,8 @@ defmodule WebchatWeb.ChatLive do
 
       user_id -> 
         user = Users.get!(user_id)
-        ServerParticipation.maybe_join(params["server_id"], user)
-        servers = ServerParticipation.list_servers(user)
+        Chat.try_join(params["server_id"], user)
+        servers = Chat.list_servers(user)
 
         {:ok, 
           assign(socket, 
@@ -83,7 +82,7 @@ defmodule WebchatWeb.ChatLive do
           Chat.select_default_chatroom(attrs.chatrooms))
     
     # Subscribe to the server presence tracking 
-    socket = subscribe_to_server(attrs.selected_server, socket)
+    socket = Subs.subscribe_to_server(attrs.selected_server, socket)
 
     {:noreply, assign(socket, attrs) }
   end
@@ -124,7 +123,7 @@ defmodule WebchatWeb.ChatLive do
     # We are fetching the full presence list
     # Could become a bottleneck
     {:noreply, assign(socket, 
-      users: participants_list(socket.assigns.selected_server) 
+      users: Subs.participants_list(socket.assigns.selected_server) 
     )}
   end
 
@@ -133,7 +132,7 @@ defmodule WebchatWeb.ChatLive do
     socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) )
+      |> assign(servers: Chat.list_servers(socket.assigns.user) )
 
     {:noreply, push_patch(socket, 
       to: Routes.live_path(socket, __MODULE__, server_id: new_server.id),
@@ -159,7 +158,7 @@ defmodule WebchatWeb.ChatLive do
     socket = 
       socket
       |> remove_socket_action()
-      |> assign(servers: ServerParticipation.list_servers(socket.assigns.user) )
+      |> assign(servers: Chat.list_servers(socket.assigns.user) )
 
     {:noreply, push_patch(socket,
       to: Routes.live_path(socket, __MODULE__, server_id: server_joined.id),

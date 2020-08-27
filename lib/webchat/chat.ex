@@ -1,13 +1,17 @@
 defmodule Webchat.Chat do
   import Ecto.Query, warn: false
 
+  alias Webchat.Repo
+  alias Webchat.Administration.Models.User
   alias Webchat.Chat.Models.Chatroom
   alias Webchat.Chat.Models.Server
+  alias Webchat.Chat.Models.Participant
   alias Webchat.Chat.Servers
+  alias Webchat.Chat.Participants
 
 
   @doc """
-  Get a server with it's id
+  Get a server 
   loaded with it's chatrooms
   """
   def select_server(serverId) do
@@ -45,10 +49,44 @@ defmodule Webchat.Chat do
   def select_default_chatroom([head | _tail]), do: head
 
   @doc """
-  Checks if user is owner 
+  If the user is NOT a participant in the server
+  We will create a participant linking the user and the server
   """
-  def is_owner?(%Server{} = server, user) do
-    server.user_id == user.id
+  def try_join(serverId, _) when is_nil(serverId), do: nil
+  def try_join(serverId, %User{} = user) do
+    case Participants.get_by(%{server_id: serverId, user_id: user.id}) do
+      nil -> 
+        Participants.create(
+          %{user_id: user.id, 
+            server_id: serverId, 
+            role_id: 1 
+          })
+      _ ->
+        nil
+    end
+  end
+
+  @doc """
+  Get all participants inside a server
+  """
+  def list_participants(%Server{} = server) do
+    from( p in Participant,
+      where: p.server_id == ^server.id,
+      preload: [:user, :role]
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  List servers associated with given user
+  """
+  def list_servers(%User{} = user) do
+    from( s in Server,
+      join: p in Participant,
+      on: p.server_id == s.id,
+      where: p.user_id == ^user.id
+    )
+    |> Repo.all()
   end
 
 end

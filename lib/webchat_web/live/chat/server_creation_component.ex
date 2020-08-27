@@ -5,7 +5,6 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
   import WebchatWeb.ErrorHelpers
 
   alias Webchat.Chat.Participants
-  alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Servers
 
@@ -35,14 +34,14 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
   end
 
   def mount(socket) do
-    changeset = Server.changeset(%Server{}, %{})
+    changeset = Servers.change(%Server{})
     {:ok, assign(socket, changeset: changeset) }
   end
 
   def handle_event("validate", %{"server" => params}, socket) do
     changeset = 
       socket.assigns.changeset.data
-      |> Servers.change_server(params)
+      |> Servers.change(params)
       |> Map.put(:action, :insert)
 
     {:noreply, assign(socket, changeset: changeset) }
@@ -54,7 +53,7 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
     case Servers.create(user, %{name: params["name"]} ) do
       {:ok, new_server} ->
         {:ok, _part} = Participants.create(
-          user, Webchat.Repo.get!(Role, 1), new_server )
+          %{user_id: user.id, role_id: 1, server_id: new_server.id})
 
         send(self(), {__MODULE__, :server_created, new_server})
         {:noreply, socket}

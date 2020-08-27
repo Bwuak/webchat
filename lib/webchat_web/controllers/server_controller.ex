@@ -10,7 +10,7 @@ defmodule WebchatWeb.ServerController do
   end
 
   def new(conn, _params) do
-    changeset = Servers.change_server(%Server{})
+    changeset = Servers.change(%Server{})
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -33,14 +33,14 @@ defmodule WebchatWeb.ServerController do
 
   def edit(conn, %{"id" => id}) do
     server = Servers.get!(id)
-    changeset = Servers.change_server(server)
+    changeset = Servers.change(server)
     render(conn, "edit.html", server: server, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "server" => server_params}) do
     server = Servers.get!(id)
 
-    case Servers.update_server(server, server_params) do
+    case Servers.update(server, server_params) do
       {:ok, server} ->
         conn
         |> put_flash(:info, "Server updated successfully.")

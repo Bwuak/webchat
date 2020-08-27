@@ -20,13 +20,13 @@ defmodule Webchat.Chat.Servers do
     |> Repo.insert()
   end
 
-  def update_server(%Server{} = server, attrs) do
+  def update(%Server{} = server, attrs) do
     server
     |> Server.changeset(attrs)
     |> Repo.update()
   end
   
-  def change_server(%Server{} = server, attrs \\ %{}) do
+  def change(%Server{} = server, attrs \\ %{}) do
     Server.changeset(server, attrs)
   end
 

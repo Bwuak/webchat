@@ -1,4 +1,4 @@
-defmodule WebchatWeb.Chat.Models.ChatroomCreationComponent do
+defmodule WebchatWeb.Chat.ChatroomCreationComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
@@ -39,7 +39,7 @@ defmodule WebchatWeb.Chat.Models.ChatroomCreationComponent do
   # called after mount, has assigns sent to socket
   def update(assigns, socket) do
     {:ok, assign(socket,
-      changeset: Chatroom.changeset(%Chatroom{}, %{}),
+      changeset: Chatrooms.change(%Chatroom{}),
       server: assigns.selected_server,
       id: assigns.id
     )}

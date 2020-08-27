@@ -50,27 +50,27 @@ defmodule Webchat.Chat.ServersTest do
     assert_raise Ecto.NoResultsError, fn -> Servers.get!(server.id) end
   end
 
-  test "update_server/2 with valid data updates the server" do
+  test "update/2 with valid data updates the server" do
     user = user_fixture()
     server = server_fixture(user)
-    assert {:ok, %Server{} = server} = Servers.update_server(server, @update_attrs)
+    assert {:ok, %Server{} = server} = Servers.update(server, @update_attrs)
     assert server.name == "some updated name"
   end
 
-  test "update_server/2 with invalid data returns error changeset" do
+  test "update/2 with invalid data returns error changeset" do
     user = user_fixture() 
     server = server_fixture(user)
-    assert {:error, %Ecto.Changeset{}} = Servers.update_server(server, @invalid_attrs)
+    assert {:error, %Ecto.Changeset{}} = Servers.update(server, @invalid_attrs)
 
     # fetched_server needs user for equality
     fetched_server = Map.put(Servers.get!(server.id), :user, server.user)
     assert server == fetched_server 
   end
 
-  test "change_server/1 returns a server changeset" do
+  test "change/1 returns a server changeset" do
     user = user_fixture()
     server = server_fixture(user)
-    assert %Ecto.Changeset{} = Servers.change_server(server)
+    assert %Ecto.Changeset{} = Servers.change(server)
   end
 
 end

@@ -1,4 +1,4 @@
-defmodule WebchatWeb.Chat.Models.ChatroomListingComponent do
+defmodule WebchatWeb.Chat.ChatroomListingComponent do
   use Phoenix.LiveComponent 
 
   alias WebchatWeb.Router.Helpers, as: Routes

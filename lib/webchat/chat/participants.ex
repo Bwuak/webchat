@@ -2,18 +2,15 @@ defmodule Webchat.Chat.Participants do
   import Ecto.Query, warn: false
 
   alias Webchat.Repo
-  alias Webchat.Administration.Models.User
   alias Webchat.Chat.Models.Participant
-  alias Webchat.Chat.Models.Server
-  alias Webchat.Chat.Models.Role
 
 
-  def create(
-    %User{} = user, 
-    %Role{} = role, 
-    %Server{} = server
-  ) do
-    %Participant{user_id: user.id, role_id: role.id, server_id: server.id}
+  def create(%{
+    :user_id => userId,
+    :role_id => roleId, 
+    :server_id => serverId
+  }) do
+    %Participant{user_id: userId, role_id: roleId, server_id: serverId}
     |> Participant.changeset(%{})
     |> Repo.insert()
   end

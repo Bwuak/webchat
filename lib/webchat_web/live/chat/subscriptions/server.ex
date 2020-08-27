@@ -1,10 +1,10 @@
-defmodule WebchatWeb.Subscriptions.Server do
+defmodule WebchatWeb.Chat.Subscriptions.Server do
   alias Phoenix.LiveView
   alias WebchatWeb.Presence
   alias WebchatWeb.Endpoint
 
   alias Webchat.Chat.Models.Server
-  alias Webchat.Chat.ServerParticipation
+  alias Webchat.Chat
 
 
   @topic_prefix "server:"
@@ -72,7 +72,7 @@ defmodule WebchatWeb.Subscriptions.Server do
   defp online_participants(topic), do: Presence.list(topic) 
 
   defp all_participants(%Server{} = server) do
-    ServerParticipation.list_participants(server)
+    Chat.list_participants(server)
   end
 
 end
