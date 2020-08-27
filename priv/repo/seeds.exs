@@ -13,41 +13,27 @@ use Webchat
 User.registration_changeset(%User{}, %{username: "admin", email: "admin@admin", password: "123456"})
 |> Repo.insert!
 
-
-# # get user 
 user = Users.get_by(email: "admin@admin")
 
-# # create servers 
-{:ok, server1} = Servers.create(user, %{name: "First server"})
-{:ok, server2} = Servers.create(user, %{name: "second server"} )
-# 
-# # create chatrooms 
-Chatrooms.create(server2.id, %{roomname: "General"}) 
-Chatrooms.create(server1.id, %{roomname: "General"})
-Chatrooms.create(server1.id, %{roomname: "Another room"})
-#  
-# # create a website admin
+# create a website admin
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
- 
 
-
-
-# ccreate a role
+# create a role
 Role.changeset(%Role{}, %{name: "Member"})
 |> Repo.insert()
 
-# Repo.get!(Role, 1) |> Repo.delete!()
-Repo.all(Role) |> IO.inspect
-#
+# create servers 
+{:ok, server1} = Servers.create(user, %{name: "Server 1"})
+ 
+# create chatrooms 
+Chatrooms.create(server1.id, %{roomname: "General"}) 
 
 
 # create a participant
-user = Users.get_by(email: "admin@admin")
-server = Repo.get_by(Server, %{name: "First server"}) 
 role = Repo.get_by(Role, %{name: "Member"})
 Participant.changeset(%Participant{}, 
   %{user_id: user.id,
-    server_id: server.id,
+    server_id: server1.id,
     role_id: role.id}
 ) |> Repo.insert!()
 
