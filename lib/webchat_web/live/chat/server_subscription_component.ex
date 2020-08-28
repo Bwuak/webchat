@@ -2,9 +2,9 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
   use Phoenix.LiveComponent
   use Phoenix.HTML
 
-  alias Webchat.Chat.Participants
-  alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Models.Server
+  alias Webchat.Chat.Participants
+  alias Webchat.Chat.Servers
 
   def render(assigns) do
     ~L"""
@@ -25,9 +25,6 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
     """
   end
 
-  # Handle server id form, 
-  # Create a participation if possible 
-  # Redirect user
   def handle_event("save", %{"server_id" => server_id}, socket) do
     message = 
       case fetch_server(Integer.parse(server_id) ) do
@@ -51,7 +48,7 @@ defmodule WebchatWeb.Chat.ServerSubscriptionComponent do
   end
 
   defp fetch_server({server_id, _}) when is_integer(server_id) do
-    case Webchat.Repo.get(Server, server_id) do
+    case Servers.get(server_id) do
       server = %Server{} ->
         server
       _ -> 
