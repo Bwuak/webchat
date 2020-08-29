@@ -19,7 +19,7 @@ user = Users.get_by(email: "admin@admin")
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
 
 # create a role
-Role.changeset(%Role{}, %{name: "Member"})
+Role.changeset(%Role{}, %{name: "member"})
 |> Repo.insert()
 
 # create servers 
@@ -30,11 +30,11 @@ Chatrooms.create(server1.id, %{roomname: "General"})
 
 
 # create a participant
-role = Repo.get_by(Role, %{name: "Member"})
+role = Repo.get_by(Role, %{name: "member"})
 Participant.changeset(%Participant{}, 
   %{user_id: user.id,
     server_id: server1.id,
-    role_id: role.id}
+    role_id: role.name}
 ) |> Repo.insert!()
 
 

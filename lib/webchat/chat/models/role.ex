@@ -3,9 +3,8 @@ defmodule Webchat.Chat.Models.Role do
 
   import Ecto.Changeset
 
-
+  @primary_key {:name, :string, []}
   schema "roles" do
-    field :name, :string 
     
     timestamps()
   end
