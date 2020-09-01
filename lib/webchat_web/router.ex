@@ -32,6 +32,7 @@ defmodule WebchatWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/invite/:id", InvitationController, :index
     resources "/users", UserController, only: [:new, :create]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
 
