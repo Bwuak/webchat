@@ -11,7 +11,8 @@ defmodule Webchat.Chat.Models.Participant do
   schema "participants" do
     belongs_to :server, Server, [primary_key: true]
     belongs_to :user, User, [primary_key: true]
-    belongs_to :role, Role, [foreign_key: :role_name, references: :name]
+    belongs_to :role, Role, 
+      [foreign_key: :role_name, type: :string, references: :name]
     
     timestamps()
   end
