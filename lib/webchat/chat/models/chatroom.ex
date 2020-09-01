@@ -2,11 +2,14 @@ defmodule Webchat.Chat.Models.Chatroom do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Webchat.Chat.Models.Message
+  alias Webchat.Chat.Models.Server
+
   schema "chatrooms" do
     field :roomname, :string
 
-    has_many :messages, Webchat.Chat.Models.Message
-    belongs_to :server, Webchat.Chat.Models.Server
+    has_many :messages, Message
+    belongs_to :server, Server
 
     timestamps()
   end
