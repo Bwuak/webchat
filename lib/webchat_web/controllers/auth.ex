@@ -4,12 +4,11 @@ defmodule WebchatWeb.Auth do
 
   alias WebchatWeb.Router.Helpers, as: Routes
 
+  alias Webchat.Invitation
+  alias Webchat.Invitation.Models.Invite
+
   def init(opts), do: opts
 
-  # If user
-  # put user information in connection
-  # else
-  # current user is nil
   def call(conn, _opts) do
     user_id = get_session(conn, :user_id)
 
@@ -20,14 +19,12 @@ defmodule WebchatWeb.Auth do
       user = user_id && Webchat.Administration.Users.get(user_id) ->
         put_current_user(conn, user)
 
-      true -> 
+      true ->
         assign(conn, :current_user, nil)
     end
   end
-  
-  # Assign 
-  # Current user session to the connection
-  # user token for websocket identification
+
+  # Creates token
   def put_current_user(conn, user) do
     token = Phoenix.Token.sign(conn, "user socket", user.id)
 
@@ -40,19 +37,34 @@ defmodule WebchatWeb.Auth do
     conn
     |> assign(:current_user, user)
     |> put_session(:user_id, user.id)
+    |> redeem_invites()
     |> put_session(:live_socket_id, "users_socket: #{user.id}")
     |> configure_session(renew: true)
   end
+
+  # Fetch invites in session
+  def redeem_invites(conn) do
+    case get_session(conn, :invite) do 
+      nil ->
+        conn
+
+      invite = %Invite{} ->
+        Invitation.redeem_invite(conn.assigns.current_user, invite)
+        conn 
+        |> delete_session(:invite)
+
+      _ ->
+        conn
+    end
+  end
+
 
   def logout(conn) do
     configure_session(conn, drop: true)
   end
 
 
-  # If user 
-  # Return connection
-  # Else
-  # Redirect a non connected user to welcome page and stop other plugs
+  # Validate a user is logged in
   def authenticate_user(conn, _opts) do
     if conn.assigns.current_user do
       conn
@@ -70,7 +82,7 @@ defmodule WebchatWeb.Auth do
     case Webchat.Administration.is_admin?(user) do
       true ->
         conn
-      _ -> 
+      _ ->
         conn
         |> redirect(to: "/chat")
         |> halt()

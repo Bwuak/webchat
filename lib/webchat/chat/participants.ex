@@ -3,19 +3,19 @@ defmodule Webchat.Chat.Participants do
 
   alias Webchat.Repo
   alias Webchat.Chat.Models.Participant
+  alias Webchat.Administration.Models.User
 
 
-  def create(%{
-    :user_id => userId,
-    :server_id => serverId
-  }) do
-    %Participant{user_id: userId, server_id: serverId}
+  def create(%User{} = user, serverId) do
+    %Participant{user_id: user.id, server_id: serverId}
     |> Participant.changeset(%{})
     |> Repo.insert()
   end
 
-  def get_by(params), do: Repo.get_by(Participant, params)
-  
+  def get(%User{} = user, serverId) do
+    Repo.get_by(Participant, %{user_id: user.id, server_id: serverId})
+  end
+
   def delete(%Participant{} = participation) do
     Repo.delete(participation)
   end
