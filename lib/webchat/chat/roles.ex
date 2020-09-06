@@ -1,19 +1,25 @@
 defmodule Webchat.Chat.Roles do
   import Ecto.Query, warn: false
 
-  alias Webchat.Repo
   alias Webchat.Chat.Models.Role
 
+  # Roles determined at compile time
+  # Make sure they're the same as DB
+  # Could use ets...
+  @roles [
+    %Role{name: "member"},
+    %Role{name: "banned"}
+  ]
 
-  def create(attrs) do
-    %Role{}
-    |> Role.changeset(attrs)
-    |> Repo.insert()
-  end
 
   @doc """
   Fetching %Role{} for a given role name
   """
-  def get!(role_name), do: Repo.get_by!(Role, %{name: role_name}) 
+  def get!(role_name) do
+    role = 
+      Enum.find(@roles, fn role -> role.name == role_name end)
+
+    if role, do: role, else: raise "invalid role"
+  end
 
 end

@@ -19,8 +19,10 @@ user = Users.get_by(email: "admin@admin")
 {:ok, _admin} = Admin.changeset(%Admin{user_id: user.id}, %{}) |> Repo.insert()
 
 # create a role
-Role.changeset(%Role{}, %{name: "member"})
-|> Repo.insert()
+member = %Role{name: "member"}
+banned = %Role{name: "banned"}
+Repo.insert!(member)
+Repo.insert!(banned)
 
 # create servers 
 {:ok, server1} = Servers.create(user, %{name: "Server 1"})
