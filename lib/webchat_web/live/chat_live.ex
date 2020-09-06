@@ -12,6 +12,7 @@ defmodule WebchatWeb.ChatLive do
   alias WebchatWeb.Chat.ChatroomCreationComponent
   alias WebchatWeb.Chat.ServerSubscriptionComponent
   alias WebchatWeb.Chat.ErrorComponent
+  alias WebchatWeb.Chat.InviteMenuComponent
 
   # Domain dependencies
   alias Webchat.Chat
@@ -114,6 +115,10 @@ defmodule WebchatWeb.ChatLive do
 
   def handle_event("create-room", _, socket) do
     {:noreply, assign(socket, action: ChatroomCreationComponent) }
+  end
+
+  def handle_event("invite-menu", _, socket) do
+    {:noreply, assign(socket, action: InviteMenuComponent) }
   end
 
   # Error component 

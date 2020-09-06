@@ -8,6 +8,8 @@
 @import "./chatroom/user_component.css";
 @import "./chatroom/chatroom_component.css";
 @import "./chatroom/user_list_component.css";
+@import "./chatroom/server_component.css";
+@import "./chatroom/server_listing_component.css";
 
 
 .action {
@@ -25,32 +27,6 @@ h3 {
   text-align: center;
 }
 
-.server-link, .room-link {
-  cursor: pointer;
-  height: 100%;
-  width: inherit;
-  width: 240px;
-  text-align: center;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
- color: var(--chatroom-col3-text);
-}
-.server-link:link, .server-link:visited, .room-link:link, .room-link:visited {
-  text-decoration: none;
-  display: inline-block;
-}
-
-.active-server {
-  background-color: var(--chatroom-col2);
-  pointer-events: none;
-}
-
-.active-chatroom {
-  background-color: var(--chatroom-col3);
-  pointer-events: none;
-}
-
 .no-username {
   color: black;
 }
@@ -59,7 +35,7 @@ h3 {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: 240px 240px auto 240px;
+  grid-template-columns: 180px 180px auto 180px; 
 }
 
 #app * {

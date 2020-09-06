@@ -7,6 +7,11 @@ defmodule WebchatWeb.Chat.ChatroomListingComponent do
   def render(assigns) do
    ~L"""
     <div id="server" >
+      <%= if @selected_server.user_id == @user.id do %>
+      <div id="invite">
+        <p phx-click="invite-menu">Invite +</p>
+      </div>
+        <% end %>
       <h3>Rooms</h3>
       <nav>
         <%= for room <- @chatrooms do %>

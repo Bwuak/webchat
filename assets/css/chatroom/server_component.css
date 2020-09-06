@@ -1,0 +1,33 @@
+#invite {
+  height: 5vh;
+  display: grid;
+}
+
+#invite p {
+  align-self: center;
+  justify-self: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.room-link {
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--chatroom-col3-text);
+}
+
+.room-link:link, .room-link:visited {
+  text-decoration: none;
+  display: inline-block;
+}
+
+
+.active-chatroom {
+  background-color: var(--chatroom-col3);
+  pointer-events: none;
+}

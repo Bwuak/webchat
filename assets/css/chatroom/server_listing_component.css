@@ -1,0 +1,19 @@
+.server-link {
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+ color: var(--chatroom-col3-text);
+}
+.server-link:link, .server-link:visited {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.active-server {
+  background-color: var(--chatroom-col2);
+  pointer-events: none;
+}
