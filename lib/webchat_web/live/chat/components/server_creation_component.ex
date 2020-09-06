@@ -24,6 +24,13 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
           <%= text_input f, :name %>
           <%= error_tag f, :name %>
         </div>
+        
+        <div>
+          <div>
+            <%= label f, "private" %>
+            <%= checkbox f, :private %>
+          </div>
+        </div>
       
         <div>
           <%= submit "Create" %>
@@ -50,7 +57,7 @@ defmodule WebchatWeb.Chat.ServerCreationComponent do
   # create the server if it is valid
   def handle_event("save", %{"server" => params}, socket) do
     user = socket.assigns.user
-    case Servers.create(user, %{name: params["name"]} ) do
+    case Servers.create(user, params) do
       {:ok, new_server} ->
         {:ok, _part} = Participants.create(user, new_server.id)
           
