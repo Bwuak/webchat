@@ -2,7 +2,8 @@ defmodule WebchatWeb.ChatLive do
   use WebchatWeb, :live_view
 
   # Helper
-  alias WebchatWeb.Chat.Subscriptions.Server, as: Subs
+  alias WebchatWeb.Chat.ServerSubscription, as: Subs
+  alias WebchatWeb.Chat.ServerAuth
 
   # Components
   alias WebchatWeb.Chat.ServerActionComponent
@@ -37,17 +38,22 @@ defmodule WebchatWeb.ChatLive do
 
       user_id -> 
         user = Users.get!(user_id)
-        Chat.try_join(params["server_id"], user)
+        is_allowed = ServerAuth.try_join(params["server_id"], user)
         servers = Chat.list_servers(user)
 
-        {:ok, 
-          assign(socket, 
-            servers: servers,
-            user: user,
-            users: [],
-            subscription: nil),
-          layout: {WebchatWeb.LayoutView, "chat_live.html"}
-        }
+        if is_allowed do
+          {:ok, 
+            assign(socket, 
+              servers: servers,
+              user: user,
+              users: [],
+              subscription: nil
+            ),
+            layout: {WebchatWeb.LayoutView, "chat_live.html"}
+          }
+        else
+          {:ok, push_redirect(socket, to: "/chat", replace: true)}
+        end
     end
   end
 
@@ -111,7 +117,7 @@ defmodule WebchatWeb.ChatLive do
   end
 
   # Error component 
-  def handle_info({_AnyComponent, :error, msg}, socket) do
+  def handle_info({_some_component, :error, msg}, socket) do
     {:noreply, assign(socket, 
       action: ErrorComponent,
       error: msg
@@ -154,14 +160,14 @@ defmodule WebchatWeb.ChatLive do
     )}
   end
 
-  def handle_info({ServerSubscriptionComponent, :server_joined, server_joined}, socket) do
+  def handle_info({ServerSubscriptionComponent, :server_joined, server_id}, socket) do
     socket = 
       socket
       |> remove_socket_action()
       |> assign(servers: Chat.list_servers(socket.assigns.user) )
 
     {:noreply, push_patch(socket,
-      to: Routes.live_path(socket, __MODULE__, server_id: server_joined.id),
+      to: Routes.live_path(socket, __MODULE__, server_id: server_id),
       replace: true
     ) }
   end

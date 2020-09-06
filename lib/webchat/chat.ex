@@ -7,7 +7,6 @@ defmodule Webchat.Chat do
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Models.Participant
   alias Webchat.Chat.Servers
-  alias Webchat.Chat.Participants
 
 
   @doc """
@@ -48,19 +47,6 @@ defmodule Webchat.Chat do
   def select_default_chatroom([]), do: %Chatroom{roomname: nil}
   def select_default_chatroom([head | _tail]), do: head
 
-  @doc """
-  If the user is NOT a participant in the server
-  We will create a participant linking the user and the server
-  """
-  def try_join(serverId, _) when is_nil(serverId), do: nil
-  def try_join(serverId, %User{} = user) do
-    case Participants.get(user, serverId) do
-      nil -> 
-        {:ok, _} = Participants.create(user, serverId)
-      _ ->
-        nil
-    end
-  end
 
   @doc """
   Get all participants inside a server

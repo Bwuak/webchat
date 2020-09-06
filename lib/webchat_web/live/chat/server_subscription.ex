@@ -1,4 +1,4 @@
-defmodule WebchatWeb.Chat.Subscriptions.Server do
+defmodule WebchatWeb.Chat.ServerSubscription do
   alias Phoenix.LiveView
   alias WebchatWeb.Presence
   alias WebchatWeb.Endpoint

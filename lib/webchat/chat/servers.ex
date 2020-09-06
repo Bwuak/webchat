@@ -10,7 +10,7 @@ defmodule Webchat.Chat.Servers do
 
   def get!(id), do: Repo.get!(Server, id)
 
-  def get(id), do: Repo.get!(Server, id)
+  def get(id), do: Repo.get(Server, id)
 
   def delete(%Server{} = server), do: Repo.delete(server)
 
