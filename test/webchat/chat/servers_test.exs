@@ -9,6 +9,7 @@ defmodule Webchat.Chat.ServersTest do
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
 
+
   test "list_servers/0 returns all servers" do
     user = user_fixture()
     server = server_fixture(user)
@@ -41,6 +42,20 @@ defmodule Webchat.Chat.ServersTest do
     user = user_fixture()
     assert {:error, %Ecto.Changeset{}} = 
       Servers.create(user, @invalid_attrs)
+  end
+
+  test "create/1 creates default public server" do
+    user = user_fixture()
+    {:ok, server} = Servers.create(user, @valid_attrs)
+
+    assert server.private == false
+  end
+
+  test "create/1 private server creates a server with private field true" do
+    user = user_fixture()
+    {:ok, server} = Servers.create(user, Map.put(@valid_attrs, :private, true))
+
+    assert server.private == true 
   end
 
   test "delete/1 deletes the server" do

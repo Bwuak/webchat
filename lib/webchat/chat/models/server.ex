@@ -4,6 +4,7 @@ defmodule Webchat.Chat.Models.Server do
 
   schema "servers" do
     field :name, :string
+    field :private, :boolean, default: false
 
     belongs_to :user, Webchat.Administration.Models.User
     has_many :chatrooms, Webchat.Chat.Models.Chatroom
@@ -14,7 +15,7 @@ defmodule Webchat.Chat.Models.Server do
   @doc false
   def changeset(server, attrs) do
     server
-    |> cast(attrs, [:name, :user_id])
+    |> cast(attrs, [:name, :user_id, :private])
     |> validate_required([:name])
     |> validate_length(:name, min: 2, max: 20)
     |> validate_required([:user_id])
