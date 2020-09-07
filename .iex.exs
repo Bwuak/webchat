@@ -20,3 +20,4 @@ alias Webchat.Chat.Messages
 alias Webchat.Chat.Roles
 
 alias Webchat.Invitation.Models.Invite
+alias Webchat.Invitation.Invites
