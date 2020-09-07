@@ -10,6 +10,7 @@
 @import "./chatroom/user_list_component.css";
 @import "./chatroom/server_component.css";
 @import "./chatroom/server_listing_component.css";
+@import "./chatroom/invite_menu_component.css";
 
 
 .action {

@@ -1,0 +1,11 @@
+#invite-link {
+  color: green;
+  align-text: center;
+}
+
+#invite-link-container {
+  height: 50px;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
