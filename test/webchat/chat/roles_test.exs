@@ -5,16 +5,9 @@ defmodule Webchat.Chat.RolesTest do
   alias Webchat.Chat.Models.Role
   alias Webchat.Chat.Roles
 
-  @roles_names [
-    "banned",
-    "member"
-  ]
 
   setup do
-    for role_name <- @roles_names do
-      Role.changeset(%Role{}, %{name: role_name})
-      |> Repo.insert()
-    end
+    roles_setup()
   end
 
   test "get! member role struct" do
@@ -36,6 +29,11 @@ defmodule Webchat.Chat.RolesTest do
     assert_raise RuntimeError, fn -> Roles.get!(@invalid_name) end
   end
 
+  # same as test helpers
+  @roles_names [
+    "banned",
+    "member"
+  ]
   test "roles structs compared to db role data" do
     for role_name <- @roles_names do
       role = Roles.get!(role_name)

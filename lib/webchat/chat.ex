@@ -54,7 +54,7 @@ defmodule Webchat.Chat do
   def list_participants(%Server{} = server) do
     from( p in Participant,
       where: p.server_id == ^server.id,
-      preload: [:user, :role]
+      preload: [:user]
     )
     |> Repo.all()
   end

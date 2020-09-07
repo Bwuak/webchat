@@ -23,7 +23,6 @@ defmodule Webchat.Chat.Models.Participant do
     |> validate_required([:user_id, :server_id])
     |> assoc_constraint(:user)
     |> assoc_constraint(:server)
-    |> assoc_constraint(:role)
   end
 
 end

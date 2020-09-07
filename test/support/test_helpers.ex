@@ -6,6 +6,7 @@ defmodule Webchat.TestHelpers do
   alias Webchat.Chat.Models.Server
   alias Webchat.Chat.Models.Chatroom
   alias Webchat.Chat.Models.Message
+  alias Webchat.Chat.Models.Role
 
   alias Webchat.Chat.Messages
   alias Webchat.Chat.Chatrooms
@@ -53,5 +54,17 @@ defmodule Webchat.TestHelpers do
 
     server
   end
+
+  @roles_names [
+    "banned",
+    "member"
+  ]
+  def roles_setup() do
+    for role_name <- @roles_names do
+      Role.changeset(%Role{}, %{name: role_name})
+      |> Repo.insert()
+    end
+  end
+
 
 end
