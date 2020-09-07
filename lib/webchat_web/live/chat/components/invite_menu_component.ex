@@ -44,7 +44,6 @@ defmodule WebchatWeb.Chat.InviteMenuComponent do
   defp create_link(invite) do
     domain = WebchatWeb.Endpoint.url()
     "#{domain}/invite/#{invite.uuid}"
-    |> IO.inspect
   end
 
 end
