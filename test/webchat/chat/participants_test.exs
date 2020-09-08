@@ -8,11 +8,13 @@ defmodule Webchat.Chat.ParticipantsTest do
 
   setup do
     roles_setup()
-    user = user_fixture()
-    server = server_fixture(user) 
+    owner = user_fixture(%{email: "owner@email"})
+    server = server_fixture(owner) 
+    user = user_fixture(%{email: "user@email"})
 
     %{user: user, 
-      server: server
+      server: server,
+      owner: owner
     } 
   end
 
@@ -29,11 +31,9 @@ defmodule Webchat.Chat.ParticipantsTest do
     assert_raise Postgrex.Error, fn -> Participants.create(data.user, @invalid_id) end
   end
 
-  # TODO Why is this broken???
-  # Error on participants role_id column WHICH DOES NOT EXISTS!!
-  # Column for role id in DB and struct is role_name
-  # It works fine in app and iex... but not in tests
-  # Tests do not see default values from migrations db?
+  # Test impossible unknwon error
+  # violation on role_id for participants table
+  # But participants table does not have that column... 
   test "create/2 with valid data create a participant", data do
     # Participants.create(data.user, data.server.id)
   end
