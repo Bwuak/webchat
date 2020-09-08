@@ -37,6 +37,7 @@ textarea {
 
 #msg-input {
   background-color: var(--chatroom-col1);
+  color: var(--chatroom-col3-text);
   border-top-left-radius: 5em;
   border-bottom-left-radius: 5em;
   padding-left: 1.2em;
@@ -45,6 +46,7 @@ textarea {
 
 #msg-submit {
   background-color: var(--chatroom-col2);
+  color: var(--chatroom-col3-text);
   border: none;
   border-top-right-radius: 5em;
   border-bottom-right-radius: 5em;
