@@ -19,9 +19,9 @@ import NProgress from "nprogress"
 
 
 import WebchatRequests from "./webchat_requests"
-import Hooks from "./hooks_events"
 import State from "./models/state"
-import UserEvents from "./user_events"
+import Hooks from "./events/hooks_events"
+import UserEvents from "./events/user_events"
 import Controller from "./chat_controller"
 
 

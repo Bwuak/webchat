@@ -1,7 +1,7 @@
 import regeneratorRuntime from "regenerator-runtime"
 
-import DOM from "./views/app_view"
-import Controller from "./chat_controller"
+import DOM from "../views/app_view"
+import Controller from "../chat_controller"
 
 
 let events = (function() {

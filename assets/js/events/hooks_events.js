@@ -1,8 +1,8 @@
 // could remove DOM dependency by using 
 // *this* inside hooks, but we'd need to add datasets
 // in html
-import DOM from "./views/app_view" 
-import Controller from "./chat_controller"
+import DOM from "../views/app_view" 
+import Controller from "../chat_controller"
 
 
 
