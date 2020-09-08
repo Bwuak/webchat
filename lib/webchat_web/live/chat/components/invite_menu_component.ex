@@ -42,8 +42,10 @@ defmodule WebchatWeb.Chat.InviteMenuComponent do
 
   defp create_link(nil), do: nil
   defp create_link(invite) do
-    domain = WebchatWeb.Endpoint.url()
-    "#{domain}/invite/#{invite.uuid}"
+    "http" <> domain = WebchatWeb.Endpoint.url()
+    secured_domain = "https" <> domain
+
+    "#{secured_domain}/invite/#{invite.uuid}"
   end
 
 end
