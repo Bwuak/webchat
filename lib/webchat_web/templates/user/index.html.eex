@@ -6,7 +6,6 @@
       <th></th>
       <th>Username</th>
       <th>email</th>
-      <th>Password hash</th>
     </tr>
   </thead>
   <tbody>
@@ -19,7 +18,6 @@
       </td>
       <td><%= user.username %></td>
       <td><%= user.email %></td>
-      <td><%= user.password_hash %></td>
       </td>
     </tr>
 <% end %>
