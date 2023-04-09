@@ -4,4 +4,3 @@ Evolved from a single chatroom page served by a controller to a multi-server mul
 The /chat page is handled with Phoenix.LiveView, everything else is rendered by controllers.</br>
 Messages are exchanged via channels.</br>
 </br>
-Hosted by gigalixir: https://chatroom.gigalixirapp.com/
